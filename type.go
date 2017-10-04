@@ -1,6 +1,6 @@
 package sock
 
-type Error chan error
+// type Error chan error
 
 type sel struct {
 	w, r chan interface{}
@@ -8,12 +8,12 @@ type sel struct {
 }
 
 type terror struct {
-	name string
-	len  int
-	idx  int
-	sel  sel
-	c    Error
-	n    chan int
+	name    string
+	len     int
+	idx     int
+	sel     sel
+	w, r, c chan error
+	n       chan int
 }
 
 // type Bool struct {

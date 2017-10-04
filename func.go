@@ -2,6 +2,7 @@ package sock
 
 import (
 	"bytes"
+	"errors"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -22,10 +23,11 @@ func getAndOrPostIfServer() {
 	}
 
 	// consider commenting out? idk
-	http.Handle("/", http.FileServer(http.Dir("www")))
+	http.Handle("/", http.FileServer(http.Dir("client")))
 
 	http.HandleFunc("/"+POST, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Access-Control-Allow-Origin", "*")
+
 		b, err := ioutil.ReadAll(r.Body)
 		r.Body.Close()
 		if err != nil {
@@ -33,21 +35,25 @@ func getAndOrPostIfServer() {
 			return
 		}
 		parts := bytes.Split(b, v)
-		t, name, reg, body := parts[0][0], string(parts[1]), parts[2][0], parts[3]
+		t, name, sel, body := parts[0][0], string(parts[1]), parts[2][0], parts[3]
 
 		switch t {
 		case Terror:
 			errorDict.RLock()
-			E, found := errorDict.m[name]
+			Ei, found := errorDict.m[name]
 			errorDict.RUnlock()
+
 			if !found {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			if reg == 0 {
-				E.sel.r <- body
+
+			if len(Ei)
+
+			if sel == 1 {
+				E.sel.r <- nil
 			} else {
-				E.reg.r <- body
+				E.r <- errors.New(string(body))
 			}
 
 		default:
@@ -57,6 +63,7 @@ func getAndOrPostIfServer() {
 
 	http.HandleFunc("/"+GET, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Access-Control-Allow-Origin", "*")
+
 		b, err := ioutil.ReadAll(r.Body)
 		r.Body.Close()
 		if err != nil {

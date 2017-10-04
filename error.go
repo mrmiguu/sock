@@ -1,6 +1,6 @@
 package sock
 
-func MakeError(name string, buf ...int) Error {
+func MakeError(name string, buf ...int) chan error {
 	if len(buf) > 1 {
 		panic("too many arguments")
 	}
@@ -13,8 +13,6 @@ func MakeError(name string, buf ...int) Error {
 	}
 
 	errorDict.Lock()
-	defer errorDict.Unlock()
-
 	if errorDict.m == nil {
 		errorDict.m = map[string][]*terror{}
 	}
@@ -26,6 +24,8 @@ func MakeError(name string, buf ...int) Error {
 			w: make(chan interface{}, buflen),
 			r: make(chan interface{}, buflen),
 		},
+		w: make(chan error, buflen),
+		r: make(chan error, buflen),
 		c: make(chan error, buflen),
 	}
 	if !IsClient {
@@ -33,8 +33,37 @@ func MakeError(name string, buf ...int) Error {
 		E.n = make(chan int)
 	}
 	errorDict.m[E.name] = append(errorDict.m[E.name], E)
+	errorDict.Unlock()
+
+	go E.selsend()
+	go E.selrecv()
 
 	return E.c
+}
+
+func (E *terror) selsend() {
+	for {
+		for ok := true; ok; ok = (len(E.sel.n) > 0) {
+			if !IsClient {
+				<-E.sel.n
+			}
+			E.sel.w <- nil
+		}
+
+		for ok := true; ok; ok = (len(E.n) > 0) {
+			if !IsClient {
+				<-E.n
+			}
+			E.w <- <-E.c
+		}
+	}
+}
+
+func (E *terror) selrecv() {
+	for {
+		<-E.sel.r
+		E.c <- <-E.r
+	}
 }
 
 // func (E *terror) postIfClient(t byte, name string) {
