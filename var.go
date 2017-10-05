@@ -20,84 +20,84 @@ var (
 		sync.RWMutex
 		m map[string][]*terror
 	}
-	// boolDict struct {
-	// 	sync.RWMutex
-	// 	m map[string]*Bool
-	// }
-	// stringDict struct {
-	// 	sync.RWMutex
-	// 	m map[string]*String
-	// }
-	// intDict struct {
-	// 	sync.RWMutex
-	// 	m map[string]*Int
-	// }
+	boolDict struct {
+		sync.RWMutex
+		m map[string][]*tbool
+	}
+	stringDict struct {
+		sync.RWMutex
+		m map[string][]*tstring
+	}
+	intDict struct {
+		sync.RWMutex
+		m map[string][]*tint
+	}
 	// int8Dict struct {
 	// 	sync.RWMutex
-	// 	m map[string]*Int8
+	// 	m map[string][]*tint8
 	// }
 	// int16Dict struct {
 	// 	sync.RWMutex
-	// 	m map[string]*Int16
+	// 	m map[string][]*tint16
 	// }
 	// int32Dict struct {
 	// 	sync.RWMutex
-	// 	m map[string]*Int32
+	// 	m map[string][]*tint32
 	// }
 	// int64Dict struct {
 	// 	sync.RWMutex
-	// 	m map[string]*Int64
+	// 	m map[string][]*tint64
 	// }
 	// uintDict struct {
 	// 	sync.RWMutex
-	// 	m map[string]*Uint
+	// 	m map[string][]*tuint
 	// }
 	// uint8Dict struct {
 	// 	sync.RWMutex
-	// 	m map[string]*Uint8
+	// 	m map[string][]*tuint8
 	// }
 	// uint16Dict struct {
 	// 	sync.RWMutex
-	// 	m map[string]*Uint16
+	// 	m map[string][]*tuint16
 	// }
 	// uint32Dict struct {
 	// 	sync.RWMutex
-	// 	m map[string]*Uint32
+	// 	m map[string][]*tuint32
 	// }
 	// uint64Dict struct {
 	// 	sync.RWMutex
-	// 	m map[string]*Uint64
+	// 	m map[string][]*tuint64
 	// }
 	// uintptrDict struct {
 	// 	sync.RWMutex
-	// 	m map[string]*Uintptr
+	// 	m map[string][]*tuintptr
 	// }
 	// byteDict struct {
 	// 	sync.RWMutex
-	// 	m map[string]*Byte
+	// 	m map[string][]*tbyte
 	// }
-	// bytesDict struct {
-	// 	sync.RWMutex
-	// 	m map[string]*Bytes
-	// }
-	// runeDict struct {
-	// 	sync.RWMutex
-	// 	m map[string]*Rune
-	// }
+	bytesDict struct {
+		sync.RWMutex
+		m map[string][]*tbytes
+	}
+	runeDict struct {
+		sync.RWMutex
+		m map[string][]*trune
+	}
 	// float32Dict struct {
 	// 	sync.RWMutex
-	// 	m map[string]*Float32
+	// 	m map[string][]*tfloat32
 	// }
-	// float64Dict struct {
-	// 	sync.RWMutex
-	// 	m map[string]*Float64
-	// }
+	float64Dict struct {
+		sync.RWMutex
+		m map[string][]*tfloat64
+	}
 	// complex64Dict struct {
 	// 	sync.RWMutex
-	// 	m map[string]*Complex64
+	// 	m map[string][]*tcomplex64
 	// }
 	// complex128Dict struct {
 	// 	sync.RWMutex
-	// 	m map[string]*Complex128
+	// 	m map[string][]*tcomplex128
 	// }
 )

@@ -11,6 +11,60 @@ type terror struct {
 	seln, n          chan int
 }
 
+type tbytes struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan []byte
+	seln, n          chan int
+}
+
+type tstring struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan string
+	seln, n          chan int
+}
+
+type tint struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan int
+	seln, n          chan int
+}
+
+type trune struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan rune
+	seln, n          chan int
+}
+
+type tbool struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan bool
+	seln, n          chan int
+}
+
+type tfloat64 struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan float64
+	seln, n          chan int
+}
+
 // type Bool struct {
 // 	Name string
 // 	Len  uint

@@ -47,7 +47,6 @@ func MakeError(name string, buf ...int) (chan<- error, <-chan error) {
 }
 
 func (E *terror) selsend() {
-	// defer func() { recover() }()
 	for {
 		for ok := true; ok; ok = (len(E.seln) > 0) {
 			if !IsClient {
@@ -66,33 +65,37 @@ func (E *terror) selsend() {
 }
 
 func (E *terror) selrecv() {
-	// defer func() {
-	// 	done := load.New("closing " + E.name + "#" + strconv.Itoa(E.idx))
-	// 	recover()
-
-	// 	errorDict.Lock()
-	// 	Ei := errorDict.m[E.name]
-	// 	if len(Ei) == 1 {
-	// 		delete(errorDict.m, E.name)
-	// 	} else {
-	// 		errorDict.m[E.name] = append(Ei[:E.idx], Ei[E.idx+1:]...)
-	// 	}
-	// 	E := Ei[E.idx]
-	// 	close(E.selw)
-	// 	close(E.selr)
-	// 	close(E.w)
-	// 	close(E.r)
-	// 	if !IsClient {
-	// 		close(E.seln)
-	// 		close(E.n)
-	// 	}
-	// 	errorDict.Unlock()
-
-	// 	done <- true
-	// }()
-
 	for {
 		<-E.selr
 		E.cr <- bytes2error(<-E.r)
 	}
+}
+
+func finderror(name string, idx int) (*terror, bool) {
+	errorDict.RLock()
+	defer errorDict.RUnlock()
+
+	Ei, found := errorDict.m[name]
+	if !found || idx > len(Ei)-1 {
+		return nil, false
+	}
+	return Ei[idx], true
+}
+
+func (E *terror) geterror(sel byte, b []byte) {
+	if sel == 1 {
+		E.selr <- []byte{}
+	} else {
+		E.r <- b
+	}
+}
+
+func (E *terror) seterror(sel byte) []byte {
+	if sel == 1 {
+		E.seln <- 1
+		<-E.selw
+		return []byte{}
+	}
+	E.n <- 1
+	return <-E.w
 }

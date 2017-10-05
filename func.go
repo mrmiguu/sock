@@ -40,21 +40,60 @@ func wAndOrRIfServer() {
 
 		switch t {
 		case Terror:
-			errorDict.RLock()
-			Ei, found := errorDict.m[name]
-			if !found || idx > len(Ei)-1 {
-				errorDict.RUnlock()
+			E, ok := finderror(name, idx)
+			if !ok {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			E := Ei[idx]
-			errorDict.RUnlock()
+			E.geterror(sel, body)
 
-			if sel == 1 {
-				E.selr <- []byte{}
-			} else {
-				E.r <- body
+		case Tstring:
+			S, ok := findstring(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
 			}
+			S.getstring(sel, body)
+
+		case Tint:
+			I, ok := findint(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			I.getint(sel, body)
+
+		case Tbool:
+			B, ok := findbool(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			B.getbool(sel, body)
+
+		case Tbytes:
+			B, ok := findbytes(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			B.getbytes(sel, body)
+
+		case Tfloat64:
+			F, ok := findfloat64(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			F.getfloat64(sel, body)
+
+		case Trune:
+			R, ok := findrune(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			R.getrune(sel, body)
 
 		default:
 			delayedError(w, http.StatusBadRequest)
@@ -73,29 +112,64 @@ func wAndOrRIfServer() {
 		parts := bytes.Split(b, v)
 		t, name, idx, sel := parts[0][0], string(parts[1]), bytes2int(parts[2]), parts[3][0]
 
-		b = []byte{}
-
 		// defer func() { recover() }()
 
 		switch t {
 		case Terror:
-			errorDict.RLock()
-			Ei, found := errorDict.m[name]
-			if !found || idx > len(Ei)-1 {
-				errorDict.RUnlock()
+			E, ok := finderror(name, idx)
+			if !ok {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			E := Ei[idx]
-			errorDict.RUnlock()
+			b = E.seterror(sel)
 
-			if sel == 1 {
-				E.seln <- 1
-				<-E.selw
-			} else {
-				E.n <- 1
-				b = <-E.w
+		case Tstring:
+			S, ok := findstring(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
 			}
+			b = S.setstring(sel)
+
+		case Tint:
+			I, ok := findint(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = I.setint(sel)
+
+		case Tbool:
+			B, ok := findbool(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = B.setbool(sel)
+
+		case Tbytes:
+			B, ok := findbytes(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = B.setbytes(sel)
+
+		case Tfloat64:
+			F, ok := findfloat64(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = F.setfloat64(sel)
+
+		case Trune:
+			R, ok := findrune(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = R.setrune(sel)
 
 		default:
 			delayedError(w, http.StatusBadRequest)

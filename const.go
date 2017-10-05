@@ -8,9 +8,9 @@ const (
 	V                 = "▼"
 
 	Terror byte = iota
-	// Tbool
-	// Tstring
-	// Tint
+	Tbool
+	Tstring
+	Tint
 	// Tint8
 	// Tint16
 	// Tint32
@@ -22,10 +22,10 @@ const (
 	// Tuint64
 	// Tuintptr
 	// Tbyte
-	// Tbytes
-	// Trune
+	Tbytes
+	Trune
 	// Tfloat32
-	// Tfloat64
+	Tfloat64
 	// Tcomplex64
 	// Tcomplex128
 )

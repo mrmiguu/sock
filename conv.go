@@ -3,6 +3,7 @@ package sock
 import (
 	"encoding/binary"
 	"errors"
+	"math"
 	"strconv"
 )
 
@@ -37,4 +38,22 @@ func bytes2error(b []byte) error {
 		return nil
 	}
 	return errors.New(string(b))
+}
+
+func rune2bytes(r rune) []byte {
+	return []byte(string([]rune{r}))
+}
+
+func bytes2rune(b []byte) rune {
+	return []rune(string(b))[0]
+}
+
+func float642bytes(f float64) []byte {
+	var buf [8]byte
+	binary.BigEndian.PutUint64(buf[:], math.Float64bits(f))
+	return buf[:]
+}
+
+func bytes2float64(b []byte) float64 {
+	return math.Float64frombits(binary.BigEndian.Uint64(b))
 }
