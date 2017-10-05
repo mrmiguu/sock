@@ -12,7 +12,7 @@ func MakeInt8(name string, buf ...int) (chan<- int8, <-chan int8) {
 		buflen = buf[0]
 	}
 
-	go wAndOrRIfServer()
+	go started.Do(wAndOrRIfServer)
 
 	int8Dict.Lock()
 	if int8Dict.m == nil {

@@ -12,7 +12,7 @@ func MakeUint64(name string, buf ...int) (chan<- uint64, <-chan uint64) {
 		buflen = buf[0]
 	}
 
-	go wAndOrRIfServer()
+	go started.Do(wAndOrRIfServer)
 
 	uint64Dict.Lock()
 	if uint64Dict.m == nil {

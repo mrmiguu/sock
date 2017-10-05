@@ -12,7 +12,7 @@ func MakeRune(name string, buf ...int) (chan<- rune, <-chan rune) {
 		buflen = buf[0]
 	}
 
-	go wAndOrRIfServer()
+	go started.Do(wAndOrRIfServer)
 
 	runeDict.Lock()
 	if runeDict.m == nil {

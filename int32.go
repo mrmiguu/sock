@@ -12,7 +12,7 @@ func MakeInt32(name string, buf ...int) (chan<- int32, <-chan int32) {
 		buflen = buf[0]
 	}
 
-	go wAndOrRIfServer()
+	go started.Do(wAndOrRIfServer)
 
 	int32Dict.Lock()
 	if int32Dict.m == nil {

@@ -12,7 +12,7 @@ func MakeError(name string, buf ...int) (chan<- error, <-chan error) {
 		buflen = buf[0]
 	}
 
-	go wAndOrRIfServer()
+	go started.Do(wAndOrRIfServer)
 
 	errorDict.Lock()
 	if errorDict.m == nil {

@@ -12,7 +12,7 @@ func MakeUint(name string, buf ...int) (chan<- uint, <-chan uint) {
 		buflen = buf[0]
 	}
 
-	go wAndOrRIfServer()
+	go started.Do(wAndOrRIfServer)
 
 	uintDict.Lock()
 	if uintDict.m == nil {

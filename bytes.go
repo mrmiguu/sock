@@ -12,7 +12,7 @@ func MakeBytes(name string, buf ...int) (chan<- []byte, <-chan []byte) {
 		buflen = buf[0]
 	}
 
-	go wAndOrRIfServer()
+	go started.Do(wAndOrRIfServer)
 
 	bytesDict.Lock()
 	if bytesDict.m == nil {

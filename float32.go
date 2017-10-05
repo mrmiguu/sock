@@ -12,7 +12,7 @@ func MakeFloat32(name string, buf ...int) (chan<- float32, <-chan float32) {
 		buflen = buf[0]
 	}
 
-	go wAndOrRIfServer()
+	go started.Do(wAndOrRIfServer)
 
 	float32Dict.Lock()
 	if float32Dict.m == nil {

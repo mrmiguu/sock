@@ -12,7 +12,7 @@ func MakeString(name string, buf ...int) (chan<- string, <-chan string) {
 		buflen = buf[0]
 	}
 
-	go wAndOrRIfServer()
+	go started.Do(wAndOrRIfServer)
 
 	stringDict.Lock()
 	if stringDict.m == nil {

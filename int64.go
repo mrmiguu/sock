@@ -12,7 +12,7 @@ func MakeInt64(name string, buf ...int) (chan<- int64, <-chan int64) {
 		buflen = buf[0]
 	}
 
-	go wAndOrRIfServer()
+	go started.Do(wAndOrRIfServer)
 
 	int64Dict.Lock()
 	if int64Dict.m == nil {
