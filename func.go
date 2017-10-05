@@ -49,7 +49,7 @@ func wAndOrRIfServer() {
 			errorDict.RUnlock()
 
 			if sel == 1 {
-				E.selr <- nil
+				E.selr <- []byte{0}
 			} else {
 				E.r <- body
 			}
