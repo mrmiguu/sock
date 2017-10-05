@@ -12,7 +12,7 @@ func MakeBool(name string, buf ...int) (chan<- bool, <-chan bool) {
 		buflen = buf[0]
 	}
 
-	go wAndOrRIfServer()
+	go started.Do(wAndOrRIfServer)
 
 	boolDict.Lock()
 	if boolDict.m == nil {

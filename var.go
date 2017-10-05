@@ -8,9 +8,10 @@ import (
 )
 
 var (
-	Addr       string
-	IsClient   = js.Global != nil
-	ErrorDelay = 2 * time.Second
+	Addr             string
+	IsClient         = js.Global != nil
+	ClientFolder     = "client"
+	ErrorStatusDelay = 2 * time.Second
 
 	v = []byte(V)
 

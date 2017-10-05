@@ -22,7 +22,7 @@ func wAndOrRIfServer() {
 	}
 
 	// consider commenting out? idk
-	http.Handle("/", http.FileServer(http.Dir("client")))
+	http.Handle("/", http.FileServer(http.Dir(ClientFolder)))
 
 	http.HandleFunc("/"+POST, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Access-Control-Allow-Origin", "*")
@@ -402,6 +402,6 @@ func rIfClient(r chan []byte, t byte, name string, idx int, sel byte) {
 }
 
 func delayedError(w http.ResponseWriter, code int) {
-	time.Sleep(ErrorDelay)
+	time.Sleep(ErrorStatusDelay)
 	http.Error(w, "", code)
 }
