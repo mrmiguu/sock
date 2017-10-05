@@ -1,5 +1,11 @@
 package sock
 
+import (
+	"strconv"
+
+	load "github.com/mrmiguu/Loading"
+)
+
 func MakeError(name string, buf ...int) chan error {
 	if len(buf) > 1 {
 		panic("too many arguments")
@@ -46,6 +52,7 @@ func MakeError(name string, buf ...int) chan error {
 }
 
 func (E *terror) selsend() {
+	defer func() { recover() }()
 	for {
 		for ok := true; ok; ok = (len(E.seln) > 0) {
 			if !IsClient {
@@ -64,62 +71,33 @@ func (E *terror) selsend() {
 }
 
 func (E *terror) selrecv() {
+	defer func() {
+		done := load.New("closing " + E.name + "#" + strconv.Itoa(E.idx))
+		recover()
+
+		errorDict.Lock()
+		Ei := errorDict.m[E.name]
+		if len(Ei) == 1 {
+			delete(errorDict.m, E.name)
+		} else {
+			errorDict.m[E.name] = append(Ei[:E.idx], Ei[E.idx+1:]...)
+		}
+		E := Ei[E.idx]
+		close(E.selw)
+		close(E.selr)
+		close(E.w)
+		close(E.r)
+		if !IsClient {
+			close(E.seln)
+			close(E.n)
+		}
+		errorDict.Unlock()
+
+		done <- true
+	}()
+
 	for {
 		<-E.selr
 		E.c <- bytes2error(<-E.r)
 	}
 }
-
-// func (E *terror) makeW() {
-// 	go postIfClient(E.p.w.c, Terror, E.Name)
-// }
-
-// func (E *terror) makeR() {
-// 	go getIfClient(E.p.r.c, Terror, E.Name)
-// }
-
-// func (E *terror) to(e error) {
-// 	if IsClient {
-// 		E.p.w.c <- []byte(e.Error())
-// 		return
-// 	}
-// 	for {
-// 		<-E.p.n.c
-// 		E.p.w.c <- []byte(e.Error())
-// 		if len(E.p.n.c) == 0 {
-// 			break
-// 		}
-// 	}
-// }
-
-// func (E *terror) from() error {
-// 	return errors.New(string(<-E.p.r.c))
-// }
-
-// func (E *terror) S() chan<- error {
-// 	c := make(chan error, E.Len)
-// 	go started.Do(getAndOrPostIfServer)
-// 	E.add()
-// 	E.p.w.Do(E.makeW)
-// 	E.p.n.Do(E.makeNIfServer)
-// 	go func() {
-// 		E.to(errors.New(""))
-// 		i := <-c
-// 		close(c)
-// 		E.to(i)
-// 	}()
-// 	return c
-// }
-
-// func (E *terror) R() <-chan error {
-// 	c := make(chan error, E.Len)
-// 	go started.Do(getAndOrPostIfServer)
-// 	E.add()
-// 	E.p.r.Do(E.makeR)
-// 	go func() {
-// 		E.from()
-// 		c <- E.from()
-// 		close(c)
-// 	}()
-// 	return c
-// }

@@ -36,6 +36,8 @@ func wAndOrRIfServer() {
 		parts := bytes.Split(b, v)
 		t, name, idx, sel, body := parts[0][0], string(parts[1]), bytes2int(parts[2]), parts[3][0], parts[4]
 
+		defer func() { recover() }()
+
 		switch t {
 		case Terror:
 			errorDict.RLock()
@@ -72,6 +74,8 @@ func wAndOrRIfServer() {
 		t, name, idx, sel := parts[0][0], string(parts[1]), bytes2int(parts[2]), parts[3][0]
 
 		b = []byte{}
+
+		defer func() { recover() }()
 
 		switch t {
 		case Terror:
@@ -129,6 +133,7 @@ func rIfClient(r chan []byte, t byte, name string, idx int, sel byte) {
 	if len(Addr) == 0 || Addr[len(Addr)-1] != '/' {
 		Addr += "/"
 	}
+	defer func() { recover() }()
 	for {
 		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), []byte{sel}}, v)
 		for {
