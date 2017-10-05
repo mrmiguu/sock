@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -21,7 +22,9 @@ func wAndOrRIfServer() {
 		return
 	}
 
-	// consider commenting out? idk
+	if _, err := os.Stat(ClientFolder); os.IsNotExist(err) {
+		panic("client folder not found")
+	}
 	http.Handle("/", http.FileServer(http.Dir(ClientFolder)))
 
 	http.HandleFunc("/"+POST, func(w http.ResponseWriter, r *http.Request) {
