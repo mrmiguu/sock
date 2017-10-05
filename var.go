@@ -92,12 +92,4 @@ var (
 		sync.RWMutex
 		m map[string][]*tfloat64
 	}
-	complex64Dict struct {
-		sync.RWMutex
-		m map[string][]*tcomplex64
-	}
-	complex128Dict struct {
-		sync.RWMutex
-		m map[string][]*tcomplex128
-	}
 )

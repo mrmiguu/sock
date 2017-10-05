@@ -183,22 +183,6 @@ func wAndOrRIfServer() {
 			}
 			F.getfloat32(sel, body)
 
-		case Tcomplex64:
-			C, ok := findcomplex64(name, idx)
-			if !ok {
-				delayedError(w, http.StatusNotFound)
-				return
-			}
-			C.getcomplex64(sel, body)
-
-		case Tcomplex128:
-			C, ok := findcomplex128(name, idx)
-			if !ok {
-				delayedError(w, http.StatusNotFound)
-				return
-			}
-			C.getcomplex128(sel, body)
-
 		default:
 			delayedError(w, http.StatusBadRequest)
 		}
@@ -362,22 +346,6 @@ func wAndOrRIfServer() {
 				return
 			}
 			b = F.setfloat32(sel)
-
-		case Tcomplex64:
-			C, ok := findcomplex64(name, idx)
-			if !ok {
-				delayedError(w, http.StatusNotFound)
-				return
-			}
-			b = C.setcomplex64(sel)
-
-		case Tcomplex128:
-			C, ok := findcomplex128(name, idx)
-			if !ok {
-				delayedError(w, http.StatusNotFound)
-				return
-			}
-			b = C.setcomplex128(sel)
 
 		default:
 			delayedError(w, http.StatusBadRequest)

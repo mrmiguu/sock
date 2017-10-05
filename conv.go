@@ -2,7 +2,6 @@ package sock
 
 import (
 	"encoding/binary"
-	"encoding/json"
 	"errors"
 	"math"
 	"strconv"
@@ -119,7 +118,7 @@ func bytes2bool(b []byte) bool {
 
 func error2bytes(e error) []byte {
 	if e == nil {
-		return []byte{}
+		return nil
 	}
 	return []byte(e.Error())
 }
@@ -157,26 +156,4 @@ func float322bytes(f float32) []byte {
 
 func bytes2float32(b []byte) float32 {
 	return math.Float32frombits(binary.BigEndian.Uint32(b))
-}
-
-func complex642bytes(c complex64) []byte {
-	b, _ := json.Marshal(c)
-	return b
-}
-
-func bytes2complex64(b []byte) complex64 {
-	var c complex64
-	json.Unmarshal(b, &c)
-	return c
-}
-
-func complex1282bytes(c complex128) []byte {
-	b, _ := json.Marshal(c)
-	return b
-}
-
-func bytes2complex128(b []byte) complex128 {
-	var c complex128
-	json.Unmarshal(b, &c)
-	return c
 }
