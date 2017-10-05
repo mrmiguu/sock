@@ -1,7 +1,5 @@
 package sock
 
-import "errors"
-
 func MakeError(name string, buf ...int) chan error {
 	if len(buf) > 1 {
 		panic("too many arguments")
@@ -60,7 +58,7 @@ func (E *terror) selsend() {
 			if !IsClient {
 				<-E.n
 			}
-			E.w <- []byte((<-E.c).Error())
+			E.w <- error2bytes(<-E.c)
 		}
 	}
 }
@@ -68,7 +66,7 @@ func (E *terror) selsend() {
 func (E *terror) selrecv() {
 	for {
 		<-E.selr
-		E.c <- errors.New(string(<-E.r))
+		E.c <- bytes2error(<-E.r)
 	}
 }
 

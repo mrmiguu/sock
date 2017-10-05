@@ -49,7 +49,7 @@ func wAndOrRIfServer() {
 			errorDict.RUnlock()
 
 			if sel == 1 {
-				E.selr <- []byte{0}
+				E.selr <- []byte{}
 			} else {
 				E.r <- body
 			}
@@ -71,7 +71,7 @@ func wAndOrRIfServer() {
 		parts := bytes.Split(b, v)
 		t, name, idx, sel := parts[0][0], string(parts[1]), bytes2int(parts[2]), parts[3][0]
 
-		b = []byte{0}
+		b = []byte{}
 
 		switch t {
 		case Terror:

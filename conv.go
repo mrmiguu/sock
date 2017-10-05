@@ -2,6 +2,7 @@ package sock
 
 import (
 	"encoding/binary"
+	"errors"
 	"strconv"
 )
 
@@ -22,4 +23,18 @@ func bool2bytes(b bool) []byte {
 func bytes2bool(b []byte) bool {
 	tf, _ := strconv.ParseBool(string(b))
 	return tf
+}
+
+func error2bytes(e error) []byte {
+	if e == nil {
+		return []byte{}
+	}
+	return []byte(e.Error())
+}
+
+func bytes2error(b []byte) error {
+	if len(b) == 0 {
+		return nil
+	}
+	return errors.New(string(b))
 }

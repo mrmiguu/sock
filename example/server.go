@@ -1,11 +1,13 @@
 package main
 
-import "github.com/mrmiguu/sock"
+import (
+	"fmt"
+
+	"github.com/mrmiguu/sock"
+)
 
 func main() {
 	sckerr := sock.MakeError("err")
-	err := <-sckerr
-	println(err.Error())
-	close(sckerr)
+	fmt.Println(<-sckerr)
 	select {}
 }
