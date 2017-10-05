@@ -7,7 +7,7 @@ type terror struct {
 	len              int
 	idx              int
 	selw, w, selr, r chan []byte
-	c                chan error
+	cw, cr           chan error
 	seln, n          chan int
 }
 

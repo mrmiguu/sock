@@ -1,12 +1,6 @@
 package sock
 
-import (
-	"strconv"
-
-	load "github.com/mrmiguu/Loading"
-)
-
-func MakeError(name string, buf ...int) chan error {
+func MakeError(name string, buf ...int) (chan<- error, <-chan error) {
 	if len(buf) > 1 {
 		panic("too many arguments")
 	}
@@ -32,7 +26,8 @@ func MakeError(name string, buf ...int) chan error {
 		selr: make(chan []byte, buflen),
 		w:    make(chan []byte, buflen),
 		r:    make(chan []byte, buflen),
-		c:    make(chan error, buflen),
+		cw:   make(chan error, buflen),
+		cr:   make(chan error, buflen),
 	}
 	if !IsClient {
 		E.seln = make(chan int)
@@ -48,11 +43,11 @@ func MakeError(name string, buf ...int) chan error {
 	go E.selsend()
 	go E.selrecv()
 
-	return E.c
+	return E.cw, E.cr
 }
 
 func (E *terror) selsend() {
-	defer func() { recover() }()
+	// defer func() { recover() }()
 	for {
 		for ok := true; ok; ok = (len(E.seln) > 0) {
 			if !IsClient {
@@ -65,39 +60,39 @@ func (E *terror) selsend() {
 			if !IsClient {
 				<-E.n
 			}
-			E.w <- error2bytes(<-E.c)
+			E.w <- error2bytes(<-E.cw)
 		}
 	}
 }
 
 func (E *terror) selrecv() {
-	defer func() {
-		done := load.New("closing " + E.name + "#" + strconv.Itoa(E.idx))
-		recover()
+	// defer func() {
+	// 	done := load.New("closing " + E.name + "#" + strconv.Itoa(E.idx))
+	// 	recover()
 
-		errorDict.Lock()
-		Ei := errorDict.m[E.name]
-		if len(Ei) == 1 {
-			delete(errorDict.m, E.name)
-		} else {
-			errorDict.m[E.name] = append(Ei[:E.idx], Ei[E.idx+1:]...)
-		}
-		E := Ei[E.idx]
-		close(E.selw)
-		close(E.selr)
-		close(E.w)
-		close(E.r)
-		if !IsClient {
-			close(E.seln)
-			close(E.n)
-		}
-		errorDict.Unlock()
+	// 	errorDict.Lock()
+	// 	Ei := errorDict.m[E.name]
+	// 	if len(Ei) == 1 {
+	// 		delete(errorDict.m, E.name)
+	// 	} else {
+	// 		errorDict.m[E.name] = append(Ei[:E.idx], Ei[E.idx+1:]...)
+	// 	}
+	// 	E := Ei[E.idx]
+	// 	close(E.selw)
+	// 	close(E.selr)
+	// 	close(E.w)
+	// 	close(E.r)
+	// 	if !IsClient {
+	// 		close(E.seln)
+	// 		close(E.n)
+	// 	}
+	// 	errorDict.Unlock()
 
-		done <- true
-	}()
+	// 	done <- true
+	// }()
 
 	for {
 		<-E.selr
-		E.c <- bytes2error(<-E.r)
+		E.cr <- bytes2error(<-E.r)
 	}
 }

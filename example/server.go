@@ -3,33 +3,25 @@ package main
 import (
 	"time"
 
-	load "github.com/mrmiguu/Loading"
 	"github.com/mrmiguu/sock"
 )
 
 func main() {
-	c := sock.MakeError("")
+	w, r := sock.MakeError("")
 
-	done := load.New("starting")
-	<-c
-	done <- true
+	<-r
 
-	done = load.New("<-c")
 	start := time.Now()
-	for i := range [100]int{} {
-		<-c
-		println(i + 1)
+	for range [100]int{} {
+		<-r
 	}
-	done <- true
-	println(int(float64(time.Since(start).Nanoseconds())/1000000), "ms (<-c)")
+	println(int(float64(time.Since(start).Nanoseconds())/100000000), "ms (<-r)")
 
-	done = load.New("c <- nil")
 	start = time.Now()
 	for range [100]int{} {
-		c <- nil
+		w <- nil
 	}
-	done <- true
-	println(int(float64(time.Since(start).Nanoseconds())/1000000), "ms (c <- nil)")
+	println(int(float64(time.Since(start).Nanoseconds())/100000000), "ms (w <- nil)")
 
 	select {}
 }
