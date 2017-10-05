@@ -2,18 +2,13 @@ package sock
 
 // type Error chan error
 
-type sel struct {
-	w, r chan interface{}
-	n    chan int
-}
-
 type terror struct {
-	name    string
-	len     int
-	idx     int
-	sel     sel
-	w, r, c chan error
-	n       chan int
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	c                chan error
+	seln, n          chan int
 }
 
 // type Bool struct {

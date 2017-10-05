@@ -1,5 +1,7 @@
 package sock
 
+import "errors"
+
 func MakeError(name string, buf ...int) chan error {
 	if len(buf) > 1 {
 		panic("too many arguments")
@@ -12,6 +14,8 @@ func MakeError(name string, buf ...int) chan error {
 		buflen = buf[0]
 	}
 
+	go wAndOrRIfServer()
+
 	errorDict.Lock()
 	if errorDict.m == nil {
 		errorDict.m = map[string][]*terror{}
@@ -20,21 +24,23 @@ func MakeError(name string, buf ...int) chan error {
 		name: name,
 		len:  buflen,
 		idx:  len(errorDict.m[name]),
-		sel: sel{
-			w: make(chan interface{}, buflen),
-			r: make(chan interface{}, buflen),
-		},
-		w: make(chan error, buflen),
-		r: make(chan error, buflen),
-		c: make(chan error, buflen),
+		selw: make(chan []byte, buflen),
+		selr: make(chan []byte, buflen),
+		w:    make(chan []byte, buflen),
+		r:    make(chan []byte, buflen),
+		c:    make(chan error, buflen),
 	}
 	if !IsClient {
-		E.sel.n = make(chan int)
+		E.seln = make(chan int)
 		E.n = make(chan int)
 	}
 	errorDict.m[E.name] = append(errorDict.m[E.name], E)
 	errorDict.Unlock()
 
+	go wIfClient(E.selw, Terror, E.name, E.idx, 1)
+	go rIfClient(E.selr, Terror, E.name, E.idx, 1)
+	go wIfClient(E.w, Terror, E.name, E.idx, 0)
+	go rIfClient(E.r, Terror, E.name, E.idx, 0)
 	go E.selsend()
 	go E.selrecv()
 
@@ -43,46 +49,28 @@ func MakeError(name string, buf ...int) chan error {
 
 func (E *terror) selsend() {
 	for {
-		for ok := true; ok; ok = (len(E.sel.n) > 0) {
+		for ok := true; ok; ok = (len(E.seln) > 0) {
 			if !IsClient {
-				<-E.sel.n
+				<-E.seln
 			}
-			E.sel.w <- nil
+			E.selw <- nil
 		}
 
 		for ok := true; ok; ok = (len(E.n) > 0) {
 			if !IsClient {
 				<-E.n
 			}
-			E.w <- <-E.c
+			E.w <- []byte((<-E.c).Error())
 		}
 	}
 }
 
 func (E *terror) selrecv() {
 	for {
-		<-E.sel.r
-		E.c <- <-E.r
+		<-E.selr
+		E.c <- errors.New(string(<-E.r))
 	}
 }
-
-// func (E *terror) postIfClient(t byte, name string) {
-// 	if !IsClient {
-// 		return
-// 	}
-// 	if len(Addr) == 0 || Addr[len(Addr)-1] != '/' {
-// 		Addr += "/"
-// 	}
-// 	for {
-// 		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), <-w}, v)
-// 		for {
-// 			resp, err := http.Post(Addr+POST, "text/plain", bytes.NewReader(pkt))
-// 			if err == nil && resp.StatusCode < 300 {
-// 				break
-// 			}
-// 		}
-// 	}
-// }
 
 // func (E *terror) makeW() {
 // 	go postIfClient(E.p.w.c, Terror, E.Name)

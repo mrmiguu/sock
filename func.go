@@ -2,7 +2,6 @@ package sock
 
 import (
 	"bytes"
-	"errors"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -17,7 +16,7 @@ func init() {
 	}
 }
 
-func getAndOrPostIfServer() {
+func wAndOrRIfServer() {
 	if IsClient {
 		return
 	}
@@ -35,25 +34,24 @@ func getAndOrPostIfServer() {
 			return
 		}
 		parts := bytes.Split(b, v)
-		t, name, sel, body := parts[0][0], string(parts[1]), parts[2][0], parts[3]
+		t, name, idx, sel, body := parts[0][0], string(parts[1]), bytes2int(parts[2]), parts[3][0], parts[4]
 
 		switch t {
 		case Terror:
 			errorDict.RLock()
 			Ei, found := errorDict.m[name]
-			errorDict.RUnlock()
-
-			if !found {
+			if !found || idx > len(Ei)-1 {
+				errorDict.RUnlock()
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-
-			if len(Ei)
+			E := Ei[idx]
+			errorDict.RUnlock()
 
 			if sel == 1 {
-				E.sel.r <- nil
+				E.selr <- nil
 			} else {
-				E.r <- errors.New(string(body))
+				E.r <- body
 			}
 
 		default:
@@ -71,21 +69,29 @@ func getAndOrPostIfServer() {
 			return
 		}
 		parts := bytes.Split(b, v)
-		t, name := parts[0][0], string(parts[1])
+		t, name, idx, sel := parts[0][0], string(parts[1]), bytes2int(parts[2]), parts[3][0]
+
+		b = []byte{0}
 
 		switch t {
 		case Terror:
 			errorDict.RLock()
-			E, found := errorDict.m[name]
-			errorDict.RUnlock()
-			if !found {
+			Ei, found := errorDict.m[name]
+			if !found || idx > len(Ei)-1 {
+				errorDict.RUnlock()
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			E.p.n.Do(E.makeNIfServer)
-			E.p.n.c <- 1
-			E.p.w.Do(E.makeW)
-			b = <-E.p.w.c
+			E := Ei[idx]
+			errorDict.RUnlock()
+
+			if sel == 1 {
+				E.seln <- 1
+				<-E.selw
+			} else {
+				E.n <- 1
+				b = <-E.w
+			}
 
 		default:
 			delayedError(w, http.StatusBadRequest)
@@ -98,12 +104,7 @@ func getAndOrPostIfServer() {
 	log.Fatal(http.ListenAndServe(Addr, nil))
 }
 
-func delayedError(w http.ResponseWriter, code int) {
-	time.Sleep(ErrorDelay)
-	http.Error(w, "", code)
-}
-
-func postIfClient(w chan []byte, t byte, name string) {
+func wIfClient(w chan []byte, t byte, name string, idx int, sel byte) {
 	if !IsClient {
 		return
 	}
@@ -111,7 +112,7 @@ func postIfClient(w chan []byte, t byte, name string) {
 		Addr += "/"
 	}
 	for {
-		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), <-w}, v)
+		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), []byte{sel}, <-w}, v)
 		for {
 			resp, err := http.Post(Addr+POST, "text/plain", bytes.NewReader(pkt))
 			if err == nil && resp.StatusCode < 300 {
@@ -121,7 +122,7 @@ func postIfClient(w chan []byte, t byte, name string) {
 	}
 }
 
-func getIfClient(r chan []byte, t byte, name string) {
+func rIfClient(r chan []byte, t byte, name string, idx int, sel byte) {
 	if !IsClient {
 		return
 	}
@@ -129,7 +130,7 @@ func getIfClient(r chan []byte, t byte, name string) {
 		Addr += "/"
 	}
 	for {
-		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name)}, v)
+		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), []byte{sel}}, v)
 		for {
 			resp, err := http.Post(Addr+GET, "text/plain", bytes.NewReader(pkt))
 			if err != nil || resp.StatusCode > 299 {
@@ -143,4 +144,9 @@ func getIfClient(r chan []byte, t byte, name string) {
 			}
 		}
 	}
+}
+
+func delayedError(w http.ResponseWriter, code int) {
+	time.Sleep(ErrorDelay)
+	http.Error(w, "", code)
 }
