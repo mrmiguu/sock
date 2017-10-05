@@ -95,6 +95,110 @@ func wAndOrRIfServer() {
 			}
 			R.getrune(sel, body)
 
+		case Tint8:
+			I, ok := findint8(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			I.getint8(sel, body)
+
+		case Tint16:
+			I, ok := findint16(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			I.getint16(sel, body)
+
+		case Tint32:
+			I, ok := findint32(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			I.getint32(sel, body)
+
+		case Tint64:
+			I, ok := findint64(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			I.getint64(sel, body)
+
+		case Tuint:
+			U, ok := finduint(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			U.getuint(sel, body)
+
+		case Tuint8:
+			U, ok := finduint8(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			U.getuint8(sel, body)
+
+		case Tuint16:
+			U, ok := finduint16(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			U.getuint16(sel, body)
+
+		case Tuint32:
+			U, ok := finduint32(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			U.getuint32(sel, body)
+
+		case Tuint64:
+			U, ok := finduint64(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			U.getuint64(sel, body)
+
+		case Tbyte:
+			B, ok := findbyte(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			B.getbyte(sel, body)
+
+		case Tfloat32:
+			F, ok := findfloat32(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			F.getfloat32(sel, body)
+
+		case Tcomplex64:
+			C, ok := findcomplex64(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			C.getcomplex64(sel, body)
+
+		case Tcomplex128:
+			C, ok := findcomplex128(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			C.getcomplex128(sel, body)
+
 		default:
 			delayedError(w, http.StatusBadRequest)
 		}
@@ -170,6 +274,110 @@ func wAndOrRIfServer() {
 				return
 			}
 			b = R.setrune(sel)
+
+		case Tint8:
+			I, ok := findint8(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = I.setint8(sel)
+
+		case Tint16:
+			I, ok := findint16(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = I.setint16(sel)
+
+		case Tint32:
+			I, ok := findint32(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = I.setint32(sel)
+
+		case Tint64:
+			I, ok := findint64(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = I.setint64(sel)
+
+		case Tuint:
+			U, ok := finduint(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = U.setuint(sel)
+
+		case Tuint8:
+			U, ok := finduint8(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = U.setuint8(sel)
+
+		case Tuint16:
+			U, ok := finduint16(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = U.setuint16(sel)
+
+		case Tuint32:
+			U, ok := finduint32(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = U.setuint32(sel)
+
+		case Tuint64:
+			U, ok := finduint64(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = U.setuint64(sel)
+
+		case Tbyte:
+			B, ok := findbyte(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = B.setbyte(sel)
+
+		case Tfloat32:
+			F, ok := findfloat32(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = F.setfloat32(sel)
+
+		case Tcomplex64:
+			C, ok := findcomplex64(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = C.setcomplex64(sel)
+
+		case Tcomplex128:
+			C, ok := findcomplex128(name, idx)
+			if !ok {
+				delayedError(w, http.StatusNotFound)
+				return
+			}
+			b = C.setcomplex128(sel)
 
 		default:
 			delayedError(w, http.StatusBadRequest)

@@ -11,21 +11,21 @@ const (
 	Tbool
 	Tstring
 	Tint
-	// Tint8
-	// Tint16
-	// Tint32
-	// Tint64
-	// Tuint
-	// Tuint8
-	// Tuint16
-	// Tuint32
-	// Tuint64
-	// Tuintptr
-	// Tbyte
+	Tint8
+	Tint16
+	Tint32
+	Tint64
+	Tuint
+	Tuint8
+	Tuint16
+	Tuint32
+	Tuint64
+	Tuintptr
+	Tbyte
 	Tbytes
 	Trune
-	// Tfloat32
+	Tfloat32
 	Tfloat64
-	// Tcomplex64
-	// Tcomplex128
+	Tcomplex64
+	Tcomplex128
 )

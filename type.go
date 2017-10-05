@@ -1,7 +1,5 @@
 package sock
 
-// type Error chan error
-
 type terror struct {
 	name             string
 	len              int
@@ -65,142 +63,128 @@ type tfloat64 struct {
 	seln, n          chan int
 }
 
-// type Bool struct {
-// 	Name string
-// 	Len  uint
+type tint8 struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan int8
+	seln, n          chan int
+}
 
-// 	sel, reg private
-// }
+type tint16 struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan int16
+	seln, n          chan int
+}
 
-// type String struct {
-// 	Name string
-// 	Len  uint
+type tint32 struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan int32
+	seln, n          chan int
+}
 
-// 	sel, reg private
-// }
+type tint64 struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan int64
+	seln, n          chan int
+}
 
-// type Int struct {
-// 	Name string
-// 	Len  uint
+type tuint struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan uint
+	seln, n          chan int
+}
 
-// 	sel, reg private
-// }
+type tuint8 struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan uint8
+	seln, n          chan int
+}
 
-// type Int8 struct {
-// 	Name string
-// 	Len  uint
+type tuint16 struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan uint16
+	seln, n          chan int
+}
 
-// 	sel, reg private
-// }
+type tuint32 struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan uint32
+	seln, n          chan int
+}
 
-// type Int16 struct {
-// 	Name string
-// 	Len  uint
+type tuint64 struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan uint64
+	seln, n          chan int
+}
 
-// 	sel, reg private
-// }
+type tuintptr struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan uintptr
+	seln, n          chan int
+}
 
-// type Int32 struct {
-// 	Name string
-// 	Len  uint
+type tbyte struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan byte
+	seln, n          chan int
+}
 
-// 	sel, reg private
-// }
+type tfloat32 struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan float32
+	seln, n          chan int
+}
 
-// type Int64 struct {
-// 	Name string
-// 	Len  uint
+type tcomplex64 struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan complex64
+	seln, n          chan int
+}
 
-// 	sel, reg private
-// }
-
-// type Uint struct {
-// 	Name string
-// 	Len  uint
-
-// 	sel, reg private
-// }
-
-// type Uint8 struct {
-// 	Name string
-// 	Len  uint
-
-// 	sel, reg private
-// }
-
-// type Uint16 struct {
-// 	Name string
-// 	Len  uint
-
-// 	sel, reg private
-// }
-
-// type Uint32 struct {
-// 	Name string
-// 	Len  uint
-
-// 	sel, reg private
-// }
-
-// type Uint64 struct {
-// 	Name string
-// 	Len  uint
-
-// 	sel, reg private
-// }
-
-// type Uintptr struct {
-// 	Name string
-// 	Len  uint
-
-// 	sel, reg private
-// }
-
-// type Byte struct {
-// 	Name string
-// 	Len  uint
-
-// 	sel, reg private
-// }
-
-// type Bytes struct {
-// 	Name string
-// 	Len  uint
-
-// 	sel, reg private
-// }
-
-// type Rune struct {
-// 	Name string
-// 	Len  uint
-
-// 	sel, reg private
-// }
-
-// type Float32 struct {
-// 	Name string
-// 	Len  uint
-
-// 	sel, reg private
-// }
-
-// type Float64 struct {
-// 	Name string
-// 	Len  uint
-
-// 	sel, reg private
-// }
-
-// type Complex64 struct {
-// 	Name string
-// 	Len  uint
-
-// 	sel, reg private
-// }
-
-// type Complex128 struct {
-// 	Name string
-// 	Len  uint
-
-// 	sel, reg private
-// }
+type tcomplex128 struct {
+	name             string
+	len              int
+	idx              int
+	selw, w, selr, r chan []byte
+	cw, cr           chan complex128
+	seln, n          chan int
+}
