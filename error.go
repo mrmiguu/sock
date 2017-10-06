@@ -84,7 +84,7 @@ func finderror(name string, idx int) (*terror, bool) {
 
 func (E *terror) geterror(sel byte, b []byte) {
 	if sel == 1 {
-		E.selr <- []byte{}
+		E.selr <- nil
 	} else {
 		E.r <- b
 	}
@@ -93,8 +93,7 @@ func (E *terror) geterror(sel byte, b []byte) {
 func (E *terror) seterror(sel byte) []byte {
 	if sel == 1 {
 		E.seln <- 1
-		<-E.selw
-		return []byte{}
+		return <-E.selw
 	}
 	E.n <- 1
 	return <-E.w

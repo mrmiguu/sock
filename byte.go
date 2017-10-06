@@ -84,7 +84,7 @@ func findbyte(name string, idx int) (*tbyte, bool) {
 
 func (B *tbyte) getbyte(sel byte, b []byte) {
 	if sel == 1 {
-		B.selr <- []byte{}
+		B.selr <- nil
 	} else {
 		B.r <- b
 	}
@@ -93,8 +93,7 @@ func (B *tbyte) getbyte(sel byte, b []byte) {
 func (B *tbyte) setbyte(sel byte) []byte {
 	if sel == 1 {
 		B.seln <- 1
-		<-B.selw
-		return []byte{}
+		return <-B.selw
 	}
 	B.n <- 1
 	return <-B.w

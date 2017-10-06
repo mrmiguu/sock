@@ -110,7 +110,7 @@ func findrune(name string, idx int) (*trune, bool) {
 
 func (R *trune) getrune(sel byte, b []byte) {
 	if sel == 1 {
-		R.selr <- []byte{}
+		R.selr <- nil
 	} else {
 		R.r <- b
 	}
@@ -119,8 +119,7 @@ func (R *trune) getrune(sel byte, b []byte) {
 func (R *trune) setrune(sel byte) []byte {
 	if sel == 1 {
 		R.seln <- 1
-		<-R.selw
-		return []byte{}
+		return <-R.selw
 	}
 	R.n <- 1
 	return <-R.w

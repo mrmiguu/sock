@@ -22,7 +22,7 @@ func wAndOrRIfServer() {
 		return
 	}
 
-	if _, err := os.Stat(ClientFolder); os.IsNotExist(err) {
+	if _, err := os.Stat(ClientFolder); len(ClientFolder) > 0 && os.IsNotExist(err) {
 		panic("client folder not found")
 	}
 	http.Handle("/", http.FileServer(http.Dir(ClientFolder)))

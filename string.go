@@ -84,7 +84,7 @@ func findstring(name string, idx int) (*tstring, bool) {
 
 func (S *tstring) getstring(sel byte, b []byte) {
 	if sel == 1 {
-		S.selr <- []byte{}
+		S.selr <- nil
 	} else {
 		S.r <- b
 	}
@@ -93,8 +93,7 @@ func (S *tstring) getstring(sel byte, b []byte) {
 func (S *tstring) setstring(sel byte) []byte {
 	if sel == 1 {
 		S.seln <- 1
-		<-S.selw
-		return []byte{}
+		return <-S.selw
 	}
 	S.n <- 1
 	return <-S.w

@@ -84,7 +84,7 @@ func findint(name string, idx int) (*tint, bool) {
 
 func (I *tint) getint(sel byte, b []byte) {
 	if sel == 1 {
-		I.selr <- []byte{}
+		I.selr <- nil
 	} else {
 		I.r <- b
 	}
@@ -93,8 +93,7 @@ func (I *tint) getint(sel byte, b []byte) {
 func (I *tint) setint(sel byte) []byte {
 	if sel == 1 {
 		I.seln <- 1
-		<-I.selw
-		return []byte{}
+		return <-I.selw
 	}
 	I.n <- 1
 	return <-I.w

@@ -84,7 +84,7 @@ func findfloat64(name string, idx int) (*tfloat64, bool) {
 
 func (F *tfloat64) getfloat64(sel byte, b []byte) {
 	if sel == 1 {
-		F.selr <- []byte{}
+		F.selr <- nil
 	} else {
 		F.r <- b
 	}
@@ -93,8 +93,7 @@ func (F *tfloat64) getfloat64(sel byte, b []byte) {
 func (F *tfloat64) setfloat64(sel byte) []byte {
 	if sel == 1 {
 		F.seln <- 1
-		<-F.selw
-		return []byte{}
+		return <-F.selw
 	}
 	F.n <- 1
 	return <-F.w

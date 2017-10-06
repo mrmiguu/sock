@@ -84,7 +84,7 @@ func finduint32(name string, idx int) (*tuint32, bool) {
 
 func (U *tuint32) getuint32(sel byte, b []byte) {
 	if sel == 1 {
-		U.selr <- []byte{}
+		U.selr <- nil
 	} else {
 		U.r <- b
 	}
@@ -93,8 +93,7 @@ func (U *tuint32) getuint32(sel byte, b []byte) {
 func (U *tuint32) setuint32(sel byte) []byte {
 	if sel == 1 {
 		U.seln <- 1
-		<-U.selw
-		return []byte{}
+		return <-U.selw
 	}
 	U.n <- 1
 	return <-U.w

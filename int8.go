@@ -84,7 +84,7 @@ func findint8(name string, idx int) (*tint8, bool) {
 
 func (I *tint8) getint8(sel byte, b []byte) {
 	if sel == 1 {
-		I.selr <- []byte{}
+		I.selr <- nil
 	} else {
 		I.r <- b
 	}
@@ -93,8 +93,7 @@ func (I *tint8) getint8(sel byte, b []byte) {
 func (I *tint8) setint8(sel byte) []byte {
 	if sel == 1 {
 		I.seln <- 1
-		<-I.selw
-		return []byte{}
+		return <-I.selw
 	}
 	I.n <- 1
 	return <-I.w

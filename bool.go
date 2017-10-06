@@ -84,7 +84,7 @@ func findbool(name string, idx int) (*tbool, bool) {
 
 func (B *tbool) getbool(sel byte, b []byte) {
 	if sel == 1 {
-		B.selr <- []byte{}
+		B.selr <- nil
 	} else {
 		B.r <- b
 	}
@@ -93,8 +93,7 @@ func (B *tbool) getbool(sel byte, b []byte) {
 func (B *tbool) setbool(sel byte) []byte {
 	if sel == 1 {
 		B.seln <- 1
-		<-B.selw
-		return []byte{}
+		return <-B.selw
 	}
 	B.n <- 1
 	return <-B.w

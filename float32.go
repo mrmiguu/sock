@@ -84,7 +84,7 @@ func findfloat32(name string, idx int) (*tfloat32, bool) {
 
 func (F *tfloat32) getfloat32(sel byte, b []byte) {
 	if sel == 1 {
-		F.selr <- []byte{}
+		F.selr <- nil
 	} else {
 		F.r <- b
 	}
@@ -93,8 +93,7 @@ func (F *tfloat32) getfloat32(sel byte, b []byte) {
 func (F *tfloat32) setfloat32(sel byte) []byte {
 	if sel == 1 {
 		F.seln <- 1
-		<-F.selw
-		return []byte{}
+		return <-F.selw
 	}
 	F.n <- 1
 	return <-F.w
