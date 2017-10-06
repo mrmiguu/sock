@@ -369,12 +369,19 @@ func wIfClient(w chan []byte, t byte, name string, idx int, sel byte) {
 		Addr += "/"
 	}
 	for {
-		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), []byte{sel}, <-w}, v)
+		var b []byte
+		if sel == 0 {
+			b = <-w
+		}
+		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), []byte{sel}, b}, v)
 		for {
 			resp, err := http.Post(Addr+POST, "text/plain", bytes.NewReader(pkt))
 			if err == nil && resp.StatusCode < 300 {
 				break
 			}
+		}
+		if sel == 1 {
+			<-w
 		}
 	}
 }
