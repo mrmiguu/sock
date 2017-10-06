@@ -27,7 +27,7 @@ func wAndOrRIfServer() {
 	}
 	http.Handle("/", http.FileServer(http.Dir(ClientFolder)))
 
-	go http.HandleFunc("/"+POST, func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/"+POST, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Access-Control-Allow-Origin", "*")
 
 		b, err := ioutil.ReadAll(r.Body)
@@ -190,7 +190,7 @@ func wAndOrRIfServer() {
 		}
 	})
 
-	go http.HandleFunc("/"+GET, func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/"+GET, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Access-Control-Allow-Origin", "*")
 
 		b, err := ioutil.ReadAll(r.Body)
