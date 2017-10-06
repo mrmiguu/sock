@@ -36,10 +36,8 @@ func MakeError(name string, buf ...int) (chan<- error, <-chan error) {
 	errorDict.m[E.name] = append(errorDict.m[E.name], E)
 	errorDict.Unlock()
 
-	go wIfClient(E.selw, Terror, E.name, E.idx, 1)
-	go rIfClient(E.selr, Terror, E.name, E.idx, 1)
-	go wIfClient(E.w, Terror, E.name, E.idx, 0)
-	go rIfClient(E.r, Terror, E.name, E.idx, 0)
+	go wIfClient(E.selw, E.w, Terror, E.name, E.idx)
+	go rIfClient(E.selr, E.r, Terror, E.name, E.idx)
 	go E.selsend()
 	go E.selrecv()
 
@@ -55,11 +53,12 @@ func (E *terror) selsend() {
 			E.selw <- nil
 		}
 
+		b := error2bytes(<-E.cw)
 		for ok := true; ok; ok = (len(E.n) > 0) {
 			if !IsClient {
 				<-E.n
 			}
-			E.w <- error2bytes(<-E.cw)
+			E.w <- b
 		}
 	}
 }

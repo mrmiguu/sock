@@ -15,25 +15,26 @@ type x struct {
 }
 
 func main() {
-	w, r := sock.MakeBytes("")
+	a, _ := sock.MakeBytes("a")
+	w, r := sock.MakeBool("a")
 
 	X := x{Home: "This is Home"}
 	X.V.Z = 420.69
 	b, _ := json.Marshal(X)
 
-	w <- b
+	a <- b
 
 	start := time.Now()
-	for range [100]int{} {
-		w <- nil
+	for range [2]int{} {
+		w <- true
 	}
-	println(int(float64(time.Since(start).Nanoseconds())/100000000), "ms (w <-)")
+	println(int(float64(time.Since(start).Nanoseconds())/2000000), "ms (w <-)")
 
 	start = time.Now()
-	for range [100]int{} {
+	for range [2]int{} {
 		<-r
 	}
-	println(int(float64(time.Since(start).Nanoseconds())/100000000), "ms (<-r)")
+	println(int(float64(time.Since(start).Nanoseconds())/2000000), "ms (<-r)")
 
 	select {}
 }

@@ -36,10 +36,8 @@ func MakeBool(name string, buf ...int) (chan<- bool, <-chan bool) {
 	boolDict.m[B.name] = append(boolDict.m[B.name], B)
 	boolDict.Unlock()
 
-	go wIfClient(B.selw, Tbool, B.name, B.idx, 1)
-	go rIfClient(B.selr, Tbool, B.name, B.idx, 1)
-	go wIfClient(B.w, Tbool, B.name, B.idx, 0)
-	go rIfClient(B.r, Tbool, B.name, B.idx, 0)
+	go wIfClient(B.selw, B.w, Tbool, B.name, B.idx)
+	go rIfClient(B.selr, B.r, Tbool, B.name, B.idx)
 	go B.selsend()
 	go B.selrecv()
 
@@ -55,11 +53,12 @@ func (B *tbool) selsend() {
 			B.selw <- nil
 		}
 
+		b := bool2bytes(<-B.cw)
 		for ok := true; ok; ok = (len(B.n) > 0) {
 			if !IsClient {
 				<-B.n
 			}
-			B.w <- bool2bytes(<-B.cw)
+			B.w <- b
 		}
 	}
 }

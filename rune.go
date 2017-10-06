@@ -36,10 +36,8 @@ func MakeRune(name string, buf ...int) (chan<- rune, <-chan rune) {
 	runeDict.m[R.name] = append(runeDict.m[R.name], R)
 	runeDict.Unlock()
 
-	go wIfClient(R.selw, Trune, R.name, R.idx, 1)
-	go rIfClient(R.selr, Trune, R.name, R.idx, 1)
-	go wIfClient(R.w, Trune, R.name, R.idx, 0)
-	go rIfClient(R.r, Trune, R.name, R.idx, 0)
+	go wIfClient(R.selw, R.w, Trune, R.name, R.idx)
+	go rIfClient(R.selr, R.r, Trune, R.name, R.idx)
 	go R.selsend()
 	go R.selrecv()
 
@@ -56,11 +54,12 @@ func (R *trune) selsend() {
 			R.selw <- nil
 		}
 
+		b := rune2bytes(<-R.cw)
 		for ok := true; ok; ok = (len(R.n) > 0) {
 			if !IsClient {
 				<-R.n
 			}
-			R.w <- rune2bytes(<-R.cw)
+			R.w <- b
 		}
 	}
 }

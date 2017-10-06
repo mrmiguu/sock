@@ -16,23 +16,24 @@ type x struct {
 }
 
 func main() {
-	w, r := sock.MakeBytes("")
+	_, a := sock.MakeBytes("a")
+	w, r := sock.MakeBool("a")
 
 	var X x
-	json.Unmarshal(<-r, &X)
+	json.Unmarshal(<-a, &X)
 	fmt.Println(X)
 
 	start := time.Now()
-	for range [100]int{} {
+	for range [2]int{} {
 		<-r
 	}
-	println(int(float64(time.Since(start).Nanoseconds())/100000000), "ms (<-r)")
+	println(int(float64(time.Since(start).Nanoseconds())/2000000), "ms (<-r)")
 
 	start = time.Now()
-	for range [100]int{} {
-		w <- nil
+	for range [2]int{} {
+		w <- true
 	}
-	println(int(float64(time.Since(start).Nanoseconds())/100000000), "ms (w <-)")
+	println(int(float64(time.Since(start).Nanoseconds())/2000000), "ms (w <-)")
 
 	select {}
 }

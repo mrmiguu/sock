@@ -20,12 +20,9 @@ const (
 	Tuint16
 	Tuint32
 	Tuint64
-	Tuintptr
 	Tbyte
 	Tbytes
 	Trune
 	Tfloat32
 	Tfloat64
-	Tcomplex64
-	Tcomplex128
 )

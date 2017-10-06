@@ -36,10 +36,8 @@ func MakeUint32(name string, buf ...int) (chan<- uint32, <-chan uint32) {
 	uint32Dict.m[U.name] = append(uint32Dict.m[U.name], U)
 	uint32Dict.Unlock()
 
-	go wIfClient(U.selw, Tuint32, U.name, U.idx, 1)
-	go rIfClient(U.selr, Tuint32, U.name, U.idx, 1)
-	go wIfClient(U.w, Tuint32, U.name, U.idx, 0)
-	go rIfClient(U.r, Tuint32, U.name, U.idx, 0)
+	go wIfClient(U.selw, U.w, Tuint32, U.name, U.idx)
+	go rIfClient(U.selr, U.r, Tuint32, U.name, U.idx)
 	go U.selsend()
 	go U.selrecv()
 
@@ -55,11 +53,12 @@ func (U *tuint32) selsend() {
 			U.selw <- nil
 		}
 
+		b := uint322bytes(<-U.cw)
 		for ok := true; ok; ok = (len(U.n) > 0) {
 			if !IsClient {
 				<-U.n
 			}
-			U.w <- uint322bytes(<-U.cw)
+			U.w <- b
 		}
 	}
 }

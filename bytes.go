@@ -36,10 +36,8 @@ func MakeBytes(name string, buf ...int) (chan<- []byte, <-chan []byte) {
 	bytesDict.m[B.name] = append(bytesDict.m[B.name], B)
 	bytesDict.Unlock()
 
-	go wIfClient(B.selw, Tbytes, B.name, B.idx, 1)
-	go rIfClient(B.selr, Tbytes, B.name, B.idx, 1)
-	go wIfClient(B.w, Tbytes, B.name, B.idx, 0)
-	go rIfClient(B.r, Tbytes, B.name, B.idx, 0)
+	go wIfClient(B.selw, B.w, Tbytes, B.name, B.idx)
+	go rIfClient(B.selr, B.r, Tbytes, B.name, B.idx)
 	go B.selsend()
 	go B.selrecv()
 
@@ -55,11 +53,12 @@ func (B *tbytes) selsend() {
 			B.selw <- nil
 		}
 
+		b := <-B.cw
 		for ok := true; ok; ok = (len(B.n) > 0) {
 			if !IsClient {
 				<-B.n
 			}
-			B.w <- <-B.cw
+			B.w <- b
 		}
 	}
 }

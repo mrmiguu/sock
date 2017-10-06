@@ -36,10 +36,8 @@ func MakeInt(name string, buf ...int) (chan<- int, <-chan int) {
 	intDict.m[I.name] = append(intDict.m[I.name], I)
 	intDict.Unlock()
 
-	go wIfClient(I.selw, Tint, I.name, I.idx, 1)
-	go rIfClient(I.selr, Tint, I.name, I.idx, 1)
-	go wIfClient(I.w, Tint, I.name, I.idx, 0)
-	go rIfClient(I.r, Tint, I.name, I.idx, 0)
+	go wIfClient(I.selw, I.w, Tint, I.name, I.idx)
+	go rIfClient(I.selr, I.r, Tint, I.name, I.idx)
 	go I.selsend()
 	go I.selrecv()
 
@@ -55,11 +53,12 @@ func (I *tint) selsend() {
 			I.selw <- nil
 		}
 
+		b := int2bytes(<-I.cw)
 		for ok := true; ok; ok = (len(I.n) > 0) {
 			if !IsClient {
 				<-I.n
 			}
-			I.w <- int2bytes(<-I.cw)
+			I.w <- b
 		}
 	}
 }

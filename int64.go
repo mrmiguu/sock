@@ -36,10 +36,8 @@ func MakeInt64(name string, buf ...int) (chan<- int64, <-chan int64) {
 	int64Dict.m[I.name] = append(int64Dict.m[I.name], I)
 	int64Dict.Unlock()
 
-	go wIfClient(I.selw, Tint64, I.name, I.idx, 1)
-	go rIfClient(I.selr, Tint64, I.name, I.idx, 1)
-	go wIfClient(I.w, Tint64, I.name, I.idx, 0)
-	go rIfClient(I.r, Tint64, I.name, I.idx, 0)
+	go wIfClient(I.selw, I.w, Tint64, I.name, I.idx)
+	go rIfClient(I.selr, I.r, Tint64, I.name, I.idx)
 	go I.selsend()
 	go I.selrecv()
 
@@ -55,11 +53,12 @@ func (I *tint64) selsend() {
 			I.selw <- nil
 		}
 
+		b := int642bytes(<-I.cw)
 		for ok := true; ok; ok = (len(I.n) > 0) {
 			if !IsClient {
 				<-I.n
 			}
-			I.w <- int642bytes(<-I.cw)
+			I.w <- b
 		}
 	}
 }

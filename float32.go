@@ -36,10 +36,8 @@ func MakeFloat32(name string, buf ...int) (chan<- float32, <-chan float32) {
 	float32Dict.m[F.name] = append(float32Dict.m[F.name], F)
 	float32Dict.Unlock()
 
-	go wIfClient(F.selw, Tfloat32, F.name, F.idx, 1)
-	go rIfClient(F.selr, Tfloat32, F.name, F.idx, 1)
-	go wIfClient(F.w, Tfloat32, F.name, F.idx, 0)
-	go rIfClient(F.r, Tfloat32, F.name, F.idx, 0)
+	go wIfClient(F.selw, F.w, Tfloat32, F.name, F.idx)
+	go rIfClient(F.selr, F.r, Tfloat32, F.name, F.idx)
 	go F.selsend()
 	go F.selrecv()
 
@@ -55,11 +53,12 @@ func (F *tfloat32) selsend() {
 			F.selw <- nil
 		}
 
+		b := float322bytes(<-F.cw)
 		for ok := true; ok; ok = (len(F.n) > 0) {
 			if !IsClient {
 				<-F.n
 			}
-			F.w <- float322bytes(<-F.cw)
+			F.w <- b
 		}
 	}
 }

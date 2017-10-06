@@ -39,6 +39,7 @@ func wAndOrRIfServer() {
 		parts := bytes.Split(b, v)
 		t, name, idx, sel, body := parts[0][0], string(parts[1]), bytes2int(parts[2]), parts[3][0], parts[4]
 
+		// fmt.Println(`t, name, idx, sel, body :=`, t, name, idx, sel, string(body))
 		// defer func() { recover() }()
 
 		switch t {
@@ -202,6 +203,7 @@ func wAndOrRIfServer() {
 		}
 		parts := bytes.Split(b, v)
 		t, name, idx, sel := parts[0][0], string(parts[1]), bytes2int(parts[2]), parts[3][0]
+		// fmt.Println(`t, name, idx, sel :=`, t, name, idx, sel)
 
 		// defer func() { recover() }()
 
@@ -361,7 +363,7 @@ func wAndOrRIfServer() {
 	log.Fatal(http.ListenAndServe(Addr, nil))
 }
 
-func wIfClient(w chan []byte, t byte, name string, idx int, sel byte) {
+func wIfClient(selw, w chan []byte, t byte, name string, idx int) {
 	if !IsClient {
 		return
 	}
@@ -369,33 +371,41 @@ func wIfClient(w chan []byte, t byte, name string, idx int, sel byte) {
 		Addr += "/"
 	}
 	for {
-		var b []byte
-		if sel == 0 {
-			b = <-w
-		}
-		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), []byte{sel}, b}, v)
+		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), []byte{1}, nil}, v)
 		for {
 			resp, err := http.Post(Addr+POST, "text/plain", bytes.NewReader(pkt))
 			if err == nil && resp.StatusCode < 300 {
 				break
 			}
 		}
-		if sel == 1 {
-			<-w
+		<-selw
+		pkt = bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), []byte{0}, <-w}, v)
+		for {
+			resp, err := http.Post(Addr+POST, "text/plain", bytes.NewReader(pkt))
+			if err == nil && resp.StatusCode < 300 {
+				break
+			}
 		}
 	}
 }
 
-func rIfClient(r chan []byte, t byte, name string, idx int, sel byte) {
+func rIfClient(selr, r chan []byte, t byte, name string, idx int) {
 	if !IsClient {
 		return
 	}
 	if len(Addr) == 0 || Addr[len(Addr)-1] != '/' {
 		Addr += "/"
 	}
-	// defer func() { recover() }()
 	for {
-		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), []byte{sel}}, v)
+		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), []byte{1}}, v)
+		for {
+			resp, err := http.Post(Addr+GET, "text/plain", bytes.NewReader(pkt))
+			if err == nil && resp.StatusCode < 300 {
+				selr <- nil
+				break
+			}
+		}
+		pkt = bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), []byte{0}}, v)
 		for {
 			resp, err := http.Post(Addr+GET, "text/plain", bytes.NewReader(pkt))
 			if err != nil || resp.StatusCode > 299 {

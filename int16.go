@@ -36,10 +36,8 @@ func MakeInt16(name string, buf ...int) (chan<- int16, <-chan int16) {
 	int16Dict.m[I.name] = append(int16Dict.m[I.name], I)
 	int16Dict.Unlock()
 
-	go wIfClient(I.selw, Tint16, I.name, I.idx, 1)
-	go rIfClient(I.selr, Tint16, I.name, I.idx, 1)
-	go wIfClient(I.w, Tint16, I.name, I.idx, 0)
-	go rIfClient(I.r, Tint16, I.name, I.idx, 0)
+	go wIfClient(I.selw, I.w, Tint16, I.name, I.idx)
+	go rIfClient(I.selr, I.r, Tint16, I.name, I.idx)
 	go I.selsend()
 	go I.selrecv()
 
@@ -55,11 +53,12 @@ func (I *tint16) selsend() {
 			I.selw <- nil
 		}
 
+		b := int162bytes(<-I.cw)
 		for ok := true; ok; ok = (len(I.n) > 0) {
 			if !IsClient {
 				<-I.n
 			}
-			I.w <- int162bytes(<-I.cw)
+			I.w <- b
 		}
 	}
 }

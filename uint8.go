@@ -36,10 +36,8 @@ func MakeUint8(name string, buf ...int) (chan<- uint8, <-chan uint8) {
 	uint8Dict.m[U.name] = append(uint8Dict.m[U.name], U)
 	uint8Dict.Unlock()
 
-	go wIfClient(U.selw, Tuint8, U.name, U.idx, 1)
-	go rIfClient(U.selr, Tuint8, U.name, U.idx, 1)
-	go wIfClient(U.w, Tuint8, U.name, U.idx, 0)
-	go rIfClient(U.r, Tuint8, U.name, U.idx, 0)
+	go wIfClient(U.selw, U.w, Tuint8, U.name, U.idx)
+	go rIfClient(U.selr, U.r, Tuint8, U.name, U.idx)
 	go U.selsend()
 	go U.selrecv()
 
@@ -55,11 +53,12 @@ func (U *tuint8) selsend() {
 			U.selw <- nil
 		}
 
+		b := uint82bytes(<-U.cw)
 		for ok := true; ok; ok = (len(U.n) > 0) {
 			if !IsClient {
 				<-U.n
 			}
-			U.w <- uint82bytes(<-U.cw)
+			U.w <- b
 		}
 	}
 }
