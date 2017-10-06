@@ -17,7 +17,6 @@ func MakeString(name string, buf ...int) (chan<- string, <-chan string) {
 	stringDict.Lock()
 	if stringDict.m == nil {
 		stringDict.m = map[string][]*tstring{}
-		println(`map[string][]*tstring // created!`)
 	}
 	S := &tstring{
 		name: name,
