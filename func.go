@@ -27,9 +27,8 @@ func wAndOrRIfServer() {
 	}
 	http.Handle("/", http.FileServer(http.Dir(ClientFolder)))
 
-	http.HandleFunc("/"+POST, func(w http.ResponseWriter, r *http.Request) {
+	go http.HandleFunc("/"+POST, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Access-Control-Allow-Origin", "*")
-
 		b, err := ioutil.ReadAll(r.Body)
 		r.Body.Close()
 		if err != nil {
@@ -39,6 +38,9 @@ func wAndOrRIfServer() {
 		parts := bytes.Split(b, v)
 		t, name, idx, sel, body := parts[0][0], string(parts[1]), bytes2int(parts[2]), parts[3][0], parts[4]
 
+		// if t == Tstring {
+		// 	fmt.Println(b)
+		// }
 		// fmt.Println(`t, name, idx, sel, body :=`, t, name, idx, sel, string(body))
 		// defer func() { recover() }()
 
@@ -189,10 +191,11 @@ func wAndOrRIfServer() {
 
 		default:
 			delayedError(w, http.StatusBadRequest)
+			return
 		}
 	})
 
-	http.HandleFunc("/"+GET, func(w http.ResponseWriter, r *http.Request) {
+	go http.HandleFunc("/"+GET, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Access-Control-Allow-Origin", "*")
 
 		b, err := ioutil.ReadAll(r.Body)
@@ -380,12 +383,25 @@ func wIfClient(selw, w chan []byte, t byte, name string, idx int) {
 		}
 		<-selw
 		pkt = bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), []byte{0}, <-w}, v)
+		// if t == Tstring {
+		// 	fmt.Println(string(pkt))
+		// }
+		// var done chan<- bool
+		// if t == Tstring {
+		// 	done = load.New(`http.Post(Tstring)`)
+		// }
 		for {
 			resp, err := http.Post(Addr+POST, "text/plain", bytes.NewReader(pkt))
+			// if t == Tstring {
+			// 	done <- false
+			// }
 			if err == nil && resp.StatusCode < 300 {
 				break
 			}
 		}
+		// if t == Tstring {
+		// 	done <- true
+		// }
 	}
 }
 
