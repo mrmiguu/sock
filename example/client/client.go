@@ -16,7 +16,7 @@ type x struct {
 
 func main() {
 	a, _ := sock.MakeBytes("a")
-	w, r := sock.MakeBool("a")
+	w, r := sock.MakeBytes("b")
 
 	X := x{Home: "This is Home"}
 	X.V.Z = 420.69
@@ -26,7 +26,7 @@ func main() {
 
 	start := time.Now()
 	for range [100]int{} {
-		w <- true
+		w <- nil
 	}
 	println(int(float64(time.Since(start).Nanoseconds())/100000000), "ms (w <-)")
 

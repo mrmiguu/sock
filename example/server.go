@@ -17,7 +17,7 @@ type x struct {
 
 func main() {
 	_, a := sock.MakeBytes("a")
-	w, r := sock.MakeBool("a")
+	w, r := sock.MakeBytes("b")
 
 	var X x
 	json.Unmarshal(<-a, &X)
@@ -31,7 +31,7 @@ func main() {
 
 	start = time.Now()
 	for range [100]int{} {
-		w <- true
+		w <- nil
 	}
 	println(int(float64(time.Since(start).Nanoseconds())/100000000), "ms (w <-)")
 
