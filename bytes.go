@@ -22,22 +22,19 @@ func MakeBytes(name string, buf ...int) (chan<- []byte, <-chan []byte) {
 		name: name,
 		len:  buflen,
 		idx:  len(bytesDict.m[name]),
-		selw: make(chan []byte, buflen),
-		selr: make(chan []byte, buflen),
 		w:    make(chan []byte, buflen),
 		r:    make(chan []byte, buflen),
 		cw:   make(chan []byte, buflen),
 		cr:   make(chan []byte, buflen),
 	}
 	if !IsClient {
-		B.seln = make(chan int)
 		B.n = make(chan int)
 	}
 	bytesDict.m[B.name] = append(bytesDict.m[B.name], B)
 	bytesDict.Unlock()
 
-	go wIfClient(B.selw, B.w, Tbytes, B.name, B.idx)
-	go rIfClient(B.selr, B.r, Tbytes, B.name, B.idx)
+	go wIfClient(B.w, Tbytes, B.name, B.idx)
+	go rIfClient(B.r, Tbytes, B.name, B.idx)
 	go B.selsend()
 	go B.selrecv()
 
@@ -45,14 +42,6 @@ func MakeBytes(name string, buf ...int) (chan<- []byte, <-chan []byte) {
 }
 
 func (B *tbytes) selsend() {
-	for {
-		for ok := true; ok; ok = (len(B.seln) > 0) {
-			if !IsClient {
-				<-B.seln
-			}
-			B.selw <- nil
-		}
-
 		b := <-B.cw
 		for ok := true; ok; ok = (len(B.n) > 0) {
 			if !IsClient {
@@ -65,7 +54,6 @@ func (B *tbytes) selsend() {
 
 func (B *tbytes) selrecv() {
 	for {
-		<-B.selr
 		B.cr <- <-B.r
 	}
 }
@@ -81,19 +69,11 @@ func findbytes(name string, idx int) (*tbytes, bool) {
 	return Bi[idx], true
 }
 
-func (B *tbytes) getbytes(sel byte, b []byte) {
-	if sel == 1 {
-		B.selr <- nil
-	} else {
+func (B *tbytes) getbytes(b []byte) {
 		B.r <- b
-	}
 }
 
-func (B *tbytes) setbytes(sel byte) []byte {
-	if sel == 1 {
-		B.seln <- 1
-		return <-B.selw
-	}
+func (B *tbytes) setbytes() []byte {
 	B.n <- 1
 	return <-B.w
 }

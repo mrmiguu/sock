@@ -22,22 +22,19 @@ func MakeUint64(name string, buf ...int) (chan<- uint64, <-chan uint64) {
 		name: name,
 		len:  buflen,
 		idx:  len(uint64Dict.m[name]),
-		selw: make(chan []byte, buflen),
-		selr: make(chan []byte, buflen),
 		w:    make(chan []byte, buflen),
 		r:    make(chan []byte, buflen),
 		cw:   make(chan uint64, buflen),
 		cr:   make(chan uint64, buflen),
 	}
 	if !IsClient {
-		U.seln = make(chan int)
 		U.n = make(chan int)
 	}
 	uint64Dict.m[U.name] = append(uint64Dict.m[U.name], U)
 	uint64Dict.Unlock()
 
-	go wIfClient(U.selw, U.w, Tuint64, U.name, U.idx)
-	go rIfClient(U.selr, U.r, Tuint64, U.name, U.idx)
+	go wIfClient(U.w, Tuint64, U.name, U.idx)
+	go rIfClient(U.r, Tuint64, U.name, U.idx)
 	go U.selsend()
 	go U.selrecv()
 
@@ -46,13 +43,6 @@ func MakeUint64(name string, buf ...int) (chan<- uint64, <-chan uint64) {
 
 func (U *tuint64) selsend() {
 	for {
-		for ok := true; ok; ok = (len(U.seln) > 0) {
-			if !IsClient {
-				<-U.seln
-			}
-			U.selw <- nil
-		}
-
 		b := uint642bytes(<-U.cw)
 		for ok := true; ok; ok = (len(U.n) > 0) {
 			if !IsClient {
@@ -65,7 +55,6 @@ func (U *tuint64) selsend() {
 
 func (U *tuint64) selrecv() {
 	for {
-		<-U.selr
 		U.cr <- bytes2uint64(<-U.r)
 	}
 }
@@ -81,19 +70,11 @@ func finduint64(name string, idx int) (*tuint64, bool) {
 	return Ui[idx], true
 }
 
-func (U *tuint64) getuint64(sel byte, b []byte) {
-	if sel == 1 {
-		U.selr <- nil
-	} else {
+func (U *tuint64) getuint64(b []byte) {
 		U.r <- b
-	}
 }
 
-func (U *tuint64) setuint64(sel byte) []byte {
-	if sel == 1 {
-		U.seln <- 1
-		return <-U.selw
-	}
+func (U *tuint64) setuint64() []byte {
 	U.n <- 1
 	return <-U.w
 }

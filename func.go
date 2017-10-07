@@ -37,7 +37,7 @@ func wAndOrRIfServer() {
 			return
 		}
 		parts := bytes.Split(b, v)
-		t, name, idx, sel, body := parts[0][0], string(parts[1]), bytes2int(parts[2]), parts[3][0], parts[4]
+		t, name, idx, body := parts[0][0], string(parts[1]), bytes2int(parts[2]), parts[3]
 
 		switch t {
 		case Terror:
@@ -46,7 +46,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			E.geterror(sel, body)
+			E.geterror(body)
 
 		case Tstring:
 			S, ok := findstring(name, idx)
@@ -54,7 +54,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			S.getstring(sel, body)
+			S.getstring(body)
 
 		case Tint:
 			I, ok := findint(name, idx)
@@ -62,7 +62,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			I.getint(sel, body)
+			I.getint(body)
 
 		case Tbool:
 			B, ok := findbool(name, idx)
@@ -70,7 +70,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			B.getbool(sel, body)
+			B.getbool(body)
 
 		case Tbytes:
 			B, ok := findbytes(name, idx)
@@ -78,7 +78,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			B.getbytes(sel, body)
+			B.getbytes(body)
 
 		case Tfloat64:
 			F, ok := findfloat64(name, idx)
@@ -86,7 +86,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			F.getfloat64(sel, body)
+			F.getfloat64(body)
 
 		case Trune:
 			R, ok := findrune(name, idx)
@@ -94,7 +94,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			R.getrune(sel, body)
+			R.getrune(body)
 
 		case Tint8:
 			I, ok := findint8(name, idx)
@@ -102,7 +102,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			I.getint8(sel, body)
+			I.getint8(body)
 
 		case Tint16:
 			I, ok := findint16(name, idx)
@@ -110,7 +110,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			I.getint16(sel, body)
+			I.getint16(body)
 
 		case Tint32:
 			I, ok := findint32(name, idx)
@@ -118,7 +118,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			I.getint32(sel, body)
+			I.getint32(body)
 
 		case Tint64:
 			I, ok := findint64(name, idx)
@@ -126,7 +126,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			I.getint64(sel, body)
+			I.getint64(body)
 
 		case Tuint:
 			U, ok := finduint(name, idx)
@@ -134,7 +134,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			U.getuint(sel, body)
+			U.getuint(body)
 
 		case Tuint8:
 			U, ok := finduint8(name, idx)
@@ -142,7 +142,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			U.getuint8(sel, body)
+			U.getuint8(body)
 
 		case Tuint16:
 			U, ok := finduint16(name, idx)
@@ -150,7 +150,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			U.getuint16(sel, body)
+			U.getuint16(body)
 
 		case Tuint32:
 			U, ok := finduint32(name, idx)
@@ -158,7 +158,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			U.getuint32(sel, body)
+			U.getuint32(body)
 
 		case Tuint64:
 			U, ok := finduint64(name, idx)
@@ -166,7 +166,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			U.getuint64(sel, body)
+			U.getuint64(body)
 
 		case Tbyte:
 			B, ok := findbyte(name, idx)
@@ -174,7 +174,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			B.getbyte(sel, body)
+			B.getbyte(body)
 
 		case Tfloat32:
 			F, ok := findfloat32(name, idx)
@@ -182,7 +182,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			F.getfloat32(sel, body)
+			F.getfloat32(body)
 
 		default:
 			delayedError(w, http.StatusBadRequest)
@@ -200,7 +200,7 @@ func wAndOrRIfServer() {
 			return
 		}
 		parts := bytes.Split(b, v)
-		t, name, idx, sel := parts[0][0], string(parts[1]), bytes2int(parts[2]), parts[3][0]
+		t, name, idx := parts[0][0], string(parts[1]), bytes2int(parts[2])
 
 		switch t {
 		case Terror:
@@ -209,7 +209,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = E.seterror(sel)
+			b = E.seterror()
 
 		case Tstring:
 			S, ok := findstring(name, idx)
@@ -217,7 +217,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = S.setstring(sel)
+			b = S.setstring()
 
 		case Tint:
 			I, ok := findint(name, idx)
@@ -225,7 +225,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = I.setint(sel)
+			b = I.setint()
 
 		case Tbool:
 			B, ok := findbool(name, idx)
@@ -233,7 +233,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = B.setbool(sel)
+			b = B.setbool()
 
 		case Tbytes:
 			B, ok := findbytes(name, idx)
@@ -241,7 +241,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = B.setbytes(sel)
+			b = B.setbytes()
 
 		case Tfloat64:
 			F, ok := findfloat64(name, idx)
@@ -249,7 +249,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = F.setfloat64(sel)
+			b = F.setfloat64()
 
 		case Trune:
 			R, ok := findrune(name, idx)
@@ -257,7 +257,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = R.setrune(sel)
+			b = R.setrune()
 
 		case Tint8:
 			I, ok := findint8(name, idx)
@@ -265,7 +265,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = I.setint8(sel)
+			b = I.setint8()
 
 		case Tint16:
 			I, ok := findint16(name, idx)
@@ -273,7 +273,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = I.setint16(sel)
+			b = I.setint16()
 
 		case Tint32:
 			I, ok := findint32(name, idx)
@@ -281,7 +281,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = I.setint32(sel)
+			b = I.setint32()
 
 		case Tint64:
 			I, ok := findint64(name, idx)
@@ -289,7 +289,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = I.setint64(sel)
+			b = I.setint64()
 
 		case Tuint:
 			U, ok := finduint(name, idx)
@@ -297,7 +297,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = U.setuint(sel)
+			b = U.setuint()
 
 		case Tuint8:
 			U, ok := finduint8(name, idx)
@@ -305,7 +305,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = U.setuint8(sel)
+			b = U.setuint8()
 
 		case Tuint16:
 			U, ok := finduint16(name, idx)
@@ -313,7 +313,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = U.setuint16(sel)
+			b = U.setuint16()
 
 		case Tuint32:
 			U, ok := finduint32(name, idx)
@@ -321,7 +321,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = U.setuint32(sel)
+			b = U.setuint32()
 
 		case Tuint64:
 			U, ok := finduint64(name, idx)
@@ -329,7 +329,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = U.setuint64(sel)
+			b = U.setuint64()
 
 		case Tbyte:
 			B, ok := findbyte(name, idx)
@@ -337,7 +337,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = B.setbyte(sel)
+			b = B.setbyte()
 
 		case Tfloat32:
 			F, ok := findfloat32(name, idx)
@@ -345,7 +345,7 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = F.setfloat32(sel)
+			b = F.setfloat32()
 
 		default:
 			delayedError(w, http.StatusBadRequest)
@@ -358,7 +358,7 @@ func wAndOrRIfServer() {
 	log.Fatal(http.ListenAndServe(Addr, nil))
 }
 
-func wIfClient(selw, w chan []byte, t byte, name string, idx int) {
+func wIfClient(w chan []byte, t byte, name string, idx int) {
 	if !IsClient {
 		return
 	}
@@ -366,15 +366,7 @@ func wIfClient(selw, w chan []byte, t byte, name string, idx int) {
 		Addr += "/"
 	}
 	for {
-		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), []byte{1}, nil}, v)
-		for {
-			resp, err := http.Post(Addr+POST, "text/plain", bytes.NewReader(pkt))
-			if err == nil && resp.StatusCode < 300 {
-				break
-			}
-		}
-		<-selw
-		pkt = bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), []byte{0}, <-w}, v)
+		pkt = bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), <-w}, v)
 		for {
 			resp, err := http.Post(Addr+POST, "text/plain", bytes.NewReader(pkt))
 			if err == nil && resp.StatusCode < 300 {
@@ -384,7 +376,7 @@ func wIfClient(selw, w chan []byte, t byte, name string, idx int) {
 	}
 }
 
-func rIfClient(selr, r chan []byte, t byte, name string, idx int) {
+func rIfClient(r chan []byte, t byte, name string, idx int) {
 	if !IsClient {
 		return
 	}
@@ -392,15 +384,7 @@ func rIfClient(selr, r chan []byte, t byte, name string, idx int) {
 		Addr += "/"
 	}
 	for {
-		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), []byte{1}}, v)
-		for {
-			resp, err := http.Post(Addr+GET, "text/plain", bytes.NewReader(pkt))
-			if err == nil && resp.StatusCode < 300 {
-				selr <- nil
-				break
-			}
-		}
-		pkt = bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), []byte{0}}, v)
+		pkt = bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx)}, v)
 		for {
 			resp, err := http.Post(Addr+GET, "text/plain", bytes.NewReader(pkt))
 			if err != nil || resp.StatusCode > 299 {

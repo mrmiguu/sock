@@ -22,22 +22,19 @@ func MakeError(name string, buf ...int) (chan<- error, <-chan error) {
 		name: name,
 		len:  buflen,
 		idx:  len(errorDict.m[name]),
-		selw: make(chan []byte, buflen),
-		selr: make(chan []byte, buflen),
 		w:    make(chan []byte, buflen),
 		r:    make(chan []byte, buflen),
 		cw:   make(chan error, buflen),
 		cr:   make(chan error, buflen),
 	}
 	if !IsClient {
-		E.seln = make(chan int)
 		E.n = make(chan int)
 	}
 	errorDict.m[E.name] = append(errorDict.m[E.name], E)
 	errorDict.Unlock()
 
-	go wIfClient(E.selw, E.w, Terror, E.name, E.idx)
-	go rIfClient(E.selr, E.r, Terror, E.name, E.idx)
+	go wIfClient(E.w, Terror, E.name, E.idx)
+	go rIfClient(E.r, Terror, E.name, E.idx)
 	go E.selsend()
 	go E.selrecv()
 
@@ -46,13 +43,6 @@ func MakeError(name string, buf ...int) (chan<- error, <-chan error) {
 
 func (E *terror) selsend() {
 	for {
-		for ok := true; ok; ok = (len(E.seln) > 0) {
-			if !IsClient {
-				<-E.seln
-			}
-			E.selw <- nil
-		}
-
 		b := error2bytes(<-E.cw)
 		for ok := true; ok; ok = (len(E.n) > 0) {
 			if !IsClient {
@@ -65,7 +55,6 @@ func (E *terror) selsend() {
 
 func (E *terror) selrecv() {
 	for {
-		<-E.selr
 		E.cr <- bytes2error(<-E.r)
 	}
 }
@@ -81,19 +70,11 @@ func finderror(name string, idx int) (*terror, bool) {
 	return Ei[idx], true
 }
 
-func (E *terror) geterror(sel byte, b []byte) {
-	if sel == 1 {
-		E.selr <- nil
-	} else {
-		E.r <- b
-	}
+func (E *terror) geterror(b []byte) {
+	E.r <- b
 }
 
-func (E *terror) seterror(sel byte) []byte {
-	if sel == 1 {
-		E.seln <- 1
-		return <-E.selw
-	}
+func (E *terror) seterror() []byte {
 	E.n <- 1
 	return <-E.w
 }

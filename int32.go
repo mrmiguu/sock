@@ -22,22 +22,19 @@ func MakeInt32(name string, buf ...int) (chan<- int32, <-chan int32) {
 		name: name,
 		len:  buflen,
 		idx:  len(int32Dict.m[name]),
-		selw: make(chan []byte, buflen),
-		selr: make(chan []byte, buflen),
 		w:    make(chan []byte, buflen),
 		r:    make(chan []byte, buflen),
 		cw:   make(chan int32, buflen),
 		cr:   make(chan int32, buflen),
 	}
 	if !IsClient {
-		I.seln = make(chan int)
 		I.n = make(chan int)
 	}
 	int32Dict.m[I.name] = append(int32Dict.m[I.name], I)
 	int32Dict.Unlock()
 
-	go wIfClient(I.selw, I.w, Tint32, I.name, I.idx)
-	go rIfClient(I.selr, I.r, Tint32, I.name, I.idx)
+	go wIfClient(I.w, Tint32, I.name, I.idx)
+	go rIfClient(I.r, Tint32, I.name, I.idx)
 	go I.selsend()
 	go I.selrecv()
 
@@ -46,13 +43,6 @@ func MakeInt32(name string, buf ...int) (chan<- int32, <-chan int32) {
 
 func (I *tint32) selsend() {
 	for {
-		for ok := true; ok; ok = (len(I.seln) > 0) {
-			if !IsClient {
-				<-I.seln
-			}
-			I.selw <- nil
-		}
-
 		b := int322bytes(<-I.cw)
 		for ok := true; ok; ok = (len(I.n) > 0) {
 			if !IsClient {
@@ -65,7 +55,6 @@ func (I *tint32) selsend() {
 
 func (I *tint32) selrecv() {
 	for {
-		<-I.selr
 		I.cr <- bytes2int32(<-I.r)
 	}
 }
@@ -81,19 +70,11 @@ func findint32(name string, idx int) (*tint32, bool) {
 	return Ii[idx], true
 }
 
-func (I *tint32) getint32(sel byte, b []byte) {
-	if sel == 1 {
-		I.selr <- nil
-	} else {
+func (I *tint32) getint32(b []byte) {
 		I.r <- b
-	}
 }
 
-func (I *tint32) setint32(sel byte) []byte {
-	if sel == 1 {
-		I.seln <- 1
-		return <-I.selw
-	}
+func (I *tint32) setint32() []byte {
 	I.n <- 1
 	return <-I.w
 }

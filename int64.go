@@ -22,22 +22,19 @@ func MakeInt64(name string, buf ...int) (chan<- int64, <-chan int64) {
 		name: name,
 		len:  buflen,
 		idx:  len(int64Dict.m[name]),
-		selw: make(chan []byte, buflen),
-		selr: make(chan []byte, buflen),
 		w:    make(chan []byte, buflen),
 		r:    make(chan []byte, buflen),
 		cw:   make(chan int64, buflen),
 		cr:   make(chan int64, buflen),
 	}
 	if !IsClient {
-		I.seln = make(chan int)
 		I.n = make(chan int)
 	}
 	int64Dict.m[I.name] = append(int64Dict.m[I.name], I)
 	int64Dict.Unlock()
 
-	go wIfClient(I.selw, I.w, Tint64, I.name, I.idx)
-	go rIfClient(I.selr, I.r, Tint64, I.name, I.idx)
+	go wIfClient(I.w, Tint64, I.name, I.idx)
+	go rIfClient(I.r, Tint64, I.name, I.idx)
 	go I.selsend()
 	go I.selrecv()
 
@@ -46,13 +43,6 @@ func MakeInt64(name string, buf ...int) (chan<- int64, <-chan int64) {
 
 func (I *tint64) selsend() {
 	for {
-		for ok := true; ok; ok = (len(I.seln) > 0) {
-			if !IsClient {
-				<-I.seln
-			}
-			I.selw <- nil
-		}
-
 		b := int642bytes(<-I.cw)
 		for ok := true; ok; ok = (len(I.n) > 0) {
 			if !IsClient {
@@ -65,7 +55,6 @@ func (I *tint64) selsend() {
 
 func (I *tint64) selrecv() {
 	for {
-		<-I.selr
 		I.cr <- bytes2int64(<-I.r)
 	}
 }
@@ -81,19 +70,11 @@ func findint64(name string, idx int) (*tint64, bool) {
 	return Ii[idx], true
 }
 
-func (I *tint64) getint64(sel byte, b []byte) {
-	if sel == 1 {
-		I.selr <- nil
-	} else {
+func (I *tint64) getint64(b []byte) {
 		I.r <- b
-	}
 }
 
-func (I *tint64) setint64(sel byte) []byte {
-	if sel == 1 {
-		I.seln <- 1
-		return <-I.selw
-	}
+func (I *tint64) setint64() []byte {
 	I.n <- 1
 	return <-I.w
 }

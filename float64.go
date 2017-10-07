@@ -22,22 +22,19 @@ func MakeFloat64(name string, buf ...int) (chan<- float64, <-chan float64) {
 		name: name,
 		len:  buflen,
 		idx:  len(float64Dict.m[name]),
-		selw: make(chan []byte, buflen),
-		selr: make(chan []byte, buflen),
 		w:    make(chan []byte, buflen),
 		r:    make(chan []byte, buflen),
 		cw:   make(chan float64, buflen),
 		cr:   make(chan float64, buflen),
 	}
 	if !IsClient {
-		F.seln = make(chan int)
 		F.n = make(chan int)
 	}
 	float64Dict.m[F.name] = append(float64Dict.m[F.name], F)
 	float64Dict.Unlock()
 
-	go wIfClient(F.selw, F.w, Tfloat64, F.name, F.idx)
-	go rIfClient(F.selr, F.r, Tfloat64, F.name, F.idx)
+	go wIfClient(F.w, Tfloat64, F.name, F.idx)
+	go rIfClient(F.r, Tfloat64, F.name, F.idx)
 	go F.selsend()
 	go F.selrecv()
 
@@ -46,13 +43,6 @@ func MakeFloat64(name string, buf ...int) (chan<- float64, <-chan float64) {
 
 func (F *tfloat64) selsend() {
 	for {
-		for ok := true; ok; ok = (len(F.seln) > 0) {
-			if !IsClient {
-				<-F.seln
-			}
-			F.selw <- nil
-		}
-
 		b := float642bytes(<-F.cw)
 		for ok := true; ok; ok = (len(F.n) > 0) {
 			if !IsClient {
@@ -65,7 +55,6 @@ func (F *tfloat64) selsend() {
 
 func (F *tfloat64) selrecv() {
 	for {
-		<-F.selr
 		F.cr <- bytes2float64(<-F.r)
 	}
 }
@@ -81,19 +70,11 @@ func findfloat64(name string, idx int) (*tfloat64, bool) {
 	return Fi[idx], true
 }
 
-func (F *tfloat64) getfloat64(sel byte, b []byte) {
-	if sel == 1 {
-		F.selr <- nil
-	} else {
-		F.r <- b
-	}
+func (F *tfloat64) getfloat64(b []byte) {
+	F.r <- b
 }
 
-func (F *tfloat64) setfloat64(sel byte) []byte {
-	if sel == 1 {
-		F.seln <- 1
-		return <-F.selw
-	}
+func (F *tfloat64) setfloat64() []byte {
 	F.n <- 1
 	return <-F.w
 }

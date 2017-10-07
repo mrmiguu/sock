@@ -1,4 +1,4 @@
-package sock
+ackage sock
 
 func MakeInt16(name string, buf ...int) (chan<- int16, <-chan int16) {
 	if len(buf) > 1 {
@@ -22,22 +22,19 @@ func MakeInt16(name string, buf ...int) (chan<- int16, <-chan int16) {
 		name: name,
 		len:  buflen,
 		idx:  len(int16Dict.m[name]),
-		selw: make(chan []byte, buflen),
-		selr: make(chan []byte, buflen),
 		w:    make(chan []byte, buflen),
 		r:    make(chan []byte, buflen),
 		cw:   make(chan int16, buflen),
 		cr:   make(chan int16, buflen),
 	}
 	if !IsClient {
-		I.seln = make(chan int)
 		I.n = make(chan int)
 	}
 	int16Dict.m[I.name] = append(int16Dict.m[I.name], I)
 	int16Dict.Unlock()
 
-	go wIfClient(I.selw, I.w, Tint16, I.name, I.idx)
-	go rIfClient(I.selr, I.r, Tint16, I.name, I.idx)
+	go wIfClient(I.w, Tint16, I.name, I.idx)
+	go rIfClient(I.r, Tint16, I.name, I.idx)
 	go I.selsend()
 	go I.selrecv()
 
@@ -46,13 +43,6 @@ func MakeInt16(name string, buf ...int) (chan<- int16, <-chan int16) {
 
 func (I *tint16) selsend() {
 	for {
-		for ok := true; ok; ok = (len(I.seln) > 0) {
-			if !IsClient {
-				<-I.seln
-			}
-			I.selw <- nil
-		}
-
 		b := int162bytes(<-I.cw)
 		for ok := true; ok; ok = (len(I.n) > 0) {
 			if !IsClient {
@@ -65,7 +55,6 @@ func (I *tint16) selsend() {
 
 func (I *tint16) selrecv() {
 	for {
-		<-I.selr
 		I.cr <- bytes2int16(<-I.r)
 	}
 }
@@ -81,19 +70,11 @@ func findint16(name string, idx int) (*tint16, bool) {
 	return Ii[idx], true
 }
 
-func (I *tint16) getint16(sel byte, b []byte) {
-	if sel == 1 {
-		I.selr <- nil
-	} else {
+func (I *tint16) getint16(b []byte) {
 		I.r <- b
-	}
 }
 
-func (I *tint16) setint16(sel byte) []byte {
-	if sel == 1 {
-		I.seln <- 1
-		return <-I.selw
-	}
+func (I *tint16) setint16() []byte {
 	I.n <- 1
 	return <-I.w
 }

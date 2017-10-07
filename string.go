@@ -22,22 +22,19 @@ func MakeString(name string, buf ...int) (chan<- string, <-chan string) {
 		name: name,
 		len:  buflen,
 		idx:  len(stringDict.m[name]),
-		selw: make(chan []byte, buflen),
-		selr: make(chan []byte, buflen),
 		w:    make(chan []byte, buflen),
 		r:    make(chan []byte, buflen),
 		cw:   make(chan string, buflen),
 		cr:   make(chan string, buflen),
 	}
 	if !IsClient {
-		S.seln = make(chan int)
 		S.n = make(chan int)
 	}
 	stringDict.m[S.name] = append(stringDict.m[S.name], S)
 	stringDict.Unlock()
 
-	go wIfClient(S.selw, S.w, Tstring, S.name, S.idx)
-	go rIfClient(S.selr, S.r, Tstring, S.name, S.idx)
+	go wIfClient(S.w, Tstring, S.name, S.idx)
+	go rIfClient(S.r, Tstring, S.name, S.idx)
 	go S.selsend()
 	go S.selrecv()
 
@@ -46,13 +43,6 @@ func MakeString(name string, buf ...int) (chan<- string, <-chan string) {
 
 func (S *tstring) selsend() {
 	for {
-		for ok := true; ok; ok = (len(S.seln) > 0) {
-			if !IsClient {
-				<-S.seln
-			}
-			S.selw <- nil
-		}
-
 		b := []byte(<-S.cw)
 		for ok := true; ok; ok = (len(S.n) > 0) {
 			if !IsClient {
@@ -65,7 +55,6 @@ func (S *tstring) selsend() {
 
 func (S *tstring) selrecv() {
 	for {
-		<-S.selr
 		S.cr <- string(<-S.r)
 	}
 }
@@ -81,19 +70,11 @@ func findstring(name string, idx int) (*tstring, bool) {
 	return Si[idx], true
 }
 
-func (S *tstring) getstring(sel byte, b []byte) {
-	if sel == 1 {
-		S.selr <- nil
-	} else {
+func (S *tstring) getstring(b []byte) {
 		S.r <- b
-	}
 }
 
-func (S *tstring) setstring(sel byte) []byte {
-	if sel == 1 {
-		S.seln <- 1
-		return <-S.selw
-	}
+func (S *tstring) setstring() []byte {
 	S.n <- 1
 	return <-S.w
 }

@@ -25,16 +25,16 @@ func main() {
 	a <- b
 
 	start := time.Now()
-	for range [2]int{} {
+	for range [100]int{} {
 		w <- true
 	}
-	println(int(float64(time.Since(start).Nanoseconds())/2000000), "ms (w <-)")
+	println(int(float64(time.Since(start).Nanoseconds())/100000000), "ms (w <-)")
 
 	start = time.Now()
-	for range [2]int{} {
+	for range [100]int{} {
 		<-r
 	}
-	println(int(float64(time.Since(start).Nanoseconds())/2000000), "ms (<-r)")
+	println(int(float64(time.Since(start).Nanoseconds())/100000000), "ms (<-r)")
 
 	select {}
 }

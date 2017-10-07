@@ -22,22 +22,19 @@ func MakeRune(name string, buf ...int) (chan<- rune, <-chan rune) {
 		name: name,
 		len:  buflen,
 		idx:  len(runeDict.m[name]),
-		selw: make(chan []byte, buflen),
-		selr: make(chan []byte, buflen),
 		w:    make(chan []byte, buflen),
 		r:    make(chan []byte, buflen),
 		cw:   make(chan rune, buflen),
 		cr:   make(chan rune, buflen),
 	}
 	if !IsClient {
-		R.seln = make(chan int)
 		R.n = make(chan int)
 	}
 	runeDict.m[R.name] = append(runeDict.m[R.name], R)
 	runeDict.Unlock()
 
-	go wIfClient(R.selw, R.w, Trune, R.name, R.idx)
-	go rIfClient(R.selr, R.r, Trune, R.name, R.idx)
+	go wIfClient(R.w, Trune, R.name, R.idx)
+	go rIfClient(R.r, Trune, R.name, R.idx)
 	go R.selsend()
 	go R.selrecv()
 
@@ -47,13 +44,6 @@ func MakeRune(name string, buf ...int) (chan<- rune, <-chan rune) {
 func (R *trune) selsend() {
 	// defer func() { recover() }()
 	for {
-		for ok := true; ok; ok = (len(R.seln) > 0) {
-			if !IsClient {
-				<-R.seln
-			}
-			R.selw <- nil
-		}
-
 		b := rune2bytes(<-R.cw)
 		for ok := true; ok; ok = (len(R.n) > 0) {
 			if !IsClient {
@@ -91,7 +81,6 @@ func (R *trune) selrecv() {
 	// }()
 
 	for {
-		<-R.selr
 		R.cr <- bytes2rune(<-R.r)
 	}
 }
@@ -107,19 +96,11 @@ func findrune(name string, idx int) (*trune, bool) {
 	return Ri[idx], true
 }
 
-func (R *trune) getrune(sel byte, b []byte) {
-	if sel == 1 {
-		R.selr <- nil
-	} else {
+func (R *trune) getrune(b []byte) {
 		R.r <- b
-	}
 }
 
-func (R *trune) setrune(sel byte) []byte {
-	if sel == 1 {
-		R.seln <- 1
-		return <-R.selw
-	}
+func (R *trune) setrune() []byte {
 	R.n <- 1
 	return <-R.w
 }

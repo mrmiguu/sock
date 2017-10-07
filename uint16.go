@@ -22,22 +22,19 @@ func MakeUint16(name string, buf ...int) (chan<- uint16, <-chan uint16) {
 		name: name,
 		len:  buflen,
 		idx:  len(uint16Dict.m[name]),
-		selw: make(chan []byte, buflen),
-		selr: make(chan []byte, buflen),
 		w:    make(chan []byte, buflen),
 		r:    make(chan []byte, buflen),
 		cw:   make(chan uint16, buflen),
 		cr:   make(chan uint16, buflen),
 	}
 	if !IsClient {
-		U.seln = make(chan int)
 		U.n = make(chan int)
 	}
 	uint16Dict.m[U.name] = append(uint16Dict.m[U.name], U)
 	uint16Dict.Unlock()
 
-	go wIfClient(U.selw, U.w, Tuint16, U.name, U.idx)
-	go rIfClient(U.selr, U.r, Tuint16, U.name, U.idx)
+	go wIfClient(U.w, Tuint16, U.name, U.idx)
+	go rIfClient(U.r, Tuint16, U.name, U.idx)
 	go U.selsend()
 	go U.selrecv()
 
@@ -46,13 +43,6 @@ func MakeUint16(name string, buf ...int) (chan<- uint16, <-chan uint16) {
 
 func (U *tuint16) selsend() {
 	for {
-		for ok := true; ok; ok = (len(U.seln) > 0) {
-			if !IsClient {
-				<-U.seln
-			}
-			U.selw <- nil
-		}
-
 		b := uint162bytes(<-U.cw)
 		for ok := true; ok; ok = (len(U.n) > 0) {
 			if !IsClient {
@@ -65,7 +55,6 @@ func (U *tuint16) selsend() {
 
 func (U *tuint16) selrecv() {
 	for {
-		<-U.selr
 		U.cr <- bytes2uint16(<-U.r)
 	}
 }
@@ -81,19 +70,11 @@ func finduint16(name string, idx int) (*tuint16, bool) {
 	return Ui[idx], true
 }
 
-func (U *tuint16) getuint16(sel byte, b []byte) {
-	if sel == 1 {
-		U.selr <- nil
-	} else {
+func (U *tuint16) getuint16(b []byte) {
 		U.r <- b
-	}
 }
 
-func (U *tuint16) setuint16(sel byte) []byte {
-	if sel == 1 {
-		U.seln <- 1
-		return <-U.selw
-	}
+func (U *tuint16) setuint16() []byte {
 	U.n <- 1
 	return <-U.w
 }
