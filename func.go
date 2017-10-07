@@ -366,7 +366,7 @@ func wIfClient(w chan []byte, t byte, name string, idx int) {
 		Addr += "/"
 	}
 	for {
-		pkt = bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), <-w}, v)
+		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), <-w}, v)
 		for {
 			resp, err := http.Post(Addr+POST, "text/plain", bytes.NewReader(pkt))
 			if err == nil && resp.StatusCode < 300 {
@@ -384,7 +384,7 @@ func rIfClient(r chan []byte, t byte, name string, idx int) {
 		Addr += "/"
 	}
 	for {
-		pkt = bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx)}, v)
+		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx)}, v)
 		for {
 			resp, err := http.Post(Addr+GET, "text/plain", bytes.NewReader(pkt))
 			if err != nil || resp.StatusCode > 299 {

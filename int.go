@@ -42,6 +42,7 @@ func MakeInt(name string, buf ...int) (chan<- int, <-chan int) {
 }
 
 func (I *tint) selsend() {
+	for {
 		b := int2bytes(<-I.cw)
 		for ok := true; ok; ok = (len(I.n) > 0) {
 			if !IsClient {
@@ -70,7 +71,7 @@ func findint(name string, idx int) (*tint, bool) {
 }
 
 func (I *tint) getint(b []byte) {
-		I.r <- b
+	I.r <- b
 }
 
 func (I *tint) setint() []byte {

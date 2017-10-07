@@ -1,4 +1,4 @@
-ackage sock
+package sock
 
 func MakeInt16(name string, buf ...int) (chan<- int16, <-chan int16) {
 	if len(buf) > 1 {
@@ -71,7 +71,7 @@ func findint16(name string, idx int) (*tint16, bool) {
 }
 
 func (I *tint16) getint16(b []byte) {
-		I.r <- b
+	I.r <- b
 }
 
 func (I *tint16) setint16() []byte {

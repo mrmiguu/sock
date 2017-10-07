@@ -42,6 +42,7 @@ func MakeBytes(name string, buf ...int) (chan<- []byte, <-chan []byte) {
 }
 
 func (B *tbytes) selsend() {
+	for {
 		b := <-B.cw
 		for ok := true; ok; ok = (len(B.n) > 0) {
 			if !IsClient {
@@ -70,7 +71,7 @@ func findbytes(name string, idx int) (*tbytes, bool) {
 }
 
 func (B *tbytes) getbytes(b []byte) {
-		B.r <- b
+	B.r <- b
 }
 
 func (B *tbytes) setbytes() []byte {
