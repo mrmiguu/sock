@@ -4,10 +4,10 @@ func MakeUint32(name string, buf ...int) (chan<- uint32, <-chan uint32) {
 	if len(buf) > 1 {
 		panic("too many arguments")
 	}
-	buflen := 0
+	buflen := 1
 	if len(buf) > 0 {
-		if buf[0] < 0 {
-			panic("negative buffer argument")
+		if buf[0] < 1 {
+			panic("buffer argument less than one")
 		}
 		buflen = buf[0]
 	}
@@ -68,13 +68,4 @@ func finduint32(name string, idx int) (*tuint32, bool) {
 		return nil, false
 	}
 	return Ui[idx], true
-}
-
-func (U *tuint32) getuint32(b []byte) {
-		U.r <- b
-}
-
-func (U *tuint32) setuint32() []byte {
-	U.n <- 1
-	return <-U.w
 }

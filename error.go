@@ -4,10 +4,10 @@ func MakeError(name string, buf ...int) (chan<- error, <-chan error) {
 	if len(buf) > 1 {
 		panic("too many arguments")
 	}
-	buflen := 0
+	buflen := 1
 	if len(buf) > 0 {
-		if buf[0] < 0 {
-			panic("negative buffer argument")
+		if buf[0] < 1 {
+			panic("buffer argument less than one")
 		}
 		buflen = buf[0]
 	}
@@ -68,13 +68,4 @@ func finderror(name string, idx int) (*terror, bool) {
 		return nil, false
 	}
 	return Ei[idx], true
-}
-
-func (E *terror) geterror(b []byte) {
-	E.r <- b
-}
-
-func (E *terror) seterror() []byte {
-	E.n <- 1
-	return <-E.w
 }

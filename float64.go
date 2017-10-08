@@ -4,10 +4,10 @@ func MakeFloat64(name string, buf ...int) (chan<- float64, <-chan float64) {
 	if len(buf) > 1 {
 		panic("too many arguments")
 	}
-	buflen := 0
+	buflen := 1
 	if len(buf) > 0 {
-		if buf[0] < 0 {
-			panic("negative buffer argument")
+		if buf[0] < 1 {
+			panic("buffer argument less than one")
 		}
 		buflen = buf[0]
 	}
@@ -68,13 +68,4 @@ func findfloat64(name string, idx int) (*tfloat64, bool) {
 		return nil, false
 	}
 	return Fi[idx], true
-}
-
-func (F *tfloat64) getfloat64(b []byte) {
-	F.r <- b
-}
-
-func (F *tfloat64) setfloat64() []byte {
-	F.n <- 1
-	return <-F.w
 }

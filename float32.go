@@ -4,10 +4,10 @@ func MakeFloat32(name string, buf ...int) (chan<- float32, <-chan float32) {
 	if len(buf) > 1 {
 		panic("too many arguments")
 	}
-	buflen := 0
+	buflen := 1
 	if len(buf) > 0 {
-		if buf[0] < 0 {
-			panic("negative buffer argument")
+		if buf[0] < 1 {
+			panic("buffer argument less than one")
 		}
 		buflen = buf[0]
 	}
@@ -68,13 +68,4 @@ func findfloat32(name string, idx int) (*tfloat32, bool) {
 		return nil, false
 	}
 	return Fi[idx], true
-}
-
-func (F *tfloat32) getfloat32(b []byte) {
-	F.r <- b
-}
-
-func (F *tfloat32) setfloat32() []byte {
-	F.n <- 1
-	return <-F.w
 }

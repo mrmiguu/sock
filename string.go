@@ -4,10 +4,10 @@ func MakeString(name string, buf ...int) (chan<- string, <-chan string) {
 	if len(buf) > 1 {
 		panic("too many arguments")
 	}
-	buflen := 0
+	buflen := 1
 	if len(buf) > 0 {
-		if buf[0] < 0 {
-			panic("negative buffer argument")
+		if buf[0] < 1 {
+			panic("buffer argument less than one")
 		}
 		buflen = buf[0]
 	}
@@ -68,13 +68,4 @@ func findstring(name string, idx int) (*tstring, bool) {
 		return nil, false
 	}
 	return Si[idx], true
-}
-
-func (S *tstring) getstring(b []byte) {
-		S.r <- b
-}
-
-func (S *tstring) setstring() []byte {
-	S.n <- 1
-	return <-S.w
 }

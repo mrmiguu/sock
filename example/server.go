@@ -1,39 +1,42 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"time"
 
 	"github.com/mrmiguu/sock"
 )
 
-type x struct {
-	Home string
-	V    struct {
-		Z float64
-	}
-}
-
 func main() {
-	_, a := sock.MakeBytes("a")
-	w, r := sock.MakeBytes("b")
+	sock.Addr = "localhost" + sock.Addr
 
-	var X x
-	json.Unmarshal(<-a, &X)
-	fmt.Println(X)
+	_, begin := sock.MakeBool("start")
+
+	println(`<-begin...`)
+	<-begin
+	println(`       !!!`)
+
+	sTest, rTest := sock.MakeBytes("test")
+
+	time.Sleep(1 * time.Second)
+	println(`3...`)
+	time.Sleep(1 * time.Second)
+	println(`.2..`)
+	time.Sleep(1 * time.Second)
+	println(`..1.`)
+	time.Sleep(1 * time.Second)
+	println(`...GO!`)
 
 	start := time.Now()
 	for range [100]int{} {
-		<-r
+		sTest <- nil
 	}
-	println(int(float64(time.Since(start).Nanoseconds())/100000000), "ms (<-r)")
+	println(int(float64(time.Since(start).Nanoseconds())/1000000/100), "ms (send)")
 
 	start = time.Now()
 	for range [100]int{} {
-		w <- nil
+		<-rTest
 	}
-	println(int(float64(time.Since(start).Nanoseconds())/100000000), "ms (w <-)")
+	println(int(float64(time.Since(start).Nanoseconds())/1000000/100), "ms (recv)")
 
 	select {}
 }

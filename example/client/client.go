@@ -1,40 +1,40 @@
 package main
 
 import (
-	"encoding/json"
 	"time"
 
 	"github.com/mrmiguu/sock"
 )
 
-type x struct {
-	Home string
-	V    struct {
-		Z float64
-	}
-}
-
 func main() {
-	a, _ := sock.MakeBytes("a")
-	w, r := sock.MakeBytes("b")
+	begin, _ := sock.MakeBool("start")
 
-	X := x{Home: "This is Home"}
-	X.V.Z = 420.69
-	b, _ := json.Marshal(X)
+	println(`begin <-...`)
+	begin <- true
+	println(`        !!!`)
 
-	a <- b
+	sTest, rTest := sock.MakeBytes("test")
+
+	time.Sleep(1 * time.Second)
+	println(`3...`)
+	time.Sleep(1 * time.Second)
+	println(`.2..`)
+	time.Sleep(1 * time.Second)
+	println(`..1.`)
+	time.Sleep(1 * time.Second)
+	println(`...GO!`)
 
 	start := time.Now()
 	for range [100]int{} {
-		w <- nil
+		<-rTest
 	}
-	println(int(float64(time.Since(start).Nanoseconds())/100000000), "ms (w <-)")
+	println(int(float64(time.Since(start).Nanoseconds())/1000000/100), "ms (recv)")
 
 	start = time.Now()
 	for range [100]int{} {
-		<-r
+		sTest <- nil
 	}
-	println(int(float64(time.Since(start).Nanoseconds())/100000000), "ms (<-r)")
+	println(int(float64(time.Since(start).Nanoseconds())/1000000/100), "ms (send)")
 
 	select {}
 }

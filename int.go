@@ -4,10 +4,10 @@ func MakeInt(name string, buf ...int) (chan<- int, <-chan int) {
 	if len(buf) > 1 {
 		panic("too many arguments")
 	}
-	buflen := 0
+	buflen := 1
 	if len(buf) > 0 {
-		if buf[0] < 0 {
-			panic("negative buffer argument")
+		if buf[0] < 1 {
+			panic("buffer argument less than one")
 		}
 		buflen = buf[0]
 	}
@@ -68,13 +68,4 @@ func findint(name string, idx int) (*tint, bool) {
 		return nil, false
 	}
 	return Ii[idx], true
-}
-
-func (I *tint) getint(b []byte) {
-	I.r <- b
-}
-
-func (I *tint) setint() []byte {
-	I.n <- 1
-	return <-I.w
 }

@@ -4,10 +4,10 @@ func MakeUint(name string, buf ...int) (chan<- uint, <-chan uint) {
 	if len(buf) > 1 {
 		panic("too many arguments")
 	}
-	buflen := 0
+	buflen := 1
 	if len(buf) > 0 {
-		if buf[0] < 0 {
-			panic("negative buffer argument")
+		if buf[0] < 1 {
+			panic("buffer argument less than one")
 		}
 		buflen = buf[0]
 	}
@@ -68,13 +68,4 @@ func finduint(name string, idx int) (*tuint, bool) {
 		return nil, false
 	}
 	return Ui[idx], true
-}
-
-func (U *tuint) getuint(b []byte) {
-		U.r <- b
-}
-
-func (U *tuint) setuint() []byte {
-	U.n <- 1
-	return <-U.w
 }

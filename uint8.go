@@ -4,10 +4,10 @@ func MakeUint8(name string, buf ...int) (chan<- uint8, <-chan uint8) {
 	if len(buf) > 1 {
 		panic("too many arguments")
 	}
-	buflen := 0
+	buflen := 1
 	if len(buf) > 0 {
-		if buf[0] < 0 {
-			panic("negative buffer argument")
+		if buf[0] < 1 {
+			panic("buffer argument less than one")
 		}
 		buflen = buf[0]
 	}
@@ -68,13 +68,4 @@ func finduint8(name string, idx int) (*tuint8, bool) {
 		return nil, false
 	}
 	return Ui[idx], true
-}
-
-func (U *tuint8) getuint8(b []byte) {
-		U.r <- b
-}
-
-func (U *tuint8) setuint8() []byte {
-	U.n <- 1
-	return <-U.w
 }

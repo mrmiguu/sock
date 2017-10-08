@@ -4,10 +4,10 @@ func MakeRune(name string, buf ...int) (chan<- rune, <-chan rune) {
 	if len(buf) > 1 {
 		panic("too many arguments")
 	}
-	buflen := 0
+	buflen := 1
 	if len(buf) > 0 {
-		if buf[0] < 0 {
-			panic("negative buffer argument")
+		if buf[0] < 1 {
+			panic("buffer argument less than one")
 		}
 		buflen = buf[0]
 	}
@@ -94,13 +94,4 @@ func findrune(name string, idx int) (*trune, bool) {
 		return nil, false
 	}
 	return Ri[idx], true
-}
-
-func (R *trune) getrune(b []byte) {
-		R.r <- b
-}
-
-func (R *trune) setrune() []byte {
-	R.n <- 1
-	return <-R.w
 }
