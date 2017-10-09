@@ -12,7 +12,7 @@ func MakeByte(name string, buf ...int) (chan<- byte, <-chan byte) {
 		buflen = buf[0]
 	}
 
-	go started.Do(wAndOrRIfServer)
+	go started.Do(wAndOrR)
 
 	byteDict.Lock()
 	if byteDict.m == nil {
@@ -33,8 +33,8 @@ func MakeByte(name string, buf ...int) (chan<- byte, <-chan byte) {
 	byteDict.m[B.name] = append(byteDict.m[B.name], B)
 	byteDict.Unlock()
 
-	go wIfClient(B.w, Tbyte, B.name, B.idx)
-	go rIfClient(B.r, Tbyte, B.name, B.idx)
+	// go wIfClient(B.w, Tbyte, B.name, B.idx)
+	// go rIfClient(B.r, Tbyte, B.name, B.idx)
 	go B.selsend()
 	go B.selrecv()
 

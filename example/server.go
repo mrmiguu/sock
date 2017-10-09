@@ -1,42 +1,47 @@
 package main
 
 import (
-	"time"
-
+	load "github.com/mrmiguu/Loading"
 	"github.com/mrmiguu/sock"
 )
 
 func main() {
 	sock.Addr = "localhost" + sock.Addr
 
-	_, begin := sock.MakeBool("start")
+	_, r := sock.MakeByte("home")
 
-	println(`<-begin...`)
-	<-begin
-	println(`       !!!`)
+	done := load.New("<-r")
+	println(<-r)
+	done <- true
 
-	sTest, rTest := sock.MakeBytes("test")
+	// _, begin := sock.MakeBool("start")
 
-	time.Sleep(1 * time.Second)
-	println(`3...`)
-	time.Sleep(1 * time.Second)
-	println(`.2..`)
-	time.Sleep(1 * time.Second)
-	println(`..1.`)
-	time.Sleep(1 * time.Second)
-	println(`...GO!`)
+	// println(`<-begin...`)
+	// <-begin
+	// println(`       !!!`)
 
-	start := time.Now()
-	for range [100]int{} {
-		sTest <- nil
-	}
-	println(int(float64(time.Since(start).Nanoseconds())/1000000/100), "ms (send)")
+	// sTest, rTest := sock.MakeBytes("test")
 
-	start = time.Now()
-	for range [100]int{} {
-		<-rTest
-	}
-	println(int(float64(time.Since(start).Nanoseconds())/1000000/100), "ms (recv)")
+	// time.Sleep(1 * time.Second)
+	// println(`3...`)
+	// time.Sleep(1 * time.Second)
+	// println(`.2..`)
+	// time.Sleep(1 * time.Second)
+	// println(`..1.`)
+	// time.Sleep(1 * time.Second)
+	// println(`...GO!`)
+
+	// start := time.Now()
+	// for range [100]int{} {
+	// 	sTest <- nil
+	// }
+	// println(int(float64(time.Since(start).Nanoseconds())/1000000/100), "ms (send)")
+
+	// start = time.Now()
+	// for range [100]int{} {
+	// 	<-rTest
+	// }
+	// println(int(float64(time.Since(start).Nanoseconds())/1000000/100), "ms (recv)")
 
 	select {}
 }
