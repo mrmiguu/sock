@@ -2,16 +2,14 @@ package sock
 
 import (
 	"sync"
-	"time"
 
 	"github.com/gopherjs/gopherjs/js"
 )
 
 var (
-	Addr             string
-	IsClient         = js.Global != nil
-	ClientFolder     = "www"
-	ErrorStatusDelay = 2 * time.Second
+	Addr         string
+	IsClient     = js.Global != nil
+	ClientFolder = "www"
 
 	v = []byte(V)
 

@@ -55,7 +55,8 @@ func (B *tbytes) selsend() {
 
 func (B *tbytes) selrecv() {
 	for {
-		B.cr <- <-B.r
+		b := <-B.r
+		B.cr <- b
 	}
 }
 

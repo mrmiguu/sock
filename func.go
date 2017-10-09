@@ -2,6 +2,7 @@ package sock
 
 import (
 	"bytes"
+	"errors"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -46,7 +47,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(E.r, body)
+			err := get(E.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tstring:
 			S, ok := findstring(name, idx)
@@ -54,7 +59,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(S.r, body)
+			err := get(S.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tint:
 			I, ok := findint(name, idx)
@@ -62,7 +71,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(I.r, body)
+			err := get(I.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tbool:
 			B, ok := findbool(name, idx)
@@ -70,7 +83,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(B.r, body)
+			err := get(B.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tbytes:
 			B, ok := findbytes(name, idx)
@@ -78,7 +95,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(B.r, body)
+			err := get(B.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tfloat64:
 			F, ok := findfloat64(name, idx)
@@ -86,7 +107,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(F.r, body)
+			err := get(F.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Trune:
 			R, ok := findrune(name, idx)
@@ -94,7 +119,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(R.r, body)
+			err := get(R.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tint8:
 			I, ok := findint8(name, idx)
@@ -102,7 +131,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(I.r, body)
+			err := get(I.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tint16:
 			I, ok := findint16(name, idx)
@@ -110,7 +143,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(I.r, body)
+			err := get(I.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tint32:
 			I, ok := findint32(name, idx)
@@ -118,7 +155,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(I.r, body)
+			err := get(I.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tint64:
 			I, ok := findint64(name, idx)
@@ -126,7 +167,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(I.r, body)
+			err := get(I.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tuint:
 			U, ok := finduint(name, idx)
@@ -134,7 +179,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(U.r, body)
+			err := get(U.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tuint8:
 			U, ok := finduint8(name, idx)
@@ -142,7 +191,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(U.r, body)
+			err := get(U.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tuint16:
 			U, ok := finduint16(name, idx)
@@ -150,7 +203,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(U.r, body)
+			err := get(U.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tuint32:
 			U, ok := finduint32(name, idx)
@@ -158,7 +215,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(U.r, body)
+			err := get(U.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tuint64:
 			U, ok := finduint64(name, idx)
@@ -166,7 +227,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(U.r, body)
+			err := get(U.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tbyte:
 			B, ok := findbyte(name, idx)
@@ -174,7 +239,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(B.r, body)
+			err := get(B.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tfloat32:
 			F, ok := findfloat32(name, idx)
@@ -182,7 +251,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			get(F.r, body)
+			err := get(F.r, body)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		default:
 			delayedError(w, http.StatusBadRequest)
@@ -190,7 +263,7 @@ func wAndOrRIfServer() {
 		}
 	})
 
-	http.HandleFunc("/"+GET, func(w http.ResponseWriter, r *http.Request) {
+	go http.HandleFunc("/"+GET, func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Access-Control-Allow-Origin", "*")
 
 		b, err := ioutil.ReadAll(r.Body)
@@ -209,7 +282,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(E.n, E.w)
+			b, err = set(E.n, E.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tstring:
 			S, ok := findstring(name, idx)
@@ -217,7 +294,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(S.n, S.w)
+			b, err = set(S.n, S.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tint:
 			I, ok := findint(name, idx)
@@ -225,7 +306,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(I.n, I.w)
+			b, err = set(I.n, I.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tbool:
 			B, ok := findbool(name, idx)
@@ -233,7 +318,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(B.n, B.w)
+			b, err = set(B.n, B.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tbytes:
 			B, ok := findbytes(name, idx)
@@ -241,7 +330,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(B.n, B.w)
+			b, err = set(B.n, B.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tfloat64:
 			F, ok := findfloat64(name, idx)
@@ -249,7 +342,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(F.n, F.w)
+			b, err = set(F.n, F.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Trune:
 			R, ok := findrune(name, idx)
@@ -257,7 +354,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(R.n, R.w)
+			b, err = set(R.n, R.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tint8:
 			I, ok := findint8(name, idx)
@@ -265,7 +366,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(I.n, I.w)
+			b, err = set(I.n, I.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tint16:
 			I, ok := findint16(name, idx)
@@ -273,7 +378,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(I.n, I.w)
+			b, err = set(I.n, I.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tint32:
 			I, ok := findint32(name, idx)
@@ -281,7 +390,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(I.n, I.w)
+			b, err = set(I.n, I.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tint64:
 			I, ok := findint64(name, idx)
@@ -289,7 +402,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(I.n, I.w)
+			b, err = set(I.n, I.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tuint:
 			U, ok := finduint(name, idx)
@@ -297,7 +414,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(U.n, U.w)
+			b, err = set(U.n, U.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tuint8:
 			U, ok := finduint8(name, idx)
@@ -305,7 +426,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(U.n, U.w)
+			b, err = set(U.n, U.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tuint16:
 			U, ok := finduint16(name, idx)
@@ -313,7 +438,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(U.n, U.w)
+			b, err = set(U.n, U.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tuint32:
 			U, ok := finduint32(name, idx)
@@ -321,7 +450,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(U.n, U.w)
+			b, err = set(U.n, U.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tuint64:
 			U, ok := finduint64(name, idx)
@@ -329,7 +462,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(U.n, U.w)
+			b, err = set(U.n, U.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tbyte:
 			B, ok := findbyte(name, idx)
@@ -337,7 +474,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(B.n, B.w)
+			b, err = set(B.n, B.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		case Tfloat32:
 			F, ok := findfloat32(name, idx)
@@ -345,7 +486,11 @@ func wAndOrRIfServer() {
 				delayedError(w, http.StatusNotFound)
 				return
 			}
-			b = set(F.n, F.w)
+			b, err = set(F.n, F.w)
+			if err != nil {
+				http.Error(w, "", http.StatusRequestTimeout)
+				return
+			}
 
 		default:
 			delayedError(w, http.StatusBadRequest)
@@ -358,13 +503,31 @@ func wAndOrRIfServer() {
 	log.Fatal(http.ListenAndServe(Addr, nil))
 }
 
-func get(r chan []byte, b []byte) {
-	r <- b
+func get(r chan []byte, b []byte) error {
+	timeout := time.NewTimer(Timeout)
+	defer timeout.Stop()
+	select {
+	case <-timeout.C:
+		return errors.New("timeout; retry")
+	case r <- b:
+		return nil
+	}
 }
 
-func set(n chan int, w chan []byte) []byte {
-	n <- 1
-	return <-w
+func set(n chan int, w chan []byte) ([]byte, error) {
+	timeout := time.NewTimer(Timeout)
+	defer timeout.Stop()
+	select {
+	case <-timeout.C:
+		return nil, errors.New("timeout; retry")
+	case n <- 1:
+		select {
+		case <-timeout.C:
+			return nil, errors.New("timeout; retry")
+		case b := <-w:
+			return b, nil
+		}
+	}
 }
 
 func wIfClient(w chan []byte, t byte, name string, idx int) {
@@ -410,6 +573,6 @@ func rIfClient(r chan []byte, t byte, name string, idx int) {
 }
 
 func delayedError(w http.ResponseWriter, code int) {
-	time.Sleep(ErrorStatusDelay)
+	time.Sleep(Timeout)
 	http.Error(w, "", code)
 }
