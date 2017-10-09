@@ -10,7 +10,7 @@ import (
 var (
 	Addr             string
 	IsClient         = js.Global != nil
-	ClientFolder     = "client"
+	ClientFolder     = "www"
 	ErrorStatusDelay = 2 * time.Second
 
 	v = []byte(V)
