@@ -4,7 +4,6 @@ import (
 	"encoding/binary"
 	"errors"
 	"math"
-	"strconv"
 )
 
 func int2bytes(i int) []byte {
@@ -108,12 +107,17 @@ func bytes2uint64(b []byte) uint64 {
 }
 
 func bool2bytes(b bool) []byte {
-	return strconv.AppendBool(nil, b)
+	if b {
+		return []byte{1}
+	}
+	return []byte{0}
 }
 
 func bytes2bool(b []byte) bool {
-	tf, _ := strconv.ParseBool(string(b))
-	return tf
+	if len(b) > 0 && b[0] == 1 {
+		return true
+	}
+	return false
 }
 
 func error2bytes(e error) []byte {

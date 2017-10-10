@@ -4,21 +4,22 @@ import (
 	"sync"
 
 	"github.com/gopherjs/gopherjs/js"
+	"github.com/gorilla/websocket"
 )
 
 var (
-	Addr         string
-	IsClient     = js.Global != nil
-	ClientFolder = "www"
+	Addr     = "localhost:80"
+	IsClient = js.Global != nil
+	Root     = "www"
+	API      = "/abc123"
+	v        = []byte(V)
 
-	v = []byte(V)
+	start sync.Once
 
-	started sync.Once
+	ws    *js.Object
+	connl sync.RWMutex
+	conns = map[*websocket.Conn]bool{}
 
-	ws *js.Object
-
-	byteDict struct {
-		sync.RWMutex
-		m map[string][]*tbyte
-	}
+	bytel sync.RWMutex
+	bytem = map[string][]wrbyte{}
 )

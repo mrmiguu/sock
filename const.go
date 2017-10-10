@@ -1,12 +1,7 @@
 package sock
 
-import "time"
-
 const (
-	DefaultAddr = "localhost:80"
-	SOCK        = "/9b466094ec991a03cb95c489c19c4d75635f0ae5"
-	V           = "▼"
-	Timeout     = 30 * time.Second
+	V = "▼"
 
 	Terror byte = iota
 	Tbool

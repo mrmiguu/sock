@@ -1,73 +1,43 @@
 package sock
 
-func MakeByte(name string, buf ...int) (chan<- byte, <-chan byte) {
-	if len(buf) > 1 {
-		panic("too many arguments")
+func Byte(key string) (chan<- byte, <-chan byte) {
+	start.Do(run)
+
+	w, r := make(chan byte), make(chan byte)
+
+	bytel.Lock()
+	B := wrbyte{
+		key: key,
+		idx: len(bytem[key]),
+		r:   r,
 	}
-	buflen := 1
-	if len(buf) > 0 {
-		if buf[0] < 1 {
-			panic("buffer argument less than one")
+	bytem[key] = append(bytem[key], B)
+	bytel.Unlock()
+
+	go func() {
+		for b := range w {
+			write(Tbyte, B.key, B.idx, []byte{b})
 		}
-		buflen = buf[0]
-	}
+	}()
 
-	started.Do(wAndOrR)
-
-	byteDict.Lock()
-	if byteDict.m == nil {
-		byteDict.m = map[string][]*tbyte{}
-	}
-	B := &tbyte{
-		name: name,
-		len:  buflen,
-		idx:  len(byteDict.m[name]),
-		w:    make(chan []byte, buflen),
-		r:    make(chan []byte, buflen),
-		cw:   make(chan byte, buflen),
-		cr:   make(chan byte, buflen),
-	}
-	if !IsClient {
-		B.n = make(chan int)
-	}
-	byteDict.m[B.name] = append(byteDict.m[B.name], B)
-	byteDict.Unlock()
-
-	go wIfClient(B.w, Tbyte, B.name, B.idx)
-	// go rIfClient(B.r, Tbyte, B.name, B.idx)
-	go B.selsend()
-	go B.selrecv()
-
-	return B.cw, B.cr
+	return w, r
 }
 
-func (B *tbyte) selsend() {
-	for {
-		b := []byte{<-B.cw}
-		for ok := true; ok; ok = (len(B.n) > 0) {
-			if !IsClient {
-				<-B.n
-			}
-			// done := load.New(`B.w <- b`)
-			B.w <- b
-			// done <- true
-		}
-	}
+type wrbyte struct {
+	key string
+	idx int
+	r   chan byte
 }
 
-func (B *tbyte) selrecv() {
-	for {
-		B.cr <- (<-B.r)[0]
+func findByte(key string, idx int) *wrbyte {
+	bytel.RLock()
+	defer bytel.RUnlock()
+	v, found := bytem[key]
+	if !found {
+		return nil
 	}
-}
-
-func findbyte(name string, idx int) (*tbyte, bool) {
-	byteDict.RLock()
-	defer byteDict.RUnlock()
-
-	Bi, found := byteDict.m[name]
-	if !found || idx > len(Bi)-1 {
-		return nil, false
+	if idx >= len(v) || idx < 0 {
+		return nil
 	}
-	return Bi[idx], true
+	return &v[idx]
 }
