@@ -9,7 +9,7 @@ var (
 	API      = "/abc123"
 )
 
-func Bool(key string) (chan<- bool, <-chan bool) {
+func MakeBool(key string) (chan<- bool, <-chan bool) {
 	start.Do(run)
 
 	w, r := make(chan bool), make(chan bool)
@@ -31,7 +31,7 @@ func Bool(key string) (chan<- bool, <-chan bool) {
 	return w, r
 }
 
-func String(key string) (chan<- string, <-chan string) {
+func MakeString(key string) (chan<- string, <-chan string) {
 	start.Do(run)
 
 	w, r := make(chan string), make(chan string)
@@ -53,7 +53,7 @@ func String(key string) (chan<- string, <-chan string) {
 	return w, r
 }
 
-func Int(key string) (chan<- int, <-chan int) {
+func MakeInt(key string) (chan<- int, <-chan int) {
 	start.Do(run)
 
 	w, r := make(chan int), make(chan int)
@@ -75,7 +75,7 @@ func Int(key string) (chan<- int, <-chan int) {
 	return w, r
 }
 
-func Int8(key string) (chan<- int8, <-chan int8) {
+func MakeInt8(key string) (chan<- int8, <-chan int8) {
 	start.Do(run)
 
 	w, r := make(chan int8), make(chan int8)
@@ -97,7 +97,7 @@ func Int8(key string) (chan<- int8, <-chan int8) {
 	return w, r
 }
 
-func Int16(key string) (chan<- int16, <-chan int16) {
+func MakeInt16(key string) (chan<- int16, <-chan int16) {
 	start.Do(run)
 
 	w, r := make(chan int16), make(chan int16)
@@ -119,7 +119,7 @@ func Int16(key string) (chan<- int16, <-chan int16) {
 	return w, r
 }
 
-func Int32(key string) (chan<- int32, <-chan int32) {
+func MakeInt32(key string) (chan<- int32, <-chan int32) {
 	start.Do(run)
 
 	w, r := make(chan int32), make(chan int32)
@@ -141,7 +141,7 @@ func Int32(key string) (chan<- int32, <-chan int32) {
 	return w, r
 }
 
-func Int64(key string) (chan<- int64, <-chan int64) {
+func MakeInt64(key string) (chan<- int64, <-chan int64) {
 	start.Do(run)
 
 	w, r := make(chan int64), make(chan int64)
@@ -163,7 +163,7 @@ func Int64(key string) (chan<- int64, <-chan int64) {
 	return w, r
 }
 
-func Uint(key string) (chan<- uint, <-chan uint) {
+func MakeUint(key string) (chan<- uint, <-chan uint) {
 	start.Do(run)
 
 	w, r := make(chan uint), make(chan uint)
@@ -185,7 +185,7 @@ func Uint(key string) (chan<- uint, <-chan uint) {
 	return w, r
 }
 
-func Uint8(key string) (chan<- uint8, <-chan uint8) {
+func MakeUint8(key string) (chan<- uint8, <-chan uint8) {
 	start.Do(run)
 
 	w, r := make(chan uint8), make(chan uint8)
@@ -207,7 +207,7 @@ func Uint8(key string) (chan<- uint8, <-chan uint8) {
 	return w, r
 }
 
-func Uint16(key string) (chan<- uint16, <-chan uint16) {
+func MakeUint16(key string) (chan<- uint16, <-chan uint16) {
 	start.Do(run)
 
 	w, r := make(chan uint16), make(chan uint16)
@@ -229,7 +229,7 @@ func Uint16(key string) (chan<- uint16, <-chan uint16) {
 	return w, r
 }
 
-func Uint32(key string) (chan<- uint32, <-chan uint32) {
+func MakeUint32(key string) (chan<- uint32, <-chan uint32) {
 	start.Do(run)
 
 	w, r := make(chan uint32), make(chan uint32)
@@ -251,7 +251,7 @@ func Uint32(key string) (chan<- uint32, <-chan uint32) {
 	return w, r
 }
 
-func Uint64(key string) (chan<- uint64, <-chan uint64) {
+func MakeUint64(key string) (chan<- uint64, <-chan uint64) {
 	start.Do(run)
 
 	w, r := make(chan uint64), make(chan uint64)
@@ -273,7 +273,7 @@ func Uint64(key string) (chan<- uint64, <-chan uint64) {
 	return w, r
 }
 
-func Byte(key string) (chan<- byte, <-chan byte) {
+func MakeByte(key string) (chan<- byte, <-chan byte) {
 	start.Do(run)
 
 	w, r := make(chan byte), make(chan byte)
@@ -295,7 +295,7 @@ func Byte(key string) (chan<- byte, <-chan byte) {
 	return w, r
 }
 
-func Bytes(key string) (chan<- []byte, <-chan []byte) {
+func MakeBytes(key string) (chan<- []byte, <-chan []byte) {
 	start.Do(run)
 
 	w, r := make(chan []byte), make(chan []byte)
@@ -317,7 +317,7 @@ func Bytes(key string) (chan<- []byte, <-chan []byte) {
 	return w, r
 }
 
-func Rune(key string) (chan<- rune, <-chan rune) {
+func MakeRune(key string) (chan<- rune, <-chan rune) {
 	start.Do(run)
 
 	w, r := make(chan rune), make(chan rune)
@@ -339,7 +339,7 @@ func Rune(key string) (chan<- rune, <-chan rune) {
 	return w, r
 }
 
-func Float32(key string) (chan<- float32, <-chan float32) {
+func MakeFloat32(key string) (chan<- float32, <-chan float32) {
 	start.Do(run)
 
 	w, r := make(chan float32), make(chan float32)
@@ -361,7 +361,7 @@ func Float32(key string) (chan<- float32, <-chan float32) {
 	return w, r
 }
 
-func Float64(key string) (chan<- float64, <-chan float64) {
+func MakeFloat64(key string) (chan<- float64, <-chan float64) {
 	start.Do(run)
 
 	w, r := make(chan float64), make(chan float64)
@@ -383,7 +383,7 @@ func Float64(key string) (chan<- float64, <-chan float64) {
 	return w, r
 }
 
-func Error(key string) (chan<- error, <-chan error) {
+func MakeError(key string) (chan<- error, <-chan error) {
 	start.Do(run)
 
 	w, r := make(chan error), make(chan error)

@@ -8,10 +8,10 @@ import (
 )
 
 func main() {
-	begin, _ := sock.Bool("start")
+	begin, _ := sock.MakeBool("start")
 	begin <- true
 
-	sTest, rTest := sock.Byte("test")
+	sTest, rTest := sock.MakeByte("test")
 
 	time.Sleep(1 * time.Second)
 	println(`3...`)
