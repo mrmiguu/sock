@@ -3,8 +3,7 @@ package sock
 const (
 	V = "▼"
 
-	Terror byte = iota
-	Tbool
+	Tbool byte = iota
 	Tstring
 	Tint
 	Tint8
@@ -21,4 +20,5 @@ const (
 	Trune
 	Tfloat32
 	Tfloat64
+	Terror
 )
