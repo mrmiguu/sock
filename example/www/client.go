@@ -2,16 +2,14 @@ package main
 
 import (
 	load "github.com/mrmiguu/Loading"
-	"github.com/mrmiguu/sock"
+	"github.com/mrmiguu/sock/sock"
 )
 
 func main() {
-	sock.Addr = "localhost"
+	w, _ := sock.Byte("")
 
-	w, _ := sock.MakeByte("home")
-
-	done := load.New("w <- 0")
-	w <- 0
+	done := load.New("w <- 255")
+	w <- 255
 	done <- true
 
 	// begin, _ := sock.MakeBool("start")

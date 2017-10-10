@@ -5,17 +5,15 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gopherjs/gopherjs/js"
 	"github.com/gorilla/websocket"
+	"github.com/mrmiguu/jsutil"
 )
 
 func init() {
-	if IsClient {
-		Addr = DefaultClientAddr
-	} else {
-		Addr = DefaultServerAddr
-	}
+	Addr = DefaultAddr
 }
 
 func wAndOrRIfServer() {
@@ -31,7 +29,8 @@ func wAndOrRIfServer() {
 	up := websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool { return true },
 	}
-	http.HandleFunc("/"+SOCK, func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc(SOCK, func(w http.ResponseWriter, r *http.Request) {
+		// println(`UPGRADE TIME !`)
 		conn, err := up.Upgrade(w, r, nil)
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
@@ -40,17 +39,23 @@ func wAndOrRIfServer() {
 		defer conn.Close()
 
 		for {
-			_, pkt, err := conn.ReadMessage()
-			if err != nil {
-				http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+			// done := load.New(`conn.ReadMessage()`)
+			mt, pkt, err := conn.ReadMessage()
+			// done <- false
+			// println(`mt`, mt)
+			if err != nil || mt != websocket.BinaryMessage {
+				conn.Close()
 				return
 			}
+			// done <- true
 
 			parts := bytes.Split(pkt, v)
 			t, name, idx := parts[0][0], string(parts[1]), bytes2int(parts[2])
 			if len(parts) > 3 {
+				// println(`handlePOST`)
 				go handlePOST(conn, t, name, idx, parts[3])
 			} else {
+				// println(`handleGET`)
 				go handleGET(conn, t, name, idx)
 			}
 		}
@@ -60,6 +65,7 @@ func wAndOrRIfServer() {
 }
 
 func handlePOST(conn *websocket.Conn, t byte, name string, idx int, body []byte) {
+	// println(`handlePOST !`)
 	switch t {
 	case Tbyte:
 		B, ok := findbyte(name, idx)
@@ -76,6 +82,7 @@ func handlePOST(conn *websocket.Conn, t byte, name string, idx int, body []byte)
 }
 
 func handleGET(conn *websocket.Conn, t byte, name string, idx int) {
+	// println(`handleGET !`)
 	var b []byte
 
 	switch t {
@@ -94,11 +101,11 @@ func handleGET(conn *websocket.Conn, t byte, name string, idx int) {
 	}
 
 	pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), b}, v)
-	conn.WriteMessage(websocket.TextMessage, pkt)
+	conn.WriteMessage(websocket.BinaryMessage, pkt)
 }
 
 func wAndOrR() {
-	wAndOrRIfServer()
+	go wAndOrRIfServer()
 	wAndOrRIfClient()
 }
 
@@ -107,11 +114,25 @@ func wAndOrRIfClient() {
 		return
 	}
 
-	if len(Addr) == 0 || Addr[len(Addr)-1] != '/' {
-		Addr += "/"
+	idx := strings.LastIndex(Addr, "/")
+	if idx != -1 {
+		Addr = Addr[:idx]
 	}
+	// if len(Addr) == 0 || Addr[len(Addr)-1] != '/' {
+	// 	Addr += "/"
+	// }
+
+	// println(`wAndOrRIfClient !`)
 
 	ws = js.Global.Get("WebSocket").New("ws://" + Addr + SOCK)
+	// println("ws://" + Addr + SOCK)
+
+	f, c := jsutil.C()
+	ws.Set("onopen", f)
+	// done := load.New(`onopen`)
+	<-c
+	// done <- true
+
 	ws.Set("onmessage", func(e *js.Object) {
 		pkt := []byte(e.Get("data").String())
 
@@ -159,45 +180,49 @@ func handleSVRRD(t byte, name string, idx int) {
 	}
 
 	pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), b}, v)
-	ws.Call("send", string(pkt))
+	ws.Call("send", pkt)
 }
 
-// func wIfClient(w chan []byte, t byte, name string, idx int) {
-// 	if !IsClient {
-// 		return
-// 	}
+func wIfClient(w chan []byte, t byte, name string, idx int) {
+	if !IsClient {
+		return
+	}
 
-// 	for {
-// 		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), <-w}, v)
+	// println(`wIfClient !`)
 
-// 		// for {
-// 		// 	resp, err := http.Post(Addr+SOCK, "text/plain", bytes.NewReader(pkt))
-// 		// 	if err == nil && resp.StatusCode < 300 {
-// 		// 		break
-// 		// 	}
-// 		// }
-// 	}
-// }
+	// var done chan<- bool
+	for {
+		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx), <-w}, v)
+
+		// done := load.New(`ws.Call("send", "` + string(pkt) + `"`)
+		ws.Call("send", pkt)
+		// done <- true
+	}
+}
 
 // func rIfClient(r chan []byte, t byte, name string, idx int) {
 // 	if !IsClient {
 // 		return
 // 	}
 
+// 	println(`rIfClient !`)
+
 // 	for {
 // 		pkt := bytes.Join([][]byte{[]byte{t}, []byte(name), int2bytes(idx)}, v)
-// 		for {
-// 			resp, err := http.Post(Addr+SOCK, "text/plain", bytes.NewReader(pkt))
-// 			if err != nil || resp.StatusCode > 299 {
-// 				continue
-// 			}
-// 			b, err := ioutil.ReadAll(resp.Body)
-// 			resp.Body.Close()
-// 			if err == nil {
-// 				r <- b
-// 				break
-// 			}
-// 		}
+// 		ws.Call("send", string(pkt))
+
+// 		// for {
+// 		// 	resp, err := http.Post(Addr+SOCK, "text/plain", bytes.NewReader(pkt))
+// 		// 	if err != nil || resp.StatusCode > 299 {
+// 		// 		continue
+// 		// 	}
+// 		// 	b, err := ioutil.ReadAll(resp.Body)
+// 		// 	resp.Body.Close()
+// 		// 	if err == nil {
+// 		// 		r <- b
+// 		// 		break
+// 		// 	}
+// 		// }
 // 	}
 // }
 
