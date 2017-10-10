@@ -1,17 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/mrmiguu/sock"
 )
 
 func main() {
-	begin, _ := sock.Byte("start")
-
-	println(`begin <-...`)
-	begin <- 0
-	println(`        !!!`)
+	begin, _ := sock.Bool("start")
+	begin <- true
 
 	sTest, rTest := sock.Byte("test")
 
@@ -24,17 +22,20 @@ func main() {
 	time.Sleep(1 * time.Second)
 	println(`...GO!`)
 
+	var bytes []byte
+
 	start := time.Now()
-	for range [256]int{} {
-		println(<-rTest)
+	for range [128]int{} {
+		bytes = append(bytes, <-rTest)
 	}
-	println(int(float64(time.Since(start).Nanoseconds())/1000000/256), "ms (recv)")
+	fmt.Println(bytes)
+	println(int(float64(time.Since(start).Nanoseconds())/1000000/128), "ms (recv)")
 
 	start = time.Now()
-	for i := range [256]int{} {
-		sTest <- byte(i)
+	for i := range [128]int{} {
+		sTest <- 128 + byte(i)
 	}
-	println(int(float64(time.Since(start).Nanoseconds())/1000000/256), "ms (send)")
+	println(int(float64(time.Since(start).Nanoseconds())/1000000/128), "ms (send)")
 
 	select {}
 }
