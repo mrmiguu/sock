@@ -1,15 +1,25 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 
 	"github.com/mrmiguu/sock"
 )
 
+type tStruct struct {
+	Name string
+	Age  int
+}
+
 func main() {
-	begin, _ := sock.MakeBool("start")
-	begin <- true
+	wS, rS := sock.MakeBytes("start")
+	b, _ := json.Marshal(tStruct{"Alex", 26})
+	wS <- b
+	var s tStruct
+	json.Unmarshal(<-rS, &s)
+	fmt.Println(s)
 
 	sTest, rTest := sock.MakeByte("test")
 
