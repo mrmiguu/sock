@@ -1,9 +1,9 @@
 package sock
 
-func findBool(key string, idx int) *wrbool {
-	booll.RLock()
-	defer booll.RUnlock()
-	v, found := boolm[key]
+func findBool(key string, idx int) *rbool {
+	rbooll.RLock()
+	defer rbooll.RUnlock()
+	v, found := rboolm[key]
 	if !found {
 		return nil
 	}
@@ -13,10 +13,10 @@ func findBool(key string, idx int) *wrbool {
 	return &v[idx]
 }
 
-func findString(key string, idx int) *wrstring {
-	stringl.RLock()
-	defer stringl.RUnlock()
-	v, found := stringm[key]
+func findString(key string, idx int) *rstring {
+	rstringl.RLock()
+	defer rstringl.RUnlock()
+	v, found := rstringm[key]
 	if !found {
 		return nil
 	}
@@ -26,10 +26,10 @@ func findString(key string, idx int) *wrstring {
 	return &v[idx]
 }
 
-func findInt(key string, idx int) *wrint {
-	intl.RLock()
-	defer intl.RUnlock()
-	v, found := intm[key]
+func findInt(key string, idx int) *rint {
+	rintl.RLock()
+	defer rintl.RUnlock()
+	v, found := rintm[key]
 	if !found {
 		return nil
 	}
@@ -39,10 +39,10 @@ func findInt(key string, idx int) *wrint {
 	return &v[idx]
 }
 
-func findInt8(key string, idx int) *wrint8 {
-	int8l.RLock()
-	defer int8l.RUnlock()
-	v, found := int8m[key]
+func findInt8(key string, idx int) *rint8 {
+	rint8l.RLock()
+	defer rint8l.RUnlock()
+	v, found := rint8m[key]
 	if !found {
 		return nil
 	}
@@ -52,10 +52,10 @@ func findInt8(key string, idx int) *wrint8 {
 	return &v[idx]
 }
 
-func findInt16(key string, idx int) *wrint16 {
-	int16l.RLock()
-	defer int16l.RUnlock()
-	v, found := int16m[key]
+func findInt16(key string, idx int) *rint16 {
+	rint16l.RLock()
+	defer rint16l.RUnlock()
+	v, found := rint16m[key]
 	if !found {
 		return nil
 	}
@@ -65,10 +65,10 @@ func findInt16(key string, idx int) *wrint16 {
 	return &v[idx]
 }
 
-func findInt32(key string, idx int) *wrint32 {
-	int32l.RLock()
-	defer int32l.RUnlock()
-	v, found := int32m[key]
+func findInt32(key string, idx int) *rint32 {
+	rint32l.RLock()
+	defer rint32l.RUnlock()
+	v, found := rint32m[key]
 	if !found {
 		return nil
 	}
@@ -78,10 +78,10 @@ func findInt32(key string, idx int) *wrint32 {
 	return &v[idx]
 }
 
-func findInt64(key string, idx int) *wrint64 {
-	int64l.RLock()
-	defer int64l.RUnlock()
-	v, found := int64m[key]
+func findInt64(key string, idx int) *rint64 {
+	rint64l.RLock()
+	defer rint64l.RUnlock()
+	v, found := rint64m[key]
 	if !found {
 		return nil
 	}
@@ -91,10 +91,10 @@ func findInt64(key string, idx int) *wrint64 {
 	return &v[idx]
 }
 
-func findUint(key string, idx int) *wruint {
-	uintl.RLock()
-	defer uintl.RUnlock()
-	v, found := uintm[key]
+func findUint(key string, idx int) *ruint {
+	ruintl.RLock()
+	defer ruintl.RUnlock()
+	v, found := ruintm[key]
 	if !found {
 		return nil
 	}
@@ -104,10 +104,10 @@ func findUint(key string, idx int) *wruint {
 	return &v[idx]
 }
 
-func findUint8(key string, idx int) *wruint8 {
-	uint8l.RLock()
-	defer uint8l.RUnlock()
-	v, found := uint8m[key]
+func findUint8(key string, idx int) *ruint8 {
+	ruint8l.RLock()
+	defer ruint8l.RUnlock()
+	v, found := ruint8m[key]
 	if !found {
 		return nil
 	}
@@ -117,10 +117,10 @@ func findUint8(key string, idx int) *wruint8 {
 	return &v[idx]
 }
 
-func findUint16(key string, idx int) *wruint16 {
-	uint16l.RLock()
-	defer uint16l.RUnlock()
-	v, found := uint16m[key]
+func findUint16(key string, idx int) *ruint16 {
+	ruint16l.RLock()
+	defer ruint16l.RUnlock()
+	v, found := ruint16m[key]
 	if !found {
 		return nil
 	}
@@ -130,10 +130,10 @@ func findUint16(key string, idx int) *wruint16 {
 	return &v[idx]
 }
 
-func findUint32(key string, idx int) *wruint32 {
-	uint32l.RLock()
-	defer uint32l.RUnlock()
-	v, found := uint32m[key]
+func findUint32(key string, idx int) *ruint32 {
+	ruint32l.RLock()
+	defer ruint32l.RUnlock()
+	v, found := ruint32m[key]
 	if !found {
 		return nil
 	}
@@ -143,10 +143,10 @@ func findUint32(key string, idx int) *wruint32 {
 	return &v[idx]
 }
 
-func findUint64(key string, idx int) *wruint64 {
-	uint64l.RLock()
-	defer uint64l.RUnlock()
-	v, found := uint64m[key]
+func findUint64(key string, idx int) *ruint64 {
+	ruint64l.RLock()
+	defer ruint64l.RUnlock()
+	v, found := ruint64m[key]
 	if !found {
 		return nil
 	}
@@ -156,10 +156,10 @@ func findUint64(key string, idx int) *wruint64 {
 	return &v[idx]
 }
 
-func findByte(key string, idx int) *wrbyte {
-	bytel.RLock()
-	defer bytel.RUnlock()
-	v, found := bytem[key]
+func findByte(key string, idx int) *rbyte {
+	rbytel.RLock()
+	defer rbytel.RUnlock()
+	v, found := rbytem[key]
 	if !found {
 		return nil
 	}
@@ -169,10 +169,10 @@ func findByte(key string, idx int) *wrbyte {
 	return &v[idx]
 }
 
-func findBytes(key string, idx int) *wrbytes {
-	bytesl.RLock()
-	defer bytesl.RUnlock()
-	v, found := bytesm[key]
+func findBytes(key string, idx int) *rbytes {
+	rbytesl.RLock()
+	defer rbytesl.RUnlock()
+	v, found := rbytesm[key]
 	if !found {
 		return nil
 	}
@@ -182,10 +182,10 @@ func findBytes(key string, idx int) *wrbytes {
 	return &v[idx]
 }
 
-func findRune(key string, idx int) *wrrune {
-	runel.RLock()
-	defer runel.RUnlock()
-	v, found := runem[key]
+func findRune(key string, idx int) *rrune {
+	rrunel.RLock()
+	defer rrunel.RUnlock()
+	v, found := rrunem[key]
 	if !found {
 		return nil
 	}
@@ -195,10 +195,10 @@ func findRune(key string, idx int) *wrrune {
 	return &v[idx]
 }
 
-func findFloat32(key string, idx int) *wrfloat32 {
-	float32l.RLock()
-	defer float32l.RUnlock()
-	v, found := float32m[key]
+func findFloat32(key string, idx int) *rfloat32 {
+	rfloat32l.RLock()
+	defer rfloat32l.RUnlock()
+	v, found := rfloat32m[key]
 	if !found {
 		return nil
 	}
@@ -208,10 +208,10 @@ func findFloat32(key string, idx int) *wrfloat32 {
 	return &v[idx]
 }
 
-func findFloat64(key string, idx int) *wrfloat64 {
-	float64l.RLock()
-	defer float64l.RUnlock()
-	v, found := float64m[key]
+func findFloat64(key string, idx int) *rfloat64 {
+	rfloat64l.RLock()
+	defer rfloat64l.RUnlock()
+	v, found := rfloat64m[key]
 	if !found {
 		return nil
 	}
@@ -221,10 +221,10 @@ func findFloat64(key string, idx int) *wrfloat64 {
 	return &v[idx]
 }
 
-func findError(key string, idx int) *wrerror {
-	errorl.RLock()
-	defer errorl.RUnlock()
-	v, found := errorm[key]
+func findError(key string, idx int) *rerror {
+	rerrorl.RLock()
+	defer rerrorl.RUnlock()
+	v, found := rerrorm[key]
 	if !found {
 		return nil
 	}

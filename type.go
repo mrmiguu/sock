@@ -5,92 +5,92 @@ type keyAndIdx struct {
 	idx int
 }
 
-type wrbool struct {
+type rbool struct {
 	keyAndIdx
 	r chan bool
 }
 
-type wrstring struct {
+type rstring struct {
 	keyAndIdx
 	r chan string
 }
 
-type wrint struct {
+type rint struct {
 	keyAndIdx
 	r chan int
 }
 
-type wrint8 struct {
+type rint8 struct {
 	keyAndIdx
 	r chan int8
 }
 
-type wrint16 struct {
+type rint16 struct {
 	keyAndIdx
 	r chan int16
 }
 
-type wrint32 struct {
+type rint32 struct {
 	keyAndIdx
 	r chan int32
 }
 
-type wrint64 struct {
+type rint64 struct {
 	keyAndIdx
 	r chan int64
 }
 
-type wruint struct {
+type ruint struct {
 	keyAndIdx
 	r chan uint
 }
 
-type wruint8 struct {
+type ruint8 struct {
 	keyAndIdx
 	r chan uint8
 }
 
-type wruint16 struct {
+type ruint16 struct {
 	keyAndIdx
 	r chan uint16
 }
 
-type wruint32 struct {
+type ruint32 struct {
 	keyAndIdx
 	r chan uint32
 }
 
-type wruint64 struct {
+type ruint64 struct {
 	keyAndIdx
 	r chan uint64
 }
 
-type wrbyte struct {
+type rbyte struct {
 	keyAndIdx
 	r chan byte
 }
 
-type wrbytes struct {
+type rbytes struct {
 	keyAndIdx
 	r chan []byte
 }
 
-type wrrune struct {
+type rrune struct {
 	keyAndIdx
 	r chan rune
 }
 
-type wrfloat32 struct {
+type rfloat32 struct {
 	keyAndIdx
 	r chan float32
 }
 
-type wrfloat64 struct {
+type rfloat64 struct {
 	keyAndIdx
 	r chan float64
 }
 
-type wrerror struct {
+type rerror struct {
 	keyAndIdx
 	r chan error
 }
