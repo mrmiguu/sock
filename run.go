@@ -54,10 +54,14 @@ func runServer() {
 		connl.Lock()
 		conns[conn] = true
 		connl.Unlock()
+		reboot.Unlock()
 		defer func() {
 			connl.Lock()
 			conn.Close()
 			delete(conns, conn)
+			if len(conns) == 0 {
+				reboot.Lock()
+			}
 			connl.Unlock()
 		}()
 

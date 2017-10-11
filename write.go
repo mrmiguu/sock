@@ -11,11 +11,19 @@ func write(t byte, key string, idx int, body []byte) {
 
 	if IsClient {
 		ws.Call("send", pkt)
-	} else {
+		return
+	}
+	for {
 		connl.RLock()
+		cnt := len(conns)
 		for conn := range conns {
 			conn.WriteMessage(websocket.BinaryMessage, pkt)
 		}
 		connl.RUnlock()
+		if cnt > 0 {
+			break
+		}
+		reboot.RLock()
+		reboot.RUnlock()
 	}
 }

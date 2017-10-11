@@ -12,9 +12,10 @@ var (
 
 	start sync.Once
 
-	ws    *js.Object
-	connl sync.RWMutex
-	conns = map[*websocket.Conn]bool{}
+	ws     *js.Object
+	connl  sync.RWMutex
+	conns  = map[*websocket.Conn]bool{}
+	reboot sync.RWMutex
 
 	booll    sync.RWMutex
 	boolm    = map[string][]wrbool{}
@@ -53,3 +54,7 @@ var (
 	errorl   sync.RWMutex
 	errorm   = map[string][]wrerror{}
 )
+
+func init() {
+	reboot.Lock()
+}
