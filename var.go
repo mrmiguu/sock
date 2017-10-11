@@ -16,6 +16,7 @@ var (
 	connl  sync.RWMutex
 	conns  = map[*websocket.Conn]bool{}
 	reboot sync.RWMutex
+	wsync  sync.Mutex
 
 	booll    sync.RWMutex
 	boolm    = map[string][]wrbool{}
