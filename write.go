@@ -24,9 +24,11 @@ func write(t byte, key string, idx int, body []byte) {
 			wsync.Unlock()
 		}
 		connl.RUnlock()
+
 		if cnt > 0 {
 			break
 		}
+
 		reboot.RLock()
 		reboot.RUnlock()
 	}

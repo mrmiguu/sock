@@ -26,10 +26,12 @@ func runClient() {
 	<-c
 
 	ws.Set("onmessage", func(e *js.Object) {
-		err := read(js.Global.Get("Uint8Array").New(e.Get("data")).Interface().([]byte))
-		if err != nil {
-			ws.Call("close")
-		}
+		go func(pkt []byte) {
+			err := read(pkt)
+			if err != nil {
+				ws.Call("close")
+			}
+		}(js.Global.Get("Uint8Array").New(e.Get("data")).Interface().([]byte))
 	})
 }
 
@@ -52,9 +54,11 @@ func runServer() {
 			return
 		}
 		connl.Lock()
+		if len(conns) == 0 {
+			reboot.Unlock()
+		}
 		conns[conn] = true
 		connl.Unlock()
-		reboot.Unlock()
 		defer func() {
 			connl.Lock()
 			conn.Close()
