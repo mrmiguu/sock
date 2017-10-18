@@ -3,50 +3,160 @@ package sock
 import "github.com/gopherjs/gopherjs/js"
 
 var (
-	Addr     = "localhost:80"
+	Addr = "localhost:80"
+
 	IsClient = js.Global != nil
-	Root     = "www"
-	API      = "/317d37b0edc7bd7cbd25d97f53a16ce5"
+
+	Root = "www"
+
+	API = "/317d37b0edc7bd7cbd25d97f53a16ce5"
 )
 
-// func Wbool(key ...string) chan<- bool {
-// 	k := getKey(key...)
+func Close(key string) {
+	wbooll.Lock()
+	delete(wboolm, key)
+	wbooll.Unlock()
 
-// 	start.Do(run)
+	rbooll.Lock()
+	delete(rboolm, key)
+	rbooll.Unlock()
 
-// 	w := make(chan bool)
+	wstringl.Lock()
+	delete(wstringm, key)
+	wstringl.Unlock()
 
-// 	wbooll.Lock()
-// 	idx := len(wboolm[k])
-// 	wboolm[k] = append(wboolm[k], nil)
-// 	wbooll.Unlock()
+	rstringl.Lock()
+	delete(rstringm, key)
+	rstringl.Unlock()
 
-// 	go func() {
-// 		for b := range w {
-// 			write(Tbool, k, idx, bool2bytes(b))
-// 		}
-// 	}()
+	wintl.Lock()
+	delete(wintm, key)
+	wintl.Unlock()
 
-// 	return w
-// }
+	rintl.Lock()
+	delete(rintm, key)
+	rintl.Unlock()
 
-// func Rbool(key ...string) <-chan bool {
-// 	k := getKey(key...)
+	wint8l.Lock()
+	delete(wint8m, key)
+	wint8l.Unlock()
 
-// 	start.Do(run)
+	rint8l.Lock()
+	delete(rint8m, key)
+	rint8l.Unlock()
 
-// 	r := make(chan bool)
+	wint16l.Lock()
+	delete(wint16m, key)
+	wint16l.Unlock()
 
-// 	rbooll.Lock()
-// 	var B rbool
-// 	B.key = k
-// 	B.idx = len(rboolm[k])
-// 	B.r = r
-// 	rboolm[k] = append(rboolm[k], B)
-// 	rbooll.Unlock()
+	rint16l.Lock()
+	delete(rint16m, key)
+	rint16l.Unlock()
 
-// 	return r
-// }
+	wint32l.Lock()
+	delete(wint32m, key)
+	wint32l.Unlock()
+
+	rint32l.Lock()
+	delete(rint32m, key)
+	rint32l.Unlock()
+
+	wint64l.Lock()
+	delete(wint64m, key)
+	wint64l.Unlock()
+
+	rint64l.Lock()
+	delete(rint64m, key)
+	rint64l.Unlock()
+
+	wuintl.Lock()
+	delete(wuintm, key)
+	wuintl.Unlock()
+
+	ruintl.Lock()
+	delete(ruintm, key)
+	ruintl.Unlock()
+
+	wuint8l.Lock()
+	delete(wuint8m, key)
+	wuint8l.Unlock()
+
+	ruint8l.Lock()
+	delete(ruint8m, key)
+	ruint8l.Unlock()
+
+	wuint16l.Lock()
+	delete(wuint16m, key)
+	wuint16l.Unlock()
+
+	ruint16l.Lock()
+	delete(ruint16m, key)
+	ruint16l.Unlock()
+
+	wuint32l.Lock()
+	delete(wuint32m, key)
+	wuint32l.Unlock()
+
+	ruint32l.Lock()
+	delete(ruint32m, key)
+	ruint32l.Unlock()
+
+	wuint64l.Lock()
+	delete(wuint64m, key)
+	wuint64l.Unlock()
+
+	ruint64l.Lock()
+	delete(ruint64m, key)
+	ruint64l.Unlock()
+
+	wbytel.Lock()
+	delete(wbytem, key)
+	wbytel.Unlock()
+
+	rbytel.Lock()
+	delete(rbytem, key)
+	rbytel.Unlock()
+
+	wbytesl.Lock()
+	delete(wbytesm, key)
+	wbytesl.Unlock()
+
+	rbytesl.Lock()
+	delete(rbytesm, key)
+	rbytesl.Unlock()
+
+	wrunel.Lock()
+	delete(wrunem, key)
+	wrunel.Unlock()
+
+	rrunel.Lock()
+	delete(rrunem, key)
+	rrunel.Unlock()
+
+	wfloat32l.Lock()
+	delete(wfloat32m, key)
+	wfloat32l.Unlock()
+
+	rfloat32l.Lock()
+	delete(rfloat32m, key)
+	rfloat32l.Unlock()
+
+	wfloat64l.Lock()
+	delete(wfloat64m, key)
+	wfloat64l.Unlock()
+
+	rfloat64l.Lock()
+	delete(rfloat64m, key)
+	rfloat64l.Unlock()
+
+	werrorl.Lock()
+	delete(werrorm, key)
+	werrorl.Unlock()
+
+	rerrorl.Lock()
+	delete(rerrorm, key)
+	rerrorl.Unlock()
+}
 
 func Wbool(key ...string) chan<- bool {
 	k := getKey(key...)
