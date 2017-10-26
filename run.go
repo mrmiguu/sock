@@ -3,7 +3,6 @@ package sock
 import (
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/gopherjs/gopherjs/js"
 	"github.com/gorilla/websocket"
@@ -19,12 +18,10 @@ func run() {
 }
 
 func runClient() {
-	wsOrWSS := "ws://"
-	if strings.Contains(Addr, "https://") {
-		wsOrWSS = "wss://"
+	wsOrWSS := "wss://"
+	if !Secure {
+		wsOrWSS = "ws://"
 	}
-	Addr = strings.Replace(Addr, "http://", "", 1)
-	Addr = strings.Replace(Addr, "https://", "", 1)
 
 	wsync.Lock()
 	defer wsync.Unlock()
