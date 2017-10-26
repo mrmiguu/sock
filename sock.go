@@ -12,152 +12,6 @@ var (
 	API = "/317d37b0edc7bd7cbd25d97f53a16ce5"
 )
 
-func Close(key string) {
-	wbooll.Lock()
-	delete(wboolm, key)
-	wbooll.Unlock()
-
-	rbooll.Lock()
-	delete(rboolm, key)
-	rbooll.Unlock()
-
-	wstringl.Lock()
-	delete(wstringm, key)
-	wstringl.Unlock()
-
-	rstringl.Lock()
-	delete(rstringm, key)
-	rstringl.Unlock()
-
-	wintl.Lock()
-	delete(wintm, key)
-	wintl.Unlock()
-
-	rintl.Lock()
-	delete(rintm, key)
-	rintl.Unlock()
-
-	wint8l.Lock()
-	delete(wint8m, key)
-	wint8l.Unlock()
-
-	rint8l.Lock()
-	delete(rint8m, key)
-	rint8l.Unlock()
-
-	wint16l.Lock()
-	delete(wint16m, key)
-	wint16l.Unlock()
-
-	rint16l.Lock()
-	delete(rint16m, key)
-	rint16l.Unlock()
-
-	wint32l.Lock()
-	delete(wint32m, key)
-	wint32l.Unlock()
-
-	rint32l.Lock()
-	delete(rint32m, key)
-	rint32l.Unlock()
-
-	wint64l.Lock()
-	delete(wint64m, key)
-	wint64l.Unlock()
-
-	rint64l.Lock()
-	delete(rint64m, key)
-	rint64l.Unlock()
-
-	wuintl.Lock()
-	delete(wuintm, key)
-	wuintl.Unlock()
-
-	ruintl.Lock()
-	delete(ruintm, key)
-	ruintl.Unlock()
-
-	wuint8l.Lock()
-	delete(wuint8m, key)
-	wuint8l.Unlock()
-
-	ruint8l.Lock()
-	delete(ruint8m, key)
-	ruint8l.Unlock()
-
-	wuint16l.Lock()
-	delete(wuint16m, key)
-	wuint16l.Unlock()
-
-	ruint16l.Lock()
-	delete(ruint16m, key)
-	ruint16l.Unlock()
-
-	wuint32l.Lock()
-	delete(wuint32m, key)
-	wuint32l.Unlock()
-
-	ruint32l.Lock()
-	delete(ruint32m, key)
-	ruint32l.Unlock()
-
-	wuint64l.Lock()
-	delete(wuint64m, key)
-	wuint64l.Unlock()
-
-	ruint64l.Lock()
-	delete(ruint64m, key)
-	ruint64l.Unlock()
-
-	wbytel.Lock()
-	delete(wbytem, key)
-	wbytel.Unlock()
-
-	rbytel.Lock()
-	delete(rbytem, key)
-	rbytel.Unlock()
-
-	wbytesl.Lock()
-	delete(wbytesm, key)
-	wbytesl.Unlock()
-
-	rbytesl.Lock()
-	delete(rbytesm, key)
-	rbytesl.Unlock()
-
-	wrunel.Lock()
-	delete(wrunem, key)
-	wrunel.Unlock()
-
-	rrunel.Lock()
-	delete(rrunem, key)
-	rrunel.Unlock()
-
-	wfloat32l.Lock()
-	delete(wfloat32m, key)
-	wfloat32l.Unlock()
-
-	rfloat32l.Lock()
-	delete(rfloat32m, key)
-	rfloat32l.Unlock()
-
-	wfloat64l.Lock()
-	delete(wfloat64m, key)
-	wfloat64l.Unlock()
-
-	rfloat64l.Lock()
-	delete(rfloat64m, key)
-	rfloat64l.Unlock()
-
-	werrorl.Lock()
-	delete(werrorm, key)
-	werrorl.Unlock()
-
-	rerrorl.Lock()
-	delete(rerrorm, key)
-	rerrorl.Unlock()
-}
-
 func Wbool(key ...string) chan<- bool {
 	k := getKey(key...)
 
@@ -166,13 +20,16 @@ func Wbool(key ...string) chan<- bool {
 	w := make(chan bool)
 
 	wbooll.Lock()
-	idx := len(wboolm[k])
-	wboolm[k] = append(wboolm[k], nil)
+	var B wbool
+	B.key = k
+	B.idx = len(wboolm[k])
+	B.w = w
+	wboolm[k] = append(wboolm[k], B)
 	wbooll.Unlock()
 
 	go func() {
 		for b := range w {
-			write(Tbool, k, idx, bool2bytes(b))
+			write(Tbool, k, B.idx, bool2bytes(b))
 		}
 	}()
 
@@ -205,13 +62,16 @@ func Wstring(key ...string) chan<- string {
 	w := make(chan string)
 
 	wstringl.Lock()
-	idx := len(wstringm[k])
-	wstringm[k] = append(wstringm[k], nil)
+	var S wstring
+	S.key = k
+	S.idx = len(wstringm[k])
+	S.w = w
+	wstringm[k] = append(wstringm[k], S)
 	wstringl.Unlock()
 
 	go func() {
 		for s := range w {
-			write(Tstring, k, idx, []byte(s))
+			write(Tstring, k, S.idx, []byte(s))
 		}
 	}()
 
@@ -244,13 +104,16 @@ func Wint(key ...string) chan<- int {
 	w := make(chan int)
 
 	wintl.Lock()
-	idx := len(wintm[k])
-	wintm[k] = append(wintm[k], nil)
+	var I wint
+	I.key = k
+	I.idx = len(wintm[k])
+	I.w = w
+	wintm[k] = append(wintm[k], I)
 	wintl.Unlock()
 
 	go func() {
 		for i := range w {
-			write(Tint, k, idx, int2bytes(i))
+			write(Tint, k, I.idx, int2bytes(i))
 		}
 	}()
 
@@ -283,13 +146,16 @@ func Wint8(key ...string) chan<- int8 {
 	w := make(chan int8)
 
 	wint8l.Lock()
-	idx := len(wint8m[k])
-	wint8m[k] = append(wint8m[k], nil)
+	var I wint8
+	I.key = k
+	I.idx = len(wint8m[k])
+	I.w = w
+	wint8m[k] = append(wint8m[k], I)
 	wint8l.Unlock()
 
 	go func() {
 		for i := range w {
-			write(Tint8, k, idx, int82bytes(i))
+			write(Tint8, k, I.idx, int82bytes(i))
 		}
 	}()
 
@@ -322,13 +188,16 @@ func Wint16(key ...string) chan<- int16 {
 	w := make(chan int16)
 
 	wint16l.Lock()
-	idx := len(wint16m[k])
-	wint16m[k] = append(wint16m[k], nil)
+	var I wint16
+	I.key = k
+	I.idx = len(wint16m[k])
+	I.w = w
+	wint16m[k] = append(wint16m[k], I)
 	wint16l.Unlock()
 
 	go func() {
 		for i := range w {
-			write(Tint16, k, idx, int162bytes(i))
+			write(Tint16, k, I.idx, int162bytes(i))
 		}
 	}()
 
@@ -361,13 +230,16 @@ func Wint32(key ...string) chan<- int32 {
 	w := make(chan int32)
 
 	wint32l.Lock()
-	idx := len(wint32m[k])
-	wint32m[k] = append(wint32m[k], nil)
+	var I wint32
+	I.key = k
+	I.idx = len(wint32m[k])
+	I.w = w
+	wint32m[k] = append(wint32m[k], I)
 	wint32l.Unlock()
 
 	go func() {
 		for i := range w {
-			write(Tint32, k, idx, int322bytes(i))
+			write(Tint32, k, I.idx, int322bytes(i))
 		}
 	}()
 
@@ -400,13 +272,16 @@ func Wint64(key ...string) chan<- int64 {
 	w := make(chan int64)
 
 	wint64l.Lock()
-	idx := len(wint64m[k])
-	wint64m[k] = append(wint64m[k], nil)
+	var I wint64
+	I.key = k
+	I.idx = len(wint64m[k])
+	I.w = w
+	wint64m[k] = append(wint64m[k], I)
 	wint64l.Unlock()
 
 	go func() {
 		for i := range w {
-			write(Tint64, k, idx, int642bytes(i))
+			write(Tint64, k, I.idx, int642bytes(i))
 		}
 	}()
 
@@ -439,13 +314,16 @@ func Wuint(key ...string) chan<- uint {
 	w := make(chan uint)
 
 	wuintl.Lock()
-	idx := len(wuintm[k])
-	wuintm[k] = append(wuintm[k], nil)
+	var U wuint
+	U.key = k
+	U.idx = len(wuintm[k])
+	U.w = w
+	wuintm[k] = append(wuintm[k], U)
 	wuintl.Unlock()
 
 	go func() {
 		for u := range w {
-			write(Tuint, k, idx, uint2bytes(u))
+			write(Tuint, k, U.idx, uint2bytes(u))
 		}
 	}()
 
@@ -478,13 +356,16 @@ func Wuint8(key ...string) chan<- uint8 {
 	w := make(chan uint8)
 
 	wuint8l.Lock()
-	idx := len(wuint8m[k])
-	wuint8m[k] = append(wuint8m[k], nil)
+	var U wuint8
+	U.key = k
+	U.idx = len(wuint8m[k])
+	U.w = w
+	wuint8m[k] = append(wuint8m[k], U)
 	wuint8l.Unlock()
 
 	go func() {
 		for u := range w {
-			write(Tuint8, k, idx, uint82bytes(u))
+			write(Tuint8, k, U.idx, uint82bytes(u))
 		}
 	}()
 
@@ -517,13 +398,16 @@ func Wuint16(key ...string) chan<- uint16 {
 	w := make(chan uint16)
 
 	wuint16l.Lock()
-	idx := len(wuint16m[k])
-	wuint16m[k] = append(wuint16m[k], nil)
+	var U wuint16
+	U.key = k
+	U.idx = len(wuint16m[k])
+	U.w = w
+	wuint16m[k] = append(wuint16m[k], U)
 	wuint16l.Unlock()
 
 	go func() {
 		for u := range w {
-			write(Tuint16, k, idx, uint162bytes(u))
+			write(Tuint16, k, U.idx, uint162bytes(u))
 		}
 	}()
 
@@ -556,13 +440,16 @@ func Wuint32(key ...string) chan<- uint32 {
 	w := make(chan uint32)
 
 	wuint32l.Lock()
-	idx := len(wuint32m[k])
-	wuint32m[k] = append(wuint32m[k], nil)
+	var U wuint32
+	U.key = k
+	U.idx = len(wuint32m[k])
+	U.w = w
+	wuint32m[k] = append(wuint32m[k], U)
 	wuint32l.Unlock()
 
 	go func() {
 		for u := range w {
-			write(Tuint32, k, idx, uint322bytes(u))
+			write(Tuint32, k, U.idx, uint322bytes(u))
 		}
 	}()
 
@@ -595,13 +482,16 @@ func Wuint64(key ...string) chan<- uint64 {
 	w := make(chan uint64)
 
 	wuint64l.Lock()
-	idx := len(wuint64m[k])
-	wuint64m[k] = append(wuint64m[k], nil)
+	var U wuint64
+	U.key = k
+	U.idx = len(wuint64m[k])
+	U.w = w
+	wuint64m[k] = append(wuint64m[k], U)
 	wuint64l.Unlock()
 
 	go func() {
 		for u := range w {
-			write(Tuint64, k, idx, uint642bytes(u))
+			write(Tuint64, k, U.idx, uint642bytes(u))
 		}
 	}()
 
@@ -634,13 +524,16 @@ func Wbyte(key ...string) chan<- byte {
 	w := make(chan byte)
 
 	wbytel.Lock()
-	idx := len(wbytem[k])
-	wbytem[k] = append(wbytem[k], nil)
+	var B wbyte
+	B.key = k
+	B.idx = len(wbytem[k])
+	B.w = w
+	wbytem[k] = append(wbytem[k], B)
 	wbytel.Unlock()
 
 	go func() {
 		for b := range w {
-			write(Tbyte, k, idx, []byte{b})
+			write(Tbyte, k, B.idx, []byte{b})
 		}
 	}()
 
@@ -673,13 +566,16 @@ func Wbytes(key ...string) chan<- []byte {
 	w := make(chan []byte)
 
 	wbytesl.Lock()
-	idx := len(wbytesm[k])
-	wbytesm[k] = append(wbytesm[k], nil)
+	var B wbytes
+	B.key = k
+	B.idx = len(wbytesm[k])
+	B.w = w
+	wbytesm[k] = append(wbytesm[k], B)
 	wbytesl.Unlock()
 
 	go func() {
 		for b := range w {
-			write(Tbytes, k, idx, b)
+			write(Tbytes, k, B.idx, b)
 		}
 	}()
 
@@ -712,13 +608,16 @@ func Wrune(key ...string) chan<- rune {
 	w := make(chan rune)
 
 	wrunel.Lock()
-	idx := len(wrunem[k])
-	wrunem[k] = append(wrunem[k], nil)
+	var R wrune
+	R.key = k
+	R.idx = len(wrunem[k])
+	R.w = w
+	wrunem[k] = append(wrunem[k], R)
 	wrunel.Unlock()
 
 	go func() {
 		for r := range w {
-			write(Trune, k, idx, rune2bytes(r))
+			write(Trune, k, R.idx, rune2bytes(r))
 		}
 	}()
 
@@ -751,13 +650,16 @@ func Wfloat32(key ...string) chan<- float32 {
 	w := make(chan float32)
 
 	wfloat32l.Lock()
-	idx := len(wfloat32m[k])
-	wfloat32m[k] = append(wfloat32m[k], nil)
+	var F wfloat32
+	F.key = k
+	F.idx = len(wfloat32m[k])
+	F.w = w
+	wfloat32m[k] = append(wfloat32m[k], F)
 	wfloat32l.Unlock()
 
 	go func() {
 		for f := range w {
-			write(Tfloat32, k, idx, float322bytes(f))
+			write(Tfloat32, k, F.idx, float322bytes(f))
 		}
 	}()
 
@@ -790,13 +692,16 @@ func Wfloat64(key ...string) chan<- float64 {
 	w := make(chan float64)
 
 	wfloat64l.Lock()
-	idx := len(wfloat64m[k])
-	wfloat64m[k] = append(wfloat64m[k], nil)
+	var F wfloat64
+	F.key = k
+	F.idx = len(wfloat64m[k])
+	F.w = w
+	wfloat64m[k] = append(wfloat64m[k], F)
 	wfloat64l.Unlock()
 
 	go func() {
 		for f := range w {
-			write(Tfloat64, k, idx, float642bytes(f))
+			write(Tfloat64, k, F.idx, float642bytes(f))
 		}
 	}()
 
@@ -829,13 +734,16 @@ func Werror(key ...string) chan<- error {
 	w := make(chan error)
 
 	werrorl.Lock()
-	idx := len(werrorm[k])
-	werrorm[k] = append(werrorm[k], nil)
+	var E werror
+	E.key = k
+	E.idx = len(werrorm[k])
+	E.w = w
+	werrorm[k] = append(werrorm[k], E)
 	werrorl.Unlock()
 
 	go func() {
 		for e := range w {
-			write(Terror, k, idx, error2bytes(e))
+			write(Terror, k, E.idx, error2bytes(e))
 		}
 	}()
 
