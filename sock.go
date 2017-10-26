@@ -20,11 +20,14 @@ func Wbool(key ...string) chan<- bool {
 	w := make(chan bool)
 
 	wbooll.Lock()
+	wb := wboolm[k]
 	var B wbool
 	B.key = k
-	B.idx = len(wboolm[k])
+	B.idx = wb.i
 	B.w = w
-	wboolm[k] = append(wboolm[k], B)
+	wb.sl = append(wb.sl, B)
+	wb.i++
+	wboolm[k] = wb
 	wbooll.Unlock()
 
 	go func() {
@@ -44,11 +47,14 @@ func Rbool(key ...string) <-chan bool {
 	r := make(chan bool)
 
 	rbooll.Lock()
+	rb := rboolm[k]
 	var B rbool
 	B.key = k
-	B.idx = len(rboolm[k])
+	B.idx = rb.i
 	B.r = r
-	rboolm[k] = append(rboolm[k], B)
+	rb.sl = append(rb.sl, B)
+	rb.i++
+	rboolm[k] = rb
 	rbooll.Unlock()
 
 	return r
@@ -62,11 +68,14 @@ func Wstring(key ...string) chan<- string {
 	w := make(chan string)
 
 	wstringl.Lock()
+	ws := wstringm[k]
 	var S wstring
 	S.key = k
-	S.idx = len(wstringm[k])
+	S.idx = ws.i
 	S.w = w
-	wstringm[k] = append(wstringm[k], S)
+	ws.sl = append(ws.sl, S)
+	ws.i++
+	wstringm[k] = ws
 	wstringl.Unlock()
 
 	go func() {
@@ -86,11 +95,14 @@ func Rstring(key ...string) <-chan string {
 	r := make(chan string)
 
 	rstringl.Lock()
+	rs := rstringm[k]
 	var S rstring
 	S.key = k
-	S.idx = len(rstringm[k])
+	S.idx = rs.i
 	S.r = r
-	rstringm[k] = append(rstringm[k], S)
+	rs.sl = append(rs.sl, S)
+	rs.i++
+	rstringm[k] = rs
 	rstringl.Unlock()
 
 	return r
@@ -104,11 +116,14 @@ func Wint(key ...string) chan<- int {
 	w := make(chan int)
 
 	wintl.Lock()
+	wi := wintm[k]
 	var I wint
 	I.key = k
-	I.idx = len(wintm[k])
+	I.idx = wi.i
 	I.w = w
-	wintm[k] = append(wintm[k], I)
+	wi.sl = append(wi.sl, I)
+	wi.i++
+	wintm[k] = wi
 	wintl.Unlock()
 
 	go func() {
@@ -128,11 +143,14 @@ func Rint(key ...string) <-chan int {
 	r := make(chan int)
 
 	rintl.Lock()
+	ri := rintm[k]
 	var I rint
 	I.key = k
-	I.idx = len(rintm[k])
+	I.idx = ri.i
 	I.r = r
-	rintm[k] = append(rintm[k], I)
+	ri.sl = append(ri.sl, I)
+	ri.i++
+	rintm[k] = ri
 	rintl.Unlock()
 
 	return r
@@ -146,11 +164,14 @@ func Wint8(key ...string) chan<- int8 {
 	w := make(chan int8)
 
 	wint8l.Lock()
+	wi := wint8m[k]
 	var I wint8
 	I.key = k
-	I.idx = len(wint8m[k])
+	I.idx = wi.i
 	I.w = w
-	wint8m[k] = append(wint8m[k], I)
+	wi.sl = append(wi.sl, I)
+	wi.i++
+	wint8m[k] = wi
 	wint8l.Unlock()
 
 	go func() {
@@ -170,11 +191,14 @@ func Rint8(key ...string) <-chan int8 {
 	r := make(chan int8)
 
 	rint8l.Lock()
+	ri := rint8m[k]
 	var I rint8
 	I.key = k
-	I.idx = len(rint8m[k])
+	I.idx = ri.i
 	I.r = r
-	rint8m[k] = append(rint8m[k], I)
+	ri.sl = append(ri.sl, I)
+	ri.i++
+	rint8m[k] = ri
 	rint8l.Unlock()
 
 	return r
@@ -188,11 +212,14 @@ func Wint16(key ...string) chan<- int16 {
 	w := make(chan int16)
 
 	wint16l.Lock()
+	wi := wint16m[k]
 	var I wint16
 	I.key = k
-	I.idx = len(wint16m[k])
+	I.idx = wi.i
 	I.w = w
-	wint16m[k] = append(wint16m[k], I)
+	wi.sl = append(wi.sl, I)
+	wi.i++
+	wint16m[k] = wi
 	wint16l.Unlock()
 
 	go func() {
@@ -212,11 +239,14 @@ func Rint16(key ...string) <-chan int16 {
 	r := make(chan int16)
 
 	rint16l.Lock()
+	ri := rint16m[k]
 	var I rint16
 	I.key = k
-	I.idx = len(rint16m[k])
+	I.idx = ri.i
 	I.r = r
-	rint16m[k] = append(rint16m[k], I)
+	ri.sl = append(ri.sl, I)
+	ri.i++
+	rint16m[k] = ri
 	rint16l.Unlock()
 
 	return r
@@ -230,11 +260,14 @@ func Wint32(key ...string) chan<- int32 {
 	w := make(chan int32)
 
 	wint32l.Lock()
+	wi := wint32m[k]
 	var I wint32
 	I.key = k
-	I.idx = len(wint32m[k])
+	I.idx = wi.i
 	I.w = w
-	wint32m[k] = append(wint32m[k], I)
+	wi.sl = append(wi.sl, I)
+	wi.i++
+	wint32m[k] = wi
 	wint32l.Unlock()
 
 	go func() {
@@ -254,11 +287,14 @@ func Rint32(key ...string) <-chan int32 {
 	r := make(chan int32)
 
 	rint32l.Lock()
+	ri := rint32m[k]
 	var I rint32
 	I.key = k
-	I.idx = len(rint32m[k])
+	I.idx = ri.i
 	I.r = r
-	rint32m[k] = append(rint32m[k], I)
+	ri.sl = append(ri.sl, I)
+	ri.i++
+	rint32m[k] = ri
 	rint32l.Unlock()
 
 	return r
@@ -272,11 +308,14 @@ func Wint64(key ...string) chan<- int64 {
 	w := make(chan int64)
 
 	wint64l.Lock()
+	wi := wint64m[k]
 	var I wint64
 	I.key = k
-	I.idx = len(wint64m[k])
+	I.idx = wi.i
 	I.w = w
-	wint64m[k] = append(wint64m[k], I)
+	wi.sl = append(wi.sl, I)
+	wi.i++
+	wint64m[k] = wi
 	wint64l.Unlock()
 
 	go func() {
@@ -296,11 +335,14 @@ func Rint64(key ...string) <-chan int64 {
 	r := make(chan int64)
 
 	rint64l.Lock()
+	ri := rint64m[k]
 	var I rint64
 	I.key = k
-	I.idx = len(rint64m[k])
+	I.idx = ri.i
 	I.r = r
-	rint64m[k] = append(rint64m[k], I)
+	ri.sl = append(ri.sl, I)
+	ri.i++
+	rint64m[k] = ri
 	rint64l.Unlock()
 
 	return r
@@ -314,11 +356,14 @@ func Wuint(key ...string) chan<- uint {
 	w := make(chan uint)
 
 	wuintl.Lock()
+	wu := wuintm[k]
 	var U wuint
 	U.key = k
-	U.idx = len(wuintm[k])
+	U.idx = wu.i
 	U.w = w
-	wuintm[k] = append(wuintm[k], U)
+	wu.sl = append(wu.sl, U)
+	wu.i++
+	wuintm[k] = wu
 	wuintl.Unlock()
 
 	go func() {
@@ -338,11 +383,14 @@ func Ruint(key ...string) <-chan uint {
 	r := make(chan uint)
 
 	ruintl.Lock()
+	ru := ruintm[k]
 	var U ruint
 	U.key = k
-	U.idx = len(ruintm[k])
+	U.idx = ru.i
 	U.r = r
-	ruintm[k] = append(ruintm[k], U)
+	ru.sl = append(ru.sl, U)
+	ru.i++
+	ruintm[k] = ru
 	ruintl.Unlock()
 
 	return r
@@ -356,11 +404,14 @@ func Wuint8(key ...string) chan<- uint8 {
 	w := make(chan uint8)
 
 	wuint8l.Lock()
+	wu := wuint8m[k]
 	var U wuint8
 	U.key = k
-	U.idx = len(wuint8m[k])
+	U.idx = wu.i
 	U.w = w
-	wuint8m[k] = append(wuint8m[k], U)
+	wu.sl = append(wu.sl, U)
+	wu.i++
+	wuint8m[k] = wu
 	wuint8l.Unlock()
 
 	go func() {
@@ -380,11 +431,14 @@ func Ruint8(key ...string) <-chan uint8 {
 	r := make(chan uint8)
 
 	ruint8l.Lock()
+	ru := ruint8m[k]
 	var U ruint8
 	U.key = k
-	U.idx = len(ruint8m[k])
+	U.idx = ru.i
 	U.r = r
-	ruint8m[k] = append(ruint8m[k], U)
+	ru.sl = append(ru.sl, U)
+	ru.i++
+	ruint8m[k] = ru
 	ruint8l.Unlock()
 
 	return r
@@ -398,11 +452,14 @@ func Wuint16(key ...string) chan<- uint16 {
 	w := make(chan uint16)
 
 	wuint16l.Lock()
+	wu := wuint16m[k]
 	var U wuint16
 	U.key = k
-	U.idx = len(wuint16m[k])
+	U.idx = wu.i
 	U.w = w
-	wuint16m[k] = append(wuint16m[k], U)
+	wu.sl = append(wu.sl, U)
+	wu.i++
+	wuint16m[k] = wu
 	wuint16l.Unlock()
 
 	go func() {
@@ -422,11 +479,14 @@ func Ruint16(key ...string) <-chan uint16 {
 	r := make(chan uint16)
 
 	ruint16l.Lock()
+	ru := ruint16m[k]
 	var U ruint16
 	U.key = k
-	U.idx = len(ruint16m[k])
+	U.idx = ru.i
 	U.r = r
-	ruint16m[k] = append(ruint16m[k], U)
+	ru.sl = append(ru.sl, U)
+	ru.i++
+	ruint16m[k] = ru
 	ruint16l.Unlock()
 
 	return r
@@ -440,11 +500,14 @@ func Wuint32(key ...string) chan<- uint32 {
 	w := make(chan uint32)
 
 	wuint32l.Lock()
+	wu := wuint32m[k]
 	var U wuint32
 	U.key = k
-	U.idx = len(wuint32m[k])
+	U.idx = wu.i
 	U.w = w
-	wuint32m[k] = append(wuint32m[k], U)
+	wu.sl = append(wu.sl, U)
+	wu.i++
+	wuint32m[k] = wu
 	wuint32l.Unlock()
 
 	go func() {
@@ -464,11 +527,14 @@ func Ruint32(key ...string) <-chan uint32 {
 	r := make(chan uint32)
 
 	ruint32l.Lock()
+	ru := ruint32m[k]
 	var U ruint32
 	U.key = k
-	U.idx = len(ruint32m[k])
+	U.idx = ru.i
 	U.r = r
-	ruint32m[k] = append(ruint32m[k], U)
+	ru.sl = append(ru.sl, U)
+	ru.i++
+	ruint32m[k] = ru
 	ruint32l.Unlock()
 
 	return r
@@ -482,11 +548,14 @@ func Wuint64(key ...string) chan<- uint64 {
 	w := make(chan uint64)
 
 	wuint64l.Lock()
+	wu := wuint64m[k]
 	var U wuint64
 	U.key = k
-	U.idx = len(wuint64m[k])
+	U.idx = wu.i
 	U.w = w
-	wuint64m[k] = append(wuint64m[k], U)
+	wu.sl = append(wu.sl, U)
+	wu.i++
+	wuint64m[k] = wu
 	wuint64l.Unlock()
 
 	go func() {
@@ -506,11 +575,14 @@ func Ruint64(key ...string) <-chan uint64 {
 	r := make(chan uint64)
 
 	ruint64l.Lock()
+	ru := ruint64m[k]
 	var U ruint64
 	U.key = k
-	U.idx = len(ruint64m[k])
+	U.idx = ru.i
 	U.r = r
-	ruint64m[k] = append(ruint64m[k], U)
+	ru.sl = append(ru.sl, U)
+	ru.i++
+	ruint64m[k] = ru
 	ruint64l.Unlock()
 
 	return r
@@ -524,11 +596,14 @@ func Wbyte(key ...string) chan<- byte {
 	w := make(chan byte)
 
 	wbytel.Lock()
+	wb := wbytem[k]
 	var B wbyte
 	B.key = k
-	B.idx = len(wbytem[k])
+	B.idx = wb.i
 	B.w = w
-	wbytem[k] = append(wbytem[k], B)
+	wb.sl = append(wb.sl, B)
+	wb.i++
+	wbytem[k] = wb
 	wbytel.Unlock()
 
 	go func() {
@@ -548,11 +623,14 @@ func Rbyte(key ...string) <-chan byte {
 	r := make(chan byte)
 
 	rbytel.Lock()
+	rb := rbytem[k]
 	var B rbyte
 	B.key = k
-	B.idx = len(rbytem[k])
+	B.idx = rb.i
 	B.r = r
-	rbytem[k] = append(rbytem[k], B)
+	rb.sl = append(rb.sl, B)
+	rb.i++
+	rbytem[k] = rb
 	rbytel.Unlock()
 
 	return r
@@ -566,11 +644,14 @@ func Wbytes(key ...string) chan<- []byte {
 	w := make(chan []byte)
 
 	wbytesl.Lock()
+	wb := wbytesm[k]
 	var B wbytes
 	B.key = k
-	B.idx = len(wbytesm[k])
+	B.idx = wb.i
 	B.w = w
-	wbytesm[k] = append(wbytesm[k], B)
+	wb.sl = append(wb.sl, B)
+	wb.i++
+	wbytesm[k] = wb
 	wbytesl.Unlock()
 
 	go func() {
@@ -590,11 +671,14 @@ func Rbytes(key ...string) <-chan []byte {
 	r := make(chan []byte)
 
 	rbytesl.Lock()
+	rb := rbytesm[k]
 	var B rbytes
 	B.key = k
-	B.idx = len(rbytesm[k])
+	B.idx = rb.i
 	B.r = r
-	rbytesm[k] = append(rbytesm[k], B)
+	rb.sl = append(rb.sl, B)
+	rb.i++
+	rbytesm[k] = rb
 	rbytesl.Unlock()
 
 	return r
@@ -608,11 +692,14 @@ func Wrune(key ...string) chan<- rune {
 	w := make(chan rune)
 
 	wrunel.Lock()
+	wr := wrunem[k]
 	var R wrune
 	R.key = k
-	R.idx = len(wrunem[k])
+	R.idx = wr.i
 	R.w = w
-	wrunem[k] = append(wrunem[k], R)
+	wr.sl = append(wr.sl, R)
+	wr.i++
+	wrunem[k] = wr
 	wrunel.Unlock()
 
 	go func() {
@@ -632,11 +719,14 @@ func Rrune(key ...string) <-chan rune {
 	r := make(chan rune)
 
 	rrunel.Lock()
+	rr := rrunem[k]
 	var R rrune
 	R.key = k
-	R.idx = len(rrunem[k])
+	R.idx = rr.i
 	R.r = r
-	rrunem[k] = append(rrunem[k], R)
+	rr.sl = append(rr.sl, R)
+	rr.i++
+	rrunem[k] = rr
 	rrunel.Unlock()
 
 	return r
@@ -650,11 +740,14 @@ func Wfloat32(key ...string) chan<- float32 {
 	w := make(chan float32)
 
 	wfloat32l.Lock()
+	wf := wfloat32m[k]
 	var F wfloat32
 	F.key = k
-	F.idx = len(wfloat32m[k])
+	F.idx = wf.i
 	F.w = w
-	wfloat32m[k] = append(wfloat32m[k], F)
+	wf.sl = append(wf.sl, F)
+	wf.i++
+	wfloat32m[k] = wf
 	wfloat32l.Unlock()
 
 	go func() {
@@ -674,11 +767,14 @@ func Rfloat32(key ...string) <-chan float32 {
 	r := make(chan float32)
 
 	rfloat32l.Lock()
+	rf := rfloat32m[k]
 	var F rfloat32
 	F.key = k
-	F.idx = len(rfloat32m[k])
+	F.idx = rf.i
 	F.r = r
-	rfloat32m[k] = append(rfloat32m[k], F)
+	rf.sl = append(rf.sl, F)
+	rf.i++
+	rfloat32m[k] = rf
 	rfloat32l.Unlock()
 
 	return r
@@ -692,11 +788,14 @@ func Wfloat64(key ...string) chan<- float64 {
 	w := make(chan float64)
 
 	wfloat64l.Lock()
+	wf := wfloat64m[k]
 	var F wfloat64
 	F.key = k
-	F.idx = len(wfloat64m[k])
+	F.idx = wf.i
 	F.w = w
-	wfloat64m[k] = append(wfloat64m[k], F)
+	wf.sl = append(wf.sl, F)
+	wf.i++
+	wfloat64m[k] = wf
 	wfloat64l.Unlock()
 
 	go func() {
@@ -716,11 +815,14 @@ func Rfloat64(key ...string) <-chan float64 {
 	r := make(chan float64)
 
 	rfloat64l.Lock()
+	rf := rfloat64m[k]
 	var F rfloat64
 	F.key = k
-	F.idx = len(rfloat64m[k])
+	F.idx = rf.i
 	F.r = r
-	rfloat64m[k] = append(rfloat64m[k], F)
+	rf.sl = append(rf.sl, F)
+	rf.i++
+	rfloat64m[k] = rf
 	rfloat64l.Unlock()
 
 	return r
@@ -734,11 +836,14 @@ func Werror(key ...string) chan<- error {
 	w := make(chan error)
 
 	werrorl.Lock()
+	we := werrorm[k]
 	var E werror
 	E.key = k
-	E.idx = len(werrorm[k])
+	E.idx = we.i
 	E.w = w
-	werrorm[k] = append(werrorm[k], E)
+	we.sl = append(we.sl, E)
+	we.i++
+	werrorm[k] = we
 	werrorl.Unlock()
 
 	go func() {
@@ -758,11 +863,14 @@ func Rerror(key ...string) <-chan error {
 	r := make(chan error)
 
 	rerrorl.Lock()
+	re := rerrorm[k]
 	var E rerror
 	E.key = k
-	E.idx = len(rerrorm[k])
+	E.idx = re.i
 	E.r = r
-	rerrorm[k] = append(rerrorm[k], E)
+	re.sl = append(re.sl, E)
+	re.i++
+	rerrorm[k] = re
 	rerrorl.Unlock()
 
 	return r

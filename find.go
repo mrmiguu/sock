@@ -7,10 +7,10 @@ func findBool(key string, idx int) *rbool {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }
 
 func findString(key string, idx int) *rstring {
@@ -20,10 +20,10 @@ func findString(key string, idx int) *rstring {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }
 
 func findInt(key string, idx int) *rint {
@@ -33,10 +33,10 @@ func findInt(key string, idx int) *rint {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }
 
 func findInt8(key string, idx int) *rint8 {
@@ -46,10 +46,10 @@ func findInt8(key string, idx int) *rint8 {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }
 
 func findInt16(key string, idx int) *rint16 {
@@ -59,10 +59,10 @@ func findInt16(key string, idx int) *rint16 {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }
 
 func findInt32(key string, idx int) *rint32 {
@@ -72,10 +72,10 @@ func findInt32(key string, idx int) *rint32 {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }
 
 func findInt64(key string, idx int) *rint64 {
@@ -85,10 +85,10 @@ func findInt64(key string, idx int) *rint64 {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }
 
 func findUint(key string, idx int) *ruint {
@@ -98,10 +98,10 @@ func findUint(key string, idx int) *ruint {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }
 
 func findUint8(key string, idx int) *ruint8 {
@@ -111,10 +111,10 @@ func findUint8(key string, idx int) *ruint8 {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }
 
 func findUint16(key string, idx int) *ruint16 {
@@ -124,10 +124,10 @@ func findUint16(key string, idx int) *ruint16 {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }
 
 func findUint32(key string, idx int) *ruint32 {
@@ -137,10 +137,10 @@ func findUint32(key string, idx int) *ruint32 {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }
 
 func findUint64(key string, idx int) *ruint64 {
@@ -150,10 +150,10 @@ func findUint64(key string, idx int) *ruint64 {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }
 
 func findByte(key string, idx int) *rbyte {
@@ -163,10 +163,10 @@ func findByte(key string, idx int) *rbyte {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }
 
 func findBytes(key string, idx int) *rbytes {
@@ -176,10 +176,10 @@ func findBytes(key string, idx int) *rbytes {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }
 
 func findRune(key string, idx int) *rrune {
@@ -189,10 +189,10 @@ func findRune(key string, idx int) *rrune {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }
 
 func findFloat32(key string, idx int) *rfloat32 {
@@ -202,10 +202,10 @@ func findFloat32(key string, idx int) *rfloat32 {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }
 
 func findFloat64(key string, idx int) *rfloat64 {
@@ -215,10 +215,10 @@ func findFloat64(key string, idx int) *rfloat64 {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }
 
 func findError(key string, idx int) *rerror {
@@ -228,8 +228,8 @@ func findError(key string, idx int) *rerror {
 	if !found {
 		return nil
 	}
-	if idx >= len(v) || idx < 0 {
+	if idx >= len(v.sl) || idx < 0 {
 		return nil
 	}
-	return &v[idx]
+	return &v.sl[idx]
 }

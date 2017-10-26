@@ -1,51 +1,27 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"time"
+	"errors"
+	"strconv"
+	"strings"
 
 	"github.com/mrmiguu/sock"
 )
 
-type tStruct struct {
-	Name string
-	Age  int
-}
-
 func main() {
-	wS, rS := sock.MakeBytes("start")
-	var s tStruct
-	json.Unmarshal(<-rS, &s)
-	fmt.Println(s)
-	b, _ := json.Marshal(tStruct{"My_Son", -1})
-	wS <- b
+	F := sock.Rstring()
+	R := sock.Wstring()
+	E := sock.Werror()
 
-	sTest, rTest := sock.MakeByte("test")
-
-	time.Sleep(1 * time.Second)
-	println(`3...`)
-	time.Sleep(1 * time.Second)
-	println(`.2..`)
-	time.Sleep(1 * time.Second)
-	println(`..1.`)
-	time.Sleep(1 * time.Second)
-	println(`...GO!`)
-
-	start := time.Now()
-	for i := range [128]int{} {
-		sTest <- byte(i)
+	for f := range F {
+		args := strings.Split(f, "][")
+		switch args[0] {
+		case "add":
+			a, _ := strconv.Atoi(args[1])
+			b, _ := strconv.Atoi(args[2])
+			R <- strconv.Itoa(a + b)
+		default:
+			E <- errors.New("bad function format")
+		}
 	}
-	println(int(float64(time.Since(start).Nanoseconds())/1000000/128), "ms (send)")
-
-	var bytes []byte
-
-	start = time.Now()
-	for range [128]int{} {
-		bytes = append(bytes, <-rTest)
-	}
-	fmt.Println(bytes)
-	println(int(float64(time.Since(start).Nanoseconds())/1000000/128), "ms (recv)")
-
-	select {}
 }

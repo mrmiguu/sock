@@ -19,12 +19,16 @@ func run() {
 }
 
 func runClient() {
+	wsOrWSS := "ws://"
+	if strings.Contains(Addr, "https://") {
+		wsOrWSS = "wss://"
+	}
 	Addr = strings.Replace(Addr, "http://", "", 1)
 	Addr = strings.Replace(Addr, "https://", "", 1)
 
 	wsync.Lock()
 	defer wsync.Unlock()
-	ws = js.Global.Get("WebSocket").New("wss://" + Addr + API)
+	ws = js.Global.Get("WebSocket").New(wsOrWSS + Addr + API)
 	ws.Set("binaryType", "arraybuffer")
 
 	ws.Set("onclose", func() {

@@ -5,6 +5,151 @@ type keyAndIdx struct {
 	idx int
 }
 
+type wboolx struct {
+	i  int
+	sl []wbool
+}
+type rboolx struct {
+	i  int
+	sl []rbool
+}
+type wstringx struct {
+	i  int
+	sl []wstring
+}
+type rstringx struct {
+	i  int
+	sl []rstring
+}
+type wintx struct {
+	i  int
+	sl []wint
+}
+type rintx struct {
+	i  int
+	sl []rint
+}
+type wint8x struct {
+	i  int
+	sl []wint8
+}
+type rint8x struct {
+	i  int
+	sl []rint8
+}
+type wint16x struct {
+	i  int
+	sl []wint16
+}
+type rint16x struct {
+	i  int
+	sl []rint16
+}
+type wint32x struct {
+	i  int
+	sl []wint32
+}
+type rint32x struct {
+	i  int
+	sl []rint32
+}
+type wint64x struct {
+	i  int
+	sl []wint64
+}
+type rint64x struct {
+	i  int
+	sl []rint64
+}
+type wuintx struct {
+	i  int
+	sl []wuint
+}
+type ruintx struct {
+	i  int
+	sl []ruint
+}
+type wuint8x struct {
+	i  int
+	sl []wuint8
+}
+type ruint8x struct {
+	i  int
+	sl []ruint8
+}
+type wuint16x struct {
+	i  int
+	sl []wuint16
+}
+type ruint16x struct {
+	i  int
+	sl []ruint16
+}
+type wuint32x struct {
+	i  int
+	sl []wuint32
+}
+type ruint32x struct {
+	i  int
+	sl []ruint32
+}
+type wuint64x struct {
+	i  int
+	sl []wuint64
+}
+type ruint64x struct {
+	i  int
+	sl []ruint64
+}
+type wbytex struct {
+	i  int
+	sl []wbyte
+}
+type rbytex struct {
+	i  int
+	sl []rbyte
+}
+type wbytesx struct {
+	i  int
+	sl []wbytes
+}
+type rbytesx struct {
+	i  int
+	sl []rbytes
+}
+type wrunex struct {
+	i  int
+	sl []wrune
+}
+type rrunex struct {
+	i  int
+	sl []rrune
+}
+type wfloat32x struct {
+	i  int
+	sl []wfloat32
+}
+type rfloat32x struct {
+	i  int
+	sl []rfloat32
+}
+type wfloat64x struct {
+	i  int
+	sl []wfloat64
+}
+type rfloat64x struct {
+	i  int
+	sl []rfloat64
+}
+type werrorx struct {
+	i  int
+	sl []werror
+}
+type rerrorx struct {
+	i  int
+	sl []rerror
+}
+
 type wbool struct {
 	keyAndIdx
 	w chan bool

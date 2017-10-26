@@ -3,7 +3,7 @@ package sock
 func Close(key string) {
 	wbooll.Lock()
 	wbools := wboolm[key]
-	for _, wb := range wbools {
+	for _, wb := range wbools.sl {
 		close(wb.w)
 	}
 	delete(wboolm, key)
@@ -11,7 +11,7 @@ func Close(key string) {
 
 	rbooll.Lock()
 	rbools := rboolm[key]
-	for _, rb := range rbools {
+	for _, rb := range rbools.sl {
 		close(rb.r)
 	}
 	delete(rboolm, key)
@@ -19,7 +19,7 @@ func Close(key string) {
 
 	wstringl.Lock()
 	wstrings := wstringm[key]
-	for _, ws := range wstrings {
+	for _, ws := range wstrings.sl {
 		close(ws.w)
 	}
 	delete(wstringm, key)
@@ -27,7 +27,7 @@ func Close(key string) {
 
 	rstringl.Lock()
 	rstrings := rstringm[key]
-	for _, rs := range rstrings {
+	for _, rs := range rstrings.sl {
 		close(rs.r)
 	}
 	delete(rstringm, key)
@@ -35,7 +35,7 @@ func Close(key string) {
 
 	wintl.Lock()
 	wints := wintm[key]
-	for _, wi := range wints {
+	for _, wi := range wints.sl {
 		close(wi.w)
 	}
 	delete(wintm, key)
@@ -43,7 +43,7 @@ func Close(key string) {
 
 	rintl.Lock()
 	rints := rintm[key]
-	for _, ri := range rints {
+	for _, ri := range rints.sl {
 		close(ri.r)
 	}
 	delete(rintm, key)
@@ -51,7 +51,7 @@ func Close(key string) {
 
 	wint8l.Lock()
 	wint8s := wint8m[key]
-	for _, wi := range wint8s {
+	for _, wi := range wint8s.sl {
 		close(wi.w)
 	}
 	delete(wint8m, key)
@@ -59,7 +59,7 @@ func Close(key string) {
 
 	rint8l.Lock()
 	rint8s := rint8m[key]
-	for _, ri := range rint8s {
+	for _, ri := range rint8s.sl {
 		close(ri.r)
 	}
 	delete(rint8m, key)
@@ -67,7 +67,7 @@ func Close(key string) {
 
 	wint16l.Lock()
 	wint16s := wint16m[key]
-	for _, wi := range wint16s {
+	for _, wi := range wint16s.sl {
 		close(wi.w)
 	}
 	delete(wint16m, key)
@@ -75,7 +75,7 @@ func Close(key string) {
 
 	rint16l.Lock()
 	rint16s := rint16m[key]
-	for _, ri := range rint16s {
+	for _, ri := range rint16s.sl {
 		close(ri.r)
 	}
 	delete(rint16m, key)
@@ -83,7 +83,7 @@ func Close(key string) {
 
 	wint32l.Lock()
 	wint32s := wint32m[key]
-	for _, wi := range wint32s {
+	for _, wi := range wint32s.sl {
 		close(wi.w)
 	}
 	delete(wint32m, key)
@@ -91,7 +91,7 @@ func Close(key string) {
 
 	rint32l.Lock()
 	rint32s := rint32m[key]
-	for _, ri := range rint32s {
+	for _, ri := range rint32s.sl {
 		close(ri.r)
 	}
 	delete(rint32m, key)
@@ -99,7 +99,7 @@ func Close(key string) {
 
 	wint64l.Lock()
 	wint64s := wint64m[key]
-	for _, wi := range wint64s {
+	for _, wi := range wint64s.sl {
 		close(wi.w)
 	}
 	delete(wint64m, key)
@@ -107,7 +107,7 @@ func Close(key string) {
 
 	rint64l.Lock()
 	rint64s := rint64m[key]
-	for _, ri := range rint64s {
+	for _, ri := range rint64s.sl {
 		close(ri.r)
 	}
 	delete(rint64m, key)
@@ -115,7 +115,7 @@ func Close(key string) {
 
 	wuintl.Lock()
 	wuints := wuintm[key]
-	for _, wu := range wuints {
+	for _, wu := range wuints.sl {
 		close(wu.w)
 	}
 	delete(wuintm, key)
@@ -123,7 +123,7 @@ func Close(key string) {
 
 	ruintl.Lock()
 	ruints := ruintm[key]
-	for _, ru := range ruints {
+	for _, ru := range ruints.sl {
 		close(ru.r)
 	}
 	delete(ruintm, key)
@@ -131,7 +131,7 @@ func Close(key string) {
 
 	wuint8l.Lock()
 	wuint8s := wuint8m[key]
-	for _, wu := range wuint8s {
+	for _, wu := range wuint8s.sl {
 		close(wu.w)
 	}
 	delete(wuint8m, key)
@@ -139,7 +139,7 @@ func Close(key string) {
 
 	ruint8l.Lock()
 	ruint8s := ruint8m[key]
-	for _, ru := range ruint8s {
+	for _, ru := range ruint8s.sl {
 		close(ru.r)
 	}
 	delete(ruint8m, key)
@@ -147,7 +147,7 @@ func Close(key string) {
 
 	wuint16l.Lock()
 	wuint16s := wuint16m[key]
-	for _, wu := range wuint16s {
+	for _, wu := range wuint16s.sl {
 		close(wu.w)
 	}
 	delete(wuint16m, key)
@@ -155,7 +155,7 @@ func Close(key string) {
 
 	ruint16l.Lock()
 	ruint16s := ruint16m[key]
-	for _, ru := range ruint16s {
+	for _, ru := range ruint16s.sl {
 		close(ru.r)
 	}
 	delete(ruint16m, key)
@@ -163,7 +163,7 @@ func Close(key string) {
 
 	wuint32l.Lock()
 	wuint32s := wuint32m[key]
-	for _, wu := range wuint32s {
+	for _, wu := range wuint32s.sl {
 		close(wu.w)
 	}
 	delete(wuint32m, key)
@@ -171,7 +171,7 @@ func Close(key string) {
 
 	ruint32l.Lock()
 	ruint32s := ruint32m[key]
-	for _, ru := range ruint32s {
+	for _, ru := range ruint32s.sl {
 		close(ru.r)
 	}
 	delete(ruint32m, key)
@@ -179,7 +179,7 @@ func Close(key string) {
 
 	wuint64l.Lock()
 	wuint64s := wuint64m[key]
-	for _, wu := range wuint64s {
+	for _, wu := range wuint64s.sl {
 		close(wu.w)
 	}
 	delete(wuint64m, key)
@@ -187,7 +187,7 @@ func Close(key string) {
 
 	ruint64l.Lock()
 	ruint64s := ruint64m[key]
-	for _, ru := range ruint64s {
+	for _, ru := range ruint64s.sl {
 		close(ru.r)
 	}
 	delete(ruint64m, key)
@@ -195,7 +195,7 @@ func Close(key string) {
 
 	wbytel.Lock()
 	wbytes := wbytem[key]
-	for _, wb := range wbytes {
+	for _, wb := range wbytes.sl {
 		close(wb.w)
 	}
 	delete(wbytem, key)
@@ -203,7 +203,7 @@ func Close(key string) {
 
 	rbytel.Lock()
 	rbytes := rbytem[key]
-	for _, rb := range rbytes {
+	for _, rb := range rbytes.sl {
 		close(rb.r)
 	}
 	delete(rbytem, key)
@@ -211,7 +211,7 @@ func Close(key string) {
 
 	wbytesl.Lock()
 	wbytess := wbytesm[key]
-	for _, wb := range wbytess {
+	for _, wb := range wbytess.sl {
 		close(wb.w)
 	}
 	delete(wbytesm, key)
@@ -219,7 +219,7 @@ func Close(key string) {
 
 	rbytesl.Lock()
 	rbytess := rbytesm[key]
-	for _, rb := range rbytess {
+	for _, rb := range rbytess.sl {
 		close(rb.r)
 	}
 	delete(rbytesm, key)
@@ -227,7 +227,7 @@ func Close(key string) {
 
 	wrunel.Lock()
 	wrunes := wrunem[key]
-	for _, wr := range wrunes {
+	for _, wr := range wrunes.sl {
 		close(wr.w)
 	}
 	delete(wrunem, key)
@@ -235,7 +235,7 @@ func Close(key string) {
 
 	rrunel.Lock()
 	rrunes := rrunem[key]
-	for _, rr := range rrunes {
+	for _, rr := range rrunes.sl {
 		close(rr.r)
 	}
 	delete(rrunem, key)
@@ -243,7 +243,7 @@ func Close(key string) {
 
 	wfloat32l.Lock()
 	wfloat32s := wfloat32m[key]
-	for _, wf := range wfloat32s {
+	for _, wf := range wfloat32s.sl {
 		close(wf.w)
 	}
 	delete(wfloat32m, key)
@@ -251,7 +251,7 @@ func Close(key string) {
 
 	rfloat32l.Lock()
 	rfloat32s := rfloat32m[key]
-	for _, rf := range rfloat32s {
+	for _, rf := range rfloat32s.sl {
 		close(rf.r)
 	}
 	delete(rfloat32m, key)
@@ -259,7 +259,7 @@ func Close(key string) {
 
 	wfloat64l.Lock()
 	wfloat64s := wfloat64m[key]
-	for _, wf := range wfloat64s {
+	for _, wf := range wfloat64s.sl {
 		close(wf.w)
 	}
 	delete(wfloat64m, key)
@@ -267,7 +267,7 @@ func Close(key string) {
 
 	rfloat64l.Lock()
 	rfloat64s := rfloat64m[key]
-	for _, rf := range rfloat64s {
+	for _, rf := range rfloat64s.sl {
 		close(rf.r)
 	}
 	delete(rfloat64m, key)
@@ -275,7 +275,7 @@ func Close(key string) {
 
 	werrorl.Lock()
 	werrors := werrorm[key]
-	for _, we := range werrors {
+	for _, we := range werrors.sl {
 		close(we.w)
 	}
 	delete(werrorm, key)
@@ -283,7 +283,7 @@ func Close(key string) {
 
 	rerrorl.Lock()
 	rerrors := rerrorm[key]
-	for _, re := range rerrors {
+	for _, re := range rerrors.sl {
 		close(re.r)
 	}
 	delete(rerrorm, key)

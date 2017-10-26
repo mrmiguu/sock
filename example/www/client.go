@@ -1,51 +1,22 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"time"
-
+	"github.com/mrmiguu/jsutil"
 	"github.com/mrmiguu/sock"
 )
 
-type tStruct struct {
-	Name string
-	Age  int
-}
-
 func main() {
-	wS, rS := sock.MakeBytes("start")
-	b, _ := json.Marshal(tStruct{"Alex", 26})
-	wS <- b
-	var s tStruct
-	json.Unmarshal(<-rS, &s)
-	fmt.Println(s)
+	F := sock.Wstring()
+	R := sock.Rstring()
+	E := sock.Rerror()
 
-	sTest, rTest := sock.MakeByte("test")
-
-	time.Sleep(1 * time.Second)
-	println(`3...`)
-	time.Sleep(1 * time.Second)
-	println(`.2..`)
-	time.Sleep(1 * time.Second)
-	println(`..1.`)
-	time.Sleep(1 * time.Second)
-	println(`...GO!`)
-
-	var bytes []byte
-
-	start := time.Now()
-	for range [128]int{} {
-		bytes = append(bytes, <-rTest)
+	for {
+		F <- jsutil.Prompt("ENTER FUNCTION:")
+		select {
+		case res := <-R:
+			jsutil.Alert(res)
+		case err := <-E:
+			jsutil.Alert("ERROR: " + err.Error())
+		}
 	}
-	fmt.Println(bytes)
-	println(int(float64(time.Since(start).Nanoseconds())/1000000/128), "ms (recv)")
-
-	start = time.Now()
-	for i := range [128]int{} {
-		sTest <- 128 + byte(i)
-	}
-	println(int(float64(time.Since(start).Nanoseconds())/1000000/128), "ms (send)")
-
-	select {}
 }
