@@ -7,7 +7,7 @@ var (
 
 	IsClient = js.Global != nil
 
-	Secure = true
+	Secure = false
 
 	Root = "www"
 
