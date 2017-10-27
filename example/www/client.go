@@ -1,51 +1,22 @@
 package main
 
 import (
-	"github.com/gopherjs/gopherjs/js"
+	"time"
+
 	"github.com/mrmiguu/sock"
 )
 
-var (
-	start, end int
-)
-
 func main() {
-	F := sock.Wstring()
-	R := sock.Rstring()
-	E := sock.Rerror()
 
-	code := js.Global.Get("document").Call("getElementById", "code")
-	code.Set("onblur", func() {
-		F <- js.Global.Get("window").Call("getSelection").String()
-	})
+	Name := sock.Wstring()
+	name := "TheHowdyBuy"
+	Name <- name
 
-	go func() {
-		for {
-			select {
-			case res := <-R:
-				swap(res)
-			case err := <-E:
-				swap("ERROR: " + err.Error())
-			}
-		}
-	}()
+	time.Sleep(1 * time.Second)
+
+	SOCKName := "name=" + name
+	Found := sock.Rbool(SOCKName)
+	println(<-Found)
 
 	select {}
-}
-
-func swap(res string) {
-	code := js.Global.Get("document").Call("getElementById", "code")
-	text := code.Get("value").String()
-
-	front := "\n"
-	s, e := code.Get("selectionStart").Int(), code.Get("selectionEnd").Int()
-	if s != e {
-		front = ""
-		start, end = s, e
-	}
-
-	code.Set("value", text[:start]+front+res+text[end:])
-
-	start += len(front) + len(res)
-	end = start
 }
