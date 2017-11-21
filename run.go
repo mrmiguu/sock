@@ -1,8 +1,11 @@
 package sock
 
 import (
+	"mime"
 	"net/http"
 	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/gopherjs/gopherjs/js"
 	"github.com/gorilla/websocket"
@@ -53,7 +56,28 @@ func runServer() {
 		if _, err := os.Stat(Root); os.IsNotExist(err) {
 			panic("root folder missing")
 		}
-		http.Handle("/", http.FileServer(http.Dir(Root)))
+		http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			// var p []string
+
+			ext := filepath.Ext(r.URL.Path)
+			if ext == ".gz" {
+				// p = append(p, "Content-Encoding: gzip")
+				w.Header().Add("Content-Encoding", "gzip")
+			}
+
+			idx := strings.LastIndex(r.URL.Path, ext)
+			if idx != -1 {
+				ext = filepath.Ext(r.URL.Path[:idx])
+				if t := mime.TypeByExtension(ext); len(t) > 0 {
+					// p = append(p, "Content-Type: "+t)
+					w.Header().Add("Content-Type", t)
+				}
+			}
+
+			http.ServeFile(w, r, Root+r.URL.Path)
+
+			// println(strings.Join(p, ", "))
+		})
 	}
 
 	up := websocket.Upgrader{
