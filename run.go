@@ -9,7 +9,6 @@ import (
 
 	"github.com/gopherjs/gopherjs/js"
 	"github.com/gorilla/websocket"
-	"github.com/mrmiguu/jsutil"
 )
 
 func run() {
@@ -35,8 +34,8 @@ func runClient() {
 		go runClient()
 	})
 
-	f, c := jsutil.C()
-	ws.Set("onopen", f)
+	c := make(chan bool)
+	ws.Set("onopen", func() { go func() { c <- true }() })
 	<-c
 
 	ws.Set("onmessage", func(e *js.Object) {
