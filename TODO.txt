@@ -1,0 +1,23 @@
+1. Server creates named, pending socket
+
+2. Client creates same socket
+
+3. Socket Handshake Compilation* happens
+   (If a client closes a socket, that socket uncompiles
+    with the server's side. This allows selective cleanup^)
+
+4. When a socket closes on one endpoint, all other endpoints connected to that
+   socket close, uncompile, and cleanup. By automatically closing, writes panic
+   and reads block forever; these should be delt with correctly.
+
+5. If multiple 
+
+
+
+*Socket Handshake Compilation is when two sockets with complementary directions
+ and the same name agree from that point on to send data between each other
+
+^Socket closing, uncompiling, and cleanup have two variations: client & server.
+ The server is unique in that it splinters its one socket into one fewer
+ compilations of that socket due to the client's side closing, uncompiling, and
+ cleaning up.
