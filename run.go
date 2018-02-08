@@ -27,27 +27,21 @@ func runClient() {
 
 	wsync.Lock()
 	defer wsync.Unlock()
-	ws = js.Global.Get("WebSocket").New(wsOrWSS + Addr + API)
+	ws = js.Global.Get("WebSocket").New(wsOrWSS + Addr + Route)
 	ws.Set("binaryType", "arraybuffer")
-
-	ws.Set("onclose", func() {
-		go runClient()
+	ws.Set("onopen", func() {
+		ws.Set("onmessage", func(e *js.Object) {
+			go func(pkt []byte) {
+				err := read(pkt)
+				if err != nil {
+					wsync.Lock()
+					ws.Call("close")
+					wsync.Unlock()
+				}
+			}(js.Global.Get("Uint8Array").New(e.Get("data")).Interface().([]byte))
+		})
 	})
-
-	c := make(chan bool)
-	ws.Set("onopen", func() { go func() { c <- true }() })
-	<-c
-
-	ws.Set("onmessage", func(e *js.Object) {
-		go func(pkt []byte) {
-			err := read(pkt)
-			if err != nil {
-				wsync.Lock()
-				ws.Call("close")
-				wsync.Unlock()
-			}
-		}(js.Global.Get("Uint8Array").New(e.Get("data")).Interface().([]byte))
-	})
+	ws.Set("onclose", func() { go runClient() })
 }
 
 func runServer() {
@@ -83,7 +77,7 @@ func runServer() {
 		CheckOrigin: func(r *http.Request) bool { return true },
 	}
 
-	http.HandleFunc(API, func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc(Route, func(w http.ResponseWriter, r *http.Request) {
 		conn, err := up.Upgrade(w, r, nil)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)

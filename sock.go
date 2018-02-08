@@ -11,7 +11,7 @@ var (
 
 	Root = "www"
 
-	API = "/317d37b0edc7bd7cbd25d97f53a16ce5"
+	Route = "/317d37b0edc7bd7cbd25d97f53a16ce5"
 )
 
 func Wbool(key ...string) chan<- bool {

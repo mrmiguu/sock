@@ -9,8 +9,9 @@
 4. When a socket closes on one endpoint, all other endpoints connected to that
    socket close, uncompile, and cleanup. By automatically closing, writes panic
    and reads block forever; these should be delt with correctly.
+   (Only uncompile if all sockets are closed under that name.)
 
-5. If multiple 
+5. Combine keys, separated by separators.
 
 
 
